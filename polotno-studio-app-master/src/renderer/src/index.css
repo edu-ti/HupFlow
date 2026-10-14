@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Polotno themes only its own scope. Our chrome (tab strip, Connect dialog)
+   sits outside it, and Polotno buttons without a color of their own (ghost,
+   outline) inherit this one — without it they stay black in dark mode. */
+body {
+  @apply text-neutral-900 dark:text-neutral-100;
+}
+
+/* Frameless window: the tab strip is the draggable title bar; anything
+   clickable inside it opts out. */
+.app-drag {
+  -webkit-app-region: drag;
+}
+.app-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Polotno's toolbar, right under the tab strip, drags the window too. Its
+   markup isn't ours, so the opt-out goes by element: every control (buttons,
+   inputs, Base UI triggers that render as role/tabindex elements). */
+.polotno-toolbar {
+  -webkit-app-region: drag;
+}
+.polotno-toolbar :is(button, input, select, textarea, a, label, [role], [tabindex]) {
+  -webkit-app-region: no-drag;
+}
+
+/* Keeps the tab strip's right edge clear of the Windows window controls
+   overlay. The titlebar-area-* env values only exist while the overlay is on;
+   elsewhere this falls back to plain 0.5rem padding. */
+.window-controls-inset {
+  padding-right: calc(100% - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100%) + 0.5rem);
+}

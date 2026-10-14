@@ -1,0 +1,389 @@
+{
+  "generated_at": "2026-10-14T15:45:00-03:00",
+  "modules": [
+    {
+      "name": "carousel-generator",
+      "path": "carousel-generator-main",
+      "purpose": "Gerador de carrosséis visuais e slides para redes sociais utilizando modelos de linguagem OpenAI e exportação em PDF e imagens",
+      "primary_files": [
+        "carousel-generator-main/src/app/actions.tsx",
+        "carousel-generator-main/src/lib/langchain.ts",
+        "carousel-generator-main/src/lib/validation/slide-schema.ts",
+        "carousel-generator-main/src/lib/validation/document-schema.ts",
+        "carousel-generator-main/src/components/slides-editor.tsx"
+      ],
+      "functions": [
+        {
+          "name": "generateCarouselSlidesAction",
+          "file": "carousel-generator-main/src/app/actions.tsx",
+          "params": ["userPrompt: string"],
+          "returns": "Promise<MultiSlideSchema | null>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "generateCarouselSlides",
+          "file": "carousel-generator-main/src/lib/langchain.ts",
+          "params": ["topicPrompt: string", "apiKey: string"],
+          "returns": "Promise<z.infer<typeof MultiSlideSchema> | null>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Document",
+          "fields": [
+            { "name": "title", "type": "string", "required": false },
+            { "name": "slides", "type": "Slide[]", "required": true }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Slide",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "elements", "type": "SlideElement[]", "required": true },
+            { "name": "theme", "type": "SlideTheme", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Rate limiting por IP utilizando Upstash Redis quando KV_REST_API configurado",
+          "location": "carousel-generator-main/src/app/actions.tsx:12-20",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Geração forçada de 8 a 15 slides com 2 a 3 elementos estruturados (Title, Subtitle, Description)",
+          "location": "carousel-generator-main/src/lib/langchain.ts:45-52",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["openai", "upstash-redis", "langchain"],
+      "algorithms": ["Prompt engineering com function calling Zod", "Validação e parsing de esquemas Zod"],
+      "complexity": "medium"
+    },
+    {
+      "name": "polotno-studio-core",
+      "path": "polotno-studio-app-master",
+      "purpose": "Editor gráfico offline-first desktop/web com manipulação de canvas 2D, exportação para múltiplos formatos e controle de prancheta",
+      "primary_files": [
+        "polotno-studio-app-master/src/main/index.ts",
+        "polotno-studio-app-master/src/main/window.ts",
+        "polotno-studio-app-master/src/main/ipc.ts",
+        "polotno-studio-app-master/src/renderer/src/main.tsx",
+        "polotno-studio-app-master/src/renderer/src/App.tsx"
+      ],
+      "functions": [
+        {
+          "name": "createEditorWindow",
+          "file": "polotno-studio-app-master/src/main/window.ts",
+          "params": [],
+          "returns": "BrowserWindow",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "registerIpcHandlers",
+          "file": "polotno-studio-app-master/src/main/ipc.ts",
+          "params": [],
+          "returns": "void",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "DesignDocument",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "name", "type": "string", "required": true },
+            { "name": "width", "type": "number", "required": true },
+            { "name": "height", "type": "number", "required": true },
+            { "name": "pages", "type": "Page[]", "required": true }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Execução em single-instance lock com roteamento de arquivos abertos na segunda instância",
+          "location": "polotno-studio-app-master/src/main/index.ts:23-41",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Suporte a comandos CLI headless para render e lint via subcomandos sem iniciar interface gráfica",
+          "location": "polotno-studio-app-master/src/main/index.ts:18-22",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["polotno-sdk", "konva", "electron", "mobx"],
+      "algorithms": ["Renderização vetorial e rasterizada Konva", "Gerenciamento reativo de estado de prancheta MobX"],
+      "complexity": "high"
+    },
+    {
+      "name": "polotno-mcp-server",
+      "path": "polotno-studio-app-master/src/mcp-server",
+      "purpose": "Servidor do protocolo Model Context Protocol (MCP) e HTTP bridge para inspeção, controle e geração de designs por IA",
+      "primary_files": [
+        "polotno-studio-app-master/src/mcp-server/index.ts",
+        "polotno-studio-app-master/src/mcp-server/tools.ts",
+        "polotno-studio-app-master/src/mcp-server/prompts.ts",
+        "polotno-studio-app-master/src/mcp-server/bridge-client.ts"
+      ],
+      "functions": [
+        {
+          "name": "resolveTool",
+          "file": "polotno-studio-app-master/src/mcp-server/tools.ts",
+          "params": ["verb: string"],
+          "returns": "ToolDef | undefined",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "exec",
+          "file": "polotno-studio-app-master/src/mcp-server/tools.ts",
+          "params": ["designId: string", "command: DesignCommand"],
+          "returns": "Promise<{ value: unknown; rev?: number }>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "ToolDef",
+          "fields": [
+            { "name": "name", "type": "string", "required": true },
+            { "name": "description", "type": "string", "required": true },
+            { "name": "schema", "type": "Record<string, z.ZodType>", "required": true }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Validação de esquema completo de design via @polotno/schema antes de aplicar criações de canvas",
+          "location": "polotno-studio-app-master/src/mcp-server/tools.ts:85-89",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Aplicação atômica de mutações via JSON Patch (RFC 6902)",
+          "location": "polotno-studio-app-master/src/mcp-server/tools.ts:4-6",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["@modelcontextprotocol/sdk", "polotno-studio-core", "express", "fast-json-patch"],
+      "algorithms": ["IPC Bridge RPC para render de tela e snapshots", "Validação estrutural RFC 6902 de diffs de tela"],
+      "complexity": "medium"
+    },
+    {
+      "name": "postiz-backend-api",
+      "path": "postiz-app-main/apps/backend",
+      "purpose": "API REST principal, autenticação, controle de assinaturas Stripe, agendamento de posts e gestão de organizações",
+      "primary_files": [
+        "postiz-app-main/apps/backend/src/main.ts",
+        "postiz-app-main/apps/backend/src/api/routes/auth.controller.ts",
+        "postiz-app-main/apps/backend/src/api/routes/posts.controller.ts",
+        "postiz-app-main/apps/backend/src/api/routes/integrations.controller.ts",
+        "postiz-app-main/apps/backend/src/api/routes/billing.controller.ts",
+        "postiz-app-main/apps/backend/src/api/routes/public.controller.ts"
+      ],
+      "functions": [
+        {
+          "name": "bootstrap",
+          "file": "postiz-app-main/apps/backend/src/main.ts",
+          "params": [],
+          "returns": "Promise<void>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "createPost",
+          "file": "postiz-app-main/apps/backend/src/api/routes/posts.controller.ts",
+          "params": ["body: CreatePostDto", "user: UserSession"],
+          "returns": "Promise<PostResponseDto>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Organization",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "name", "type": "string", "required": true },
+            { "name": "apiKey", "type": "string", "required": false },
+            { "name": "shortlink", "type": "ShortLinkPreference", "required": true }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Post",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "organizationId", "type": "string", "required": true },
+            { "name": "status", "type": "PostStatus", "required": true },
+            { "name": "publishDate", "type": "DateTime", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Controle de acesso baseado em roles (RBAC) e isolamento estrito por OrganizationId",
+          "location": "postiz-app-main/apps/backend/src/api/routes/posts.controller.ts",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Rate limiting com suporte a armazenamento distribuído em Redis",
+          "location": "postiz-app-main/package.json:@nest-lab/throttler-storage-redis",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["postiz-integrations-libraries", "postgresql", "redis", "temporal"],
+      "algorithms": ["Validação multipart de mídia", "Geração de hash de assinatura para autenticação de webhook Stripe"],
+      "complexity": "high"
+    },
+    {
+      "name": "postiz-frontend-web",
+      "path": "postiz-app-main/apps/frontend",
+      "purpose": "Aplicação web cliente Next.js com calendário editorial interativo, analytics, editor de postagens com IA e gestão de conexões",
+      "primary_files": [
+        "postiz-app-main/apps/frontend/src/app/layout.tsx",
+        "postiz-app-main/apps/frontend/src/app/(app)/layout.tsx",
+        "postiz-app-main/apps/frontend/src/proxy.ts"
+      ],
+      "functions": [
+        {
+          "name": "RootLayout",
+          "file": "postiz-app-main/apps/frontend/src/app/layout.tsx",
+          "params": ["children: ReactNode"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "SocialChannelAccount",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "providerIdentifier", "type": "string", "required": true },
+            { "name": "name", "type": "string", "required": true },
+            { "name": "profilePicture", "type": "string", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Proxying de requisições de API no frontend para garantir proteção de CORS e isolamento de tokens de sessão",
+          "location": "postiz-app-main/apps/frontend/src/proxy.ts",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["postiz-backend-api", "mantine-ui", "copilotkit", "tailwindcss"],
+      "algorithms": ["Renderização reativa de calendário mensal/semanal", "Otimização de upload direto presigned"],
+      "complexity": "high"
+    },
+    {
+      "name": "postiz-orchestrator",
+      "path": "postiz-app-main/apps/orchestrator",
+      "purpose": "Execução assíncrona tolerante a falhas de publicação agendada, monitoramento de feed RSS, renovação de tokens e transcoding",
+      "primary_files": [
+        "postiz-app-main/apps/orchestrator/src/main.ts",
+        "postiz-app-main/apps/orchestrator/src/workflows/post-workflows",
+        "postiz-app-main/apps/orchestrator/src/workflows/autopost.workflow.ts",
+        "postiz-app-main/apps/orchestrator/src/workflows/refresh.token.workflow.ts"
+      ],
+      "functions": [
+        {
+          "name": "publishPostWorkflow",
+          "file": "postiz-app-main/apps/orchestrator/src/workflows/post-workflows",
+          "params": ["postId: string"],
+          "returns": "Promise<PublishResult>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "refreshTokenWorkflow",
+          "file": "postiz-app-main/apps/orchestrator/src/workflows/refresh.token.workflow.ts",
+          "params": ["integrationId: string"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "ScheduledTask",
+          "fields": [
+            { "name": "workflowId", "type": "string", "required": true },
+            { "name": "status", "type": "string", "required": true },
+            { "name": "scheduledFor", "type": "Date", "required": true }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Execução de publicações com retries idempotentes e políticas de backoff exponencial",
+          "location": "postiz-app-main/apps/orchestrator/src/workflows/post-workflows",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Renovação proativa de credenciais OAuth para prevenir expiração de sessões de redes sociais",
+          "location": "postiz-app-main/apps/orchestrator/src/workflows/refresh.token.workflow.ts",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["temporal.io", "postiz-integrations-libraries", "redis"],
+      "algorithms": ["Workflows duráveis de estado distribuído Temporal", "Sincronização de filas de tasks"],
+      "complexity": "high"
+    },
+    {
+      "name": "postiz-integrations-libraries",
+      "path": "postiz-app-main/libraries/nestjs-libraries",
+      "purpose": "38 conectores sociais oficiais, camada de banco de dados Prisma, utilitários de IA (Mastra, LangChain) e uploaders",
+      "primary_files": [
+        "postiz-app-main/libraries/nestjs-libraries/src/database/prisma/schema.prisma",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/integration.manager.ts",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/social/x.provider.ts",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts",
+        "postiz-app-main/libraries/nestjs-libraries/src/integrations/social/bluesky.provider.ts"
+      ],
+      "functions": [
+        {
+          "name": "post",
+          "file": "postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+          "params": ["id: string", "data: PostDetails"],
+          "returns": "Promise<PostResult>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "refreshToken",
+          "file": "postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+          "params": ["integration: Integration"],
+          "returns": "Promise<AuthTokens>",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Integration",
+          "fields": [
+            { "name": "id", "type": "string", "required": true },
+            { "name": "providerIdentifier", "type": "string", "required": true },
+            { "name": "token", "type": "string", "required": true },
+            { "name": "refreshToken", "type": "string", "required": false },
+            { "name": "expiresAt", "type": "DateTime", "required": false }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Padronização do contrato de postagem entre 38 plataformas com normalização de formatos de mídia e limites de caracteres",
+          "location": "postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": ["prisma", "aws-s3", "@atproto/api", "@neynar/nodejs-sdk"],
+      "algorithms": ["Normalização de payload e validação por rede social", "Encapsulamento de autenticação OAuth 1.0a / 2.0 PKCE"],
+      "complexity": "high"
+    }
+  ]
+}

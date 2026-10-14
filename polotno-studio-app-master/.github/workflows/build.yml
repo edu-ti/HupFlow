@@ -1,0 +1,69 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_POLOTNO_KEY: ${{ secrets.VITE_POLOTNO_KEY }}
+      - name: Package (unsigned, no publish)
+        run: npx electron-builder --publish never
+      - name: CLI smoke test (render bundled templates)
+        if: runner.os == 'macOS'
+        run: |
+          ./node_modules/electron/dist/Electron.app/Contents/MacOS/Electron . render \
+            src/renderer/src/templates/social-media-post.json -o /tmp/cli-smoke.png --pixel-ratio 1
+          test -s /tmp/cli-smoke.png
+      # Goes through the shipped polotno.cmd wrapper: proves it waits for the
+      # GUI binary and passes the exit code through (no inputs = exit 2).
+      - name: CLI smoke test (Windows, via polotno.cmd)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call dist\win-unpacked\resources\bin\polotno.cmd render src\renderer\src\templates\social-media-post.json -o "%RUNNER_TEMP%\cli-smoke.png" --pixel-ratio 1
+          if errorlevel 1 exit /b 1
+          if not exist "%RUNNER_TEMP%\cli-smoke.png" exit /b 1
+          call dist\win-unpacked\resources\bin\polotno.cmd render
+          if %ERRORLEVEL% neq 2 exit /b 1
+          exit /b 0
+      # Runs the packaged binary, so it also covers the Linux packaging. Ubuntu
+      # 24.04 blocks unprivileged user namespaces via AppArmor, which Chromium's
+      # sandbox needs; lift that on the runner instead of passing --no-sandbox,
+      # so the app is tested with its sandbox on.
+      - name: CLI smoke test (Linux, packaged app under Xvfb)
+        if: runner.os == 'Linux'
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          xvfb-run -a ./dist/linux-unpacked/polotno-app render \
+            src/renderer/src/templates/social-media-post.json -o /tmp/cli-smoke.png --pixel-ratio 1
+          test -s /tmp/cli-smoke.png
+      # PR builds for test machines: `gh run download <run-id> -n polotno-Linux`.
+      - name: Upload installers
+        uses: actions/upload-artifact@v7
+        with:
+          name: polotno-${{ runner.os }}
+          path: |
+            dist/*.AppImage
+            dist/*.dmg
+            dist/*.zip
+            dist/*.exe
+            dist/latest*.yml
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

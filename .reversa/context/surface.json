@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-10-14T14:57:00-03:00",
+  "project_root": "d:/SISTEMAS/HUPFLOW/HupFlow",
+  "languages": [
+    { "name": "TypeScript", "extensions": [".ts", ".tsx"], "file_count": 966 },
+    { "name": "Markdown", "extensions": [".md"], "file_count": 348 },
+    { "name": "YAML", "extensions": [".yaml", ".yml"], "file_count": 181 },
+    { "name": "JSON", "extensions": [".json"], "file_count": 95 },
+    { "name": "JavaScript", "extensions": [".js", ".mjs", ".cjs"], "file_count": 25 },
+    { "name": "Python", "extensions": [".py"], "file_count": 8 },
+    { "name": "CSS/SCSS", "extensions": [".css", ".scss"], "file_count": 6 },
+    { "name": "Shell Script", "extensions": [".sh"], "file_count": 3 },
+    { "name": "Prisma Schema", "extensions": [".prisma"], "file_count": 1 }
+  ],
+  "primary_language": "TypeScript",
+  "frameworks": [
+    { "name": "NestJS", "version": "11.1.21", "source": "postiz-app-main/package.json" },
+    { "name": "Next.js", "version": "16.3.1", "source": "postiz-app-main/package.json" },
+    { "name": "Next.js", "version": "14.0.4", "source": "carousel-generator-main/package.json" },
+    { "name": "Electron", "version": "39.2.6", "source": "polotno-studio-app-master/package.json" },
+    { "name": "Vite", "version": "7.2.6", "source": "polotno-studio-app-master/package.json" },
+    { "name": "Polotno SDK & Canvas", "version": "4.14.1", "source": "polotno-studio-app-master/package.json" },
+    { "name": "Konva", "version": "10.3.0", "source": "polotno-studio-app-master/package.json" },
+    { "name": "MobX", "version": "7.0.3", "source": "polotno-studio-app-master/package.json" },
+    { "name": "Model Context Protocol SDK", "version": "1.30.0", "source": "polotno-studio-app-master/package.json" },
+    { "name": "Prisma ORM", "version": "6.5.0", "source": "postiz-app-main/package.json" },
+    { "name": "Temporal.io SDK", "version": "1.14.0", "source": "postiz-app-main/package.json" },
+    { "name": "LangChain & LangGraph", "version": "1.1.27 / 1.2.8", "source": "postiz-app-main/package.json" },
+    { "name": "Mastra", "version": "1.67.0", "source": "postiz-app-main/package.json" },
+    { "name": "Tailwind CSS", "version": "4.x / 3.x", "source": "multi-workspace" },
+    { "name": "Radix UI", "version": "1.0.x", "source": "carousel-generator-main/package.json" }
+  ],
+  "package_manager": "pnpm",
+  "entry_points": [
+    { "path": "carousel-generator-main/src/app/page.tsx", "type": "carousel_app_entry" },
+    { "path": "carousel-generator-main/src/app/actions.tsx", "type": "carousel_server_actions" },
+    { "path": "polotno-studio-app-master/src/main/index.ts", "type": "electron_main_entry" },
+    { "path": "polotno-studio-app-master/src/renderer/src/main.tsx", "type": "polotno_renderer_entry" },
+    { "path": "polotno-studio-app-master/src/mcp-server/index.ts", "type": "polotno_mcp_server_entry" },
+    { "path": "postiz-app-main/apps/backend/src/main.ts", "type": "postiz_backend_api_entry" },
+    { "path": "postiz-app-main/apps/frontend/src/app/layout.tsx", "type": "postiz_frontend_web_entry" },
+    { "path": "postiz-app-main/apps/orchestrator/src/main.ts", "type": "postiz_orchestrator_entry" },
+    { "path": "postiz-app-main/apps/extension/src/index.ts", "type": "postiz_extension_entry" },
+    { "path": "postiz-app-main/apps/commands/src/main.ts", "type": "postiz_commands_cli_entry" }
+  ],
+  "config_files": [
+    "carousel-generator-main/next.config.js",
+    "carousel-generator-main/tailwind.config.js",
+    "carousel-generator-main/tsconfig.json",
+    "polotno-studio-app-master/electron.vite.config.ts",
+    "polotno-studio-app-master/electron-builder.yml",
+    "polotno-studio-app-master/tsconfig.json",
+    "postiz-app-main/pnpm-workspace.yaml",
+    "postiz-app-main/docker-compose.yaml",
+    "postiz-app-main/docker-compose.dev.yaml",
+    "postiz-app-main/tsconfig.base.json"
+  ],
+  "ci_cd": [
+    "polotno-studio-app-master/.github/workflows/build.yml",
+    "polotno-studio-app-master/.github/workflows/release.yml",
+    "postiz-app-main/.github/workflows/build-containers.yml",
+    "postiz-app-main/.github/workflows/build.yml",
+    "postiz-app-main/.github/workflows/publish-extension.yml"
+  ],
+  "docker": {
+    "dockerfile": "postiz-app-main/Dockerfile.dev",
+    "compose": "postiz-app-main/docker-compose.yaml"
+  },
+  "database_hints": [
+    { "path": "postiz-app-main/libraries/nestjs-libraries/src/database/prisma/schema.prisma", "type": "prisma_schema" }
+  ],
+  "test_framework": "Jest (@nx/jest)",
+  "test_file_count": 0,
+  "modules": [
+    "carousel-generator",
+    "polotno-studio-core",
+    "polotno-mcp-server",
+    "postiz-backend-api",
+    "postiz-frontend-web",
+    "postiz-orchestrator",
+    "postiz-integrations-libraries"
+  ],
+  "total_files": 1801,
+  "organization_suggestion": {
+    "granularity": "module",
+    "rationale": "A estrutura de pastas top-level e os subprojetos definem domínios autônomos claros: carousel-generator, polotno-studio e postiz (com backend, frontend, orchestrator e integrations).",
+    "signals": [
+      {
+        "type": "top_level_domain_folders",
+        "evidence": [
+          "carousel-generator-main/",
+          "polotno-studio-app-master/",
+          "postiz-app-main/"
+        ]
+      }
+    ],
+    "features": []
+  }
+}

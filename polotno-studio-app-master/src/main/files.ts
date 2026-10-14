@@ -1,0 +1,112 @@
+import { createHash, randomUUID } from 'node:crypto'
+import { promises as fs } from 'node:fs'
+import { dirname, join, basename } from 'node:path'
+import { dialog, BrowserWindow } from 'electron'
+import type { OpenedFile } from '../shared/ipc-contract'
+import { documents } from './documents'
+import type { DocId } from '../shared/types'
+
+const OPENABLE_FILE_FILTERS = [
+  { name: 'Designs', extensions: ['polotno', 'json', 'pdf', 'ai', 'svg'] },
+  { name: 'All Files', extensions: ['*'] }
+]
+
+const SAVE_FILE_FILTERS = [
+  { name: 'Polotno Design', extensions: ['json', 'polotno'] },
+  { name: 'All Files', extensions: ['*'] }
+]
+
+export function contentHash(content: string): string {
+  return createHash('sha1').update(content).digest('hex')
+}
+
+// The session and the recent list remember paths, and a design can be deleted
+// or moved between launches. Drop the entries that no longer resolve, so a
+// stale path never reaches the renderer as a failed open.
+export async function keepExisting(filePaths: string[]): Promise<string[]> {
+  const checks = await Promise.all(
+    filePaths.map((filePath) =>
+      fs
+        .access(filePath)
+        .then(() => true)
+        .catch(() => false)
+    )
+  )
+  return filePaths.filter((_, index) => checks[index])
+}
+
+export async function readDesignFile(filePath: string): Promise<OpenedFile> {
+  const content = await fs.readFile(filePath, 'utf8')
+  return { filePath, content }
+}
+
+// On Windows, replacing a file fails while anything else has it open — our own
+// watcher, antivirus, the search indexer, a sync client. Those holds last
+// milliseconds, so retry briefly before giving up.
+const RENAME_RETRY_CODES = new Set(['EPERM', 'EBUSY', 'EACCES'])
+
+async function renameWithRetry(from: string, to: string): Promise<void> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await fs.rename(from, to)
+      return
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code ?? ''
+      if (process.platform !== 'win32' || !RENAME_RETRY_CODES.has(code) || attempt >= 10) {
+        throw error
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50 * (attempt + 1)))
+    }
+  }
+}
+
+// Atomic write: temp file in the same directory, then rename. Records the
+// content hash on the owning document so the watcher can ignore our own saves.
+export async function writeDesignFile(
+  filePath: string,
+  content: string,
+  docId?: DocId
+): Promise<void> {
+  const tmpPath = join(dirname(filePath), `.${basename(filePath)}.${randomUUID()}.tmp`)
+  if (docId) {
+    const entry = documents.get(docId)
+    if (entry) entry.lastWrittenHash = contentHash(content)
+  }
+  try {
+    await fs.writeFile(tmpPath, content, 'utf8')
+    await renameWithRetry(tmpPath, filePath)
+  } catch (error) {
+    await fs.rm(tmpPath, { force: true })
+    throw error
+  }
+}
+
+export async function readDesignFileBase64(
+  filePath: string
+): Promise<{ filePath: string; base64: string }> {
+  const buffer = await fs.readFile(filePath)
+  return { filePath, base64: buffer.toString('base64') }
+}
+
+export async function showOpenDesignDialog(
+  win: BrowserWindow
+): Promise<{ filePaths: string[] } | null> {
+  const { canceled, filePaths } = await dialog.showOpenDialog(win, {
+    properties: ['openFile', 'multiSelections'],
+    filters: OPENABLE_FILE_FILTERS
+  })
+  if (canceled || filePaths.length === 0) return null
+  return { filePaths }
+}
+
+export async function showSaveAsDialog(
+  win: BrowserWindow,
+  suggestedName: string
+): Promise<{ filePath: string } | null> {
+  const { canceled, filePath } = await dialog.showSaveDialog(win, {
+    defaultPath: /\.(json|polotno)$/.test(suggestedName) ? suggestedName : `${suggestedName}.json`,
+    filters: SAVE_FILE_FILTERS
+  })
+  if (canceled || !filePath) return null
+  return { filePath }
+}

@@ -1,0 +1,65 @@
+import type { DocId } from '../shared/types'
+
+// Dirty state is deliberately absent: the renderer owns it (persistence.ts),
+// and main never needs it — app:flushRequest saves every open design on close,
+// giving a design with no file yet one of its own.
+export interface DocumentEntry {
+  docId: DocId
+  // webContents id of the renderer hosting this document's live store.
+  wcId: number
+  filePath: string | null
+  // SHA-1 of the last content we wrote to disk; lets the file watcher tell
+  // our own saves apart from external edits (stage 1 step 9).
+  lastWrittenHash: string | null
+  // Monotonic revision, bumped by every mutating bridge command. Reads return
+  // it; patch_design_json checks it for optimistic concurrency.
+  rev: number
+}
+
+class DocumentRegistry {
+  private byId = new Map<DocId, DocumentEntry>()
+
+  register(docId: DocId, wcId: number, filePath: string | null): DocumentEntry {
+    const entry: DocumentEntry = {
+      docId,
+      wcId,
+      filePath,
+      lastWrittenHash: null,
+      rev: 0
+    }
+    this.byId.set(entry.docId, entry)
+    return entry
+  }
+
+  get(docId: DocId): DocumentEntry | undefined {
+    return this.byId.get(docId)
+  }
+
+  setFilePath(docId: DocId, filePath: string): void {
+    const entry = this.byId.get(docId)
+    if (entry) entry.filePath = filePath
+  }
+
+  close(docId: DocId): void {
+    this.byId.delete(docId)
+  }
+
+  // Map iteration follows insertion order, so re-inserting in the given order
+  // makes all() (and the persisted session) match the tab strip. Unknown ids
+  // are ignored; entries missing from the list keep their place at the end.
+  reorder(docIds: DocId[]): void {
+    const ordered = new Map<DocId, DocumentEntry>()
+    for (const docId of docIds) {
+      const entry = this.byId.get(docId)
+      if (entry) ordered.set(docId, entry)
+    }
+    for (const [docId, entry] of this.byId) if (!ordered.has(docId)) ordered.set(docId, entry)
+    this.byId = ordered
+  }
+
+  all(): DocumentEntry[] {
+    return [...this.byId.values()]
+  }
+}
+
+export const documents = new DocumentRegistry()
