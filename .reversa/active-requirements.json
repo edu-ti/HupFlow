@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/001-rate-limit-feedback",
-  "feature-id": "001",
-  "short-name": "rate-limit-feedback",
-  "started-at": "2026-10-14T17:18:00-03:00",
+  "feature-dir": "_reversa_forward/004-polotno-postiz-bridge",
+  "feature-id": "004",
+  "short-name": "polotno-postiz-bridge",
+  "started-at": "2026-10-14T20:00:00-03:00",
   "current-stage": "done",
   "stages-completed": [
     "requirements",

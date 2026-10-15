@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postiz Orchestrator — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">⏱️</span>
+        <h1 class="page-title" style="margin: 0;">Postiz Orchestrator</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">postiz-orchestrator</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Orchestrator — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O **Postiz Orchestrator** é o worker assíncrono baseado no Temporal.io responsável por executar tarefas duráveis de agendamento de postagens, renovação proativa de credenciais OAuth, processamento de feeds RSS de autopost e conversão de mídias pesadas.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Consumo contínuo de task queues do Temporal Server (`TEMPORAL_ADDRESS`).</li>
+<li>Gestão de timers de agendamento que sobrevivem a paradas de contêineres e reinicializações.</li>
+<li>Execução resiliente da publicação com controle de retentativas e idempotência.</li>
+<li>Monitoramento de feeds RSS/Atom para autopost com detecção de novos artigos.</li>
+<li>Renovação silenciosa de tokens OAuth antes da expiração.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Regras de Negócio</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**RN-POR-01**: A publicação não pode ser disparada duas vezes para a mesma rede social no mesmo post (idempotência obrigatória). 🟢 CONFIRMADO</li>
+<li>**RN-POR-02**: Falhas temporárias (HTTP 429 Rate Limit, 503 Service Unavailable) devem acionar política de retentativa com backoff exponencial; erros 401 Unauthorized (token revogado) devem interromper as retentativas e alertar o usuário. 🟢 CONFIRMADO</li>
+<li>**RN-POR-03**: Workflows de streak devem ser avaliados diariamente por timezone da organização para atualizar a contagem de dias ativos. 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>ID</td><td>Requisito</td><td>Prioridade</td><td>Critério de Aceite</td></tr>
+<tr><td>**RF-POR-01**</td><td>`publishPostWorkflow`</td><td>Must</td><td>Executar publicação no horário exato e atualizar status no banco</td></tr>
+<tr><td>**RF-POR-02**</td><td>`refreshTokenWorkflow`</td><td>Must</td><td>Renovar credenciais OAuth 2.0 antes do término da validade</td></tr>
+<tr><td>**RF-POR-03**</td><td>`autopostWorkflow`</td><td>Should</td><td>Ler feeds RSS e criar posts rascunho automaticamente</td></tr>
+<tr><td>**RF-POR-04**</td><td>`processMediaWorkflow`</td><td>Should</td><td>Transcodificar vídeos e gerar thumbnails</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`postiz-app-main/apps/orchestrator/src/main.ts`</td><td>Inicialização dos Temporal Workers</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/apps/orchestrator/src/workflows/post-workflows`</td><td>Workflow central de publicação</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/apps/orchestrator/src/workflows/refresh.token.workflow.ts`</td><td>Renovação periódica de OAuth tokens</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Orchestrator — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Modelo de Execução Temporal</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">1. **Workers e Task Queues**:</p>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>O processo `orchestrator` registra workers ouvindo em filas de tarefas dedicadas (ex: `post-queue`, `autopost-queue`).</li>
+<li>As definições de Workflows ficam isoladas do código de Activities para respeitar os requisitos estritos de determinismo da sandbox do Temporal.</li>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">2. **Separação entre Workflow e Activity**:</p>
+<li>`Workflow`: Orquestração pura de controle de fluxo, loops de tempo e timers `sleep()`. Não faz I/O direto nem consulta banco.</li>
+<li>`Activity`: Código executável com efeitos colaterais: chamadas a APIs externas das redes sociais, consultas ao Prisma e uploads.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Estratégia de Retentativas (RetryPolicy)</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```typescript</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">{</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">initialInterval: '5s',</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">backoffCoefficient: 2,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">maximumInterval: '1h',</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">maximumAttempts: 10,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">nonRetryableErrorTypes: ['UnauthorizedException', 'AccountDisabledException']</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🟡 **INFERIDO**: Em ambientes de desenvolvimento locais sem o serviço Temporal rodando, o backend não consegue agendar postagens assíncronas.</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Orchestrator — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] Temporal Server em execução (porta 7233)</li>
+<li>[ ] Banco de Dados PostgreSQL e Redis ativos</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-POR-01**: Inicializar processo worker do Temporal em `main.ts`.</li>
+<li>Origem no legado: `postiz-app-main/apps/orchestrator/src/main.ts`</li>
+<li>Critério de pronto: Worker conectado ao cluster e escutando task queues.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-POR-02**: Implementar `publishPostWorkflow` com timers duráveis.</li>
+<li>Origem no legado: `postiz-app-main/apps/orchestrator/src/workflows/post-workflows`</li>
+<li>Critério de pronto: Aguardar horário agendado e invocar activity de publicação.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-POR-03**: Criar activity de disparo de post com tratamento de erros por conector.</li>
+<li>Origem no legado: `postiz-app-main/apps/orchestrator/src/activities`</li>
+<li>Critério de pronto: Chamar `IntegrationManager.post()` e atualizar status no Prisma.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-POR-04**: Implementar workflow de renovação periódica de tokens OAuth.</li>
+<li>Origem no legado: `postiz-app-main/apps/orchestrator/src/workflows/refresh.token.workflow.ts`</li>
+<li>Critério de pronto: Renovar credenciais a cada ciclo de 24 horas.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-POR-01**: Teste de determinismo de workflow usando `@temporalio/testing`.</li>
+<li>[ ] **TT-POR-02**: Teste de retentativa automática em falha temporária de rede.</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: postiz-orchestrator</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

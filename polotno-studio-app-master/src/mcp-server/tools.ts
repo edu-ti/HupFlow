@@ -31,7 +31,9 @@ export const VERB_ALIASES: Record<string, string> = {
   render: 'render_page',
   export: 'export_design',
   lint: 'lint_design',
-  save: 'save_design'
+  save: 'save_design',
+  postiz: 'export_to_postiz',
+  publish: 'export_to_postiz'
 }
 
 export function resolveTool(verb: string): ToolDef | undefined {
@@ -350,6 +352,79 @@ export const TOOLS: ToolDef[] = [
     handler: async ({ designId: id, pageId }: any) => {
       const { value } = await exec(id, { type: 'lint', pageId })
       return json({ findings: value })
+    }
+  },
+  {
+    name: 'export_to_postiz',
+    description:
+      'Render design pages from Polotno Studio and upload directly to Postiz media library for social media publishing.',
+    schema: {
+      designId,
+      token: z.string().describe('Postiz auth JWT token (required for multi-tenant isolation)'),
+      format: z.enum(['png', 'jpeg', 'pdf']).optional().default('png').describe('Export format'),
+      apiUrl: z.string().optional().describe('Postiz backend URL (default: http://localhost:3000)'),
+      pageId: z.string().optional().describe('Export one page instead of all of them'),
+      pixelRatio: z.number().optional().describe('Scale for png/jpeg'),
+      fileName: z.string().optional().describe('Base file name for the uploaded media')
+    },
+    handler: async ({
+      designId: id,
+      token,
+      format = 'png',
+      apiUrl,
+      pageId,
+      pixelRatio,
+      fileName
+    }: any) => {
+      const baseUrl = (apiUrl || process.env.POSTIZ_API_URL || 'http://localhost:3000').replace(/\/+$/, '')
+      const uploadUrl = `${baseUrl}/media/upload-simple`
+
+      const { value } = await exec(id, { type: 'export', format, pageId, pixelRatio })
+      const { pages, suggestedName } = value as {
+        pages: { pageId?: string; dataUrl: string }[]
+        suggestedName: string
+      }
+      const base = fileName ?? suggestedName
+      const uploaded: Array<{ pageIndex: number; media: unknown }> = []
+
+      for (const [index, page] of pages.entries()) {
+        const suffix = pages.length > 1 ? `-${index + 1}` : ''
+        const ext = EXPORT_EXTENSIONS[format as ExportFormat]
+        const fullFileName = `${base}${suffix}.${ext}`
+
+        const [header, base64Content] = page.dataUrl.split(',')
+        const mimeType =
+          /data:([^;]+)/.exec(header)?.[1] ?? (format === 'pdf' ? 'application/pdf' : `image/${format}`)
+        const buffer = Buffer.from(base64Content, 'base64')
+        const fileBlob = new Blob([buffer], { type: mimeType })
+
+        const formData = new FormData()
+        formData.append('file', fileBlob, fullFileName)
+
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            auth: token
+          },
+          body: formData
+        })
+
+        if (!response.ok) {
+          const errorText = await response.text().catch(() => '')
+          throw new Error(
+            `Failed to upload to Postiz (${response.status} ${response.statusText}): ${errorText || 'Unknown error'}`
+          )
+        }
+
+        const media = await response.json()
+        uploaded.push({ pageIndex: index, media })
+      }
+
+      return json({
+        success: true,
+        uploaded,
+        total: uploaded.length
+      })
     }
   }
 ]

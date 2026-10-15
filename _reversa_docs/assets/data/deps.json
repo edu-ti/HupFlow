@@ -1,0 +1,157 @@
+{
+  "nodes": [
+    {
+      "id": "carousel-generator",
+      "label": "Carousel Generator (Web Next.js)",
+      "subsystem": "carousel",
+      "loc": 5800
+    },
+    {
+      "id": "openai-api",
+      "label": "OpenAI API (gpt-4o-mini)",
+      "subsystem": "external-ai",
+      "loc": 0
+    },
+    {
+      "id": "upstash-redis",
+      "label": "Upstash Redis (Rate Limiter)",
+      "subsystem": "cache",
+      "loc": 0
+    },
+    {
+      "id": "polotno-studio",
+      "label": "Polotno Studio (Desktop Electron)",
+      "subsystem": "polotno",
+      "loc": 14500
+    },
+    {
+      "id": "polotno-mcp",
+      "label": "Polotno MCP Server",
+      "subsystem": "polotno-mcp",
+      "loc": 2600
+    },
+    {
+      "id": "ai-agents",
+      "label": "Agentes de IA (Claude/Antigravity)",
+      "subsystem": "external-ai",
+      "loc": 0
+    },
+    {
+      "id": "postiz-frontend",
+      "label": "Postiz Frontend (Next.js 16)",
+      "subsystem": "postiz-web",
+      "loc": 11800
+    },
+    {
+      "id": "postiz-backend",
+      "label": "Postiz Backend (NestJS 11)",
+      "subsystem": "postiz-api",
+      "loc": 14200
+    },
+    {
+      "id": "postiz-orchestrator",
+      "label": "Postiz Orchestrator (Temporal.io)",
+      "subsystem": "postiz-orch",
+      "loc": 5100
+    },
+    {
+      "id": "postiz-libs",
+      "label": "NestJS Libraries (38 Conectores)",
+      "subsystem": "postiz-libs",
+      "loc": 32400
+    },
+    {
+      "id": "postgres-db",
+      "label": "PostgreSQL Database (Prisma)",
+      "subsystem": "storage",
+      "loc": 0
+    },
+    {
+      "id": "temporal-server",
+      "label": "Temporal Server (gRPC)",
+      "subsystem": "messaging",
+      "loc": 0
+    },
+    {
+      "id": "social-networks",
+      "label": "Redes Sociais (38 Provedores)",
+      "subsystem": "external-social",
+      "loc": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "carousel-generator",
+      "to": "openai-api",
+      "weight": 3,
+      "label": "LangChain Chat / Structured Prompts"
+    },
+    {
+      "from": "carousel-generator",
+      "to": "upstash-redis",
+      "weight": 2,
+      "label": "IP Rate Limiting"
+    },
+    {
+      "from": "carousel-generator",
+      "to": "postiz-frontend",
+      "weight": 2,
+      "label": "Export PDF / Imagens"
+    },
+    {
+      "from": "ai-agents",
+      "to": "polotno-mcp",
+      "weight": 4,
+      "label": "MCP JSON-RPC Tools"
+    },
+    {
+      "from": "polotno-mcp",
+      "to": "polotno-studio",
+      "weight": 4,
+      "label": "IPC Bridge Canvas Mutation"
+    },
+    {
+      "from": "polotno-studio",
+      "to": "postiz-backend",
+      "weight": 3,
+      "label": "export_to_postiz REST Upload"
+    },
+    {
+      "from": "postiz-frontend",
+      "to": "postiz-backend",
+      "weight": 5,
+      "label": "REST API / JWT Auth"
+    },
+    {
+      "from": "postiz-backend",
+      "to": "postgres-db",
+      "weight": 5,
+      "label": "Prisma ORM Queries"
+    },
+    {
+      "from": "postiz-backend",
+      "to": "postiz-orchestrator",
+      "weight": 4,
+      "label": "Temporal Client StartWorkflow"
+    },
+    {
+      "from": "postiz-orchestrator",
+      "to": "temporal-server",
+      "weight": 5,
+      "label": "Worker Activity Dispatch"
+    },
+    {
+      "from": "postiz-orchestrator",
+      "to": "postiz-libs",
+      "weight": 5,
+      "label": "Social Abstract Dispatch"
+    },
+    {
+      "from": "postiz-libs",
+      "to": "social-networks",
+      "weight": 5,
+      "label": "OAuth REST / Graph APIs"
+    }
+  ],
+  "cycles": []
+}

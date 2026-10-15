@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métricas & Telemetria — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-analyst">
+  <meta name="reversa-template" content="metricas">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/vendor/highcharts.js"></script>
+  <script src="assets/vendor/highcharts-accessibility.js"></script>
+  <script src="assets/vendor/highcharts-exporting.js"></script>
+  <script src="assets/vendor/highcharts-treemap.js"></script>
+  <script src="assets/vendor/highcharts-sankey.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 1024px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .kpi-row { grid-template-columns: 1fr; } }
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
+    }
+    .kpi-sub {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+    }
+    .chart-container {
+      width: 100%;
+      height: 380px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas" class="active" aria-current="page">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Métricas do Código & Telemetria Quantitativa</h1>
+      <p class="page-description">
+        Mapeamento quantitativo extraído da base de código: distribuição de LOC por pasta, componentes com maior complexidade ciclomática, fluxo de dependências e distribuição de linguagens.
+      </p>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <span class="kpi-label">Arquivos Mapeados</span>
+        <span class="kpi-value" id="kpiFiles">1.801</span>
+        <span class="kpi-sub">TypeScript, Docs, JSON, YAML</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Volume de Código (LOC)</span>
+        <span class="kpi-value" id="kpiLoc">~85.4k</span>
+        <span class="kpi-sub">3 subsistemas consolidados</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Score de Confiança Reversa</span>
+        <span class="kpi-value" style="color: #34d399;">91.5%</span>
+        <span class="kpi-sub">Grau de cobertura e extração</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Redes Sociais Conectadas</span>
+        <span class="kpi-value" style="color: #38bdf8;">38</span>
+        <span class="kpi-sub">APIs sob interface SocialAbstract</span>
+      </div>
+    </div>
+
+    <!-- Charts Grid 2x2 -->
+    <div class="grid-2" style="margin-bottom: 2rem;">
+      <div class="reversa-card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+          Volume de Código por Pasta (Treemap LOC)
+        </h3>
+        <div id="chartTreemap" class="chart-container"></div>
+      </div>
+
+      <div class="reversa-card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+          Módulos de Maior Complexidade Ciclomática
+        </h3>
+        <div id="chartComplexity" class="chart-container"></div>
+      </div>
+
+      <div class="reversa-card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+          Histograma de Tamanho de Arquivos
+        </h3>
+        <div id="chartHistogram" class="chart-container"></div>
+      </div>
+
+      <div class="reversa-card">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+          Distribuição por Linguagens / Tecnologias
+        </h3>
+        <div id="chartLanguages" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- 5th Chart: Sankey Flow -->
+    <div class="reversa-card">
+      <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+        Fluxo Arquitetural de Dados & Dependências (Sankey)
+      </h3>
+      <div id="chartSankey" style="width: 100%; height: 420px;"></div>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Dashboard de Métricas</span>
+      <span>Highcharts 11.4.8 &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    (function renderCharts() {
+      const metrics = (window.RV_DATA && window.RV_DATA.metrics) || {};
+
+      // Dark Theme Options for Highcharts
+      Highcharts.theme = {
+        colors: ['#06b6d4', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#6366f1'],
+        chart: {
+          backgroundColor: 'transparent',
+          style: { fontFamily: 'Inter, sans-serif' }
+        },
+        title: { text: null },
+        credits: { enabled: false },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          borderColor: '#06b6d4',
+          borderRadius: 8,
+          style: { color: '#f8fafc' }
+        },
+        xAxis: {
+          gridLineColor: 'rgba(255, 255, 255, 0.05)',
+          labels: { style: { color: '#94a3b8' } },
+          lineColor: 'rgba(255, 255, 255, 0.1)',
+          tickColor: 'rgba(255, 255, 255, 0.1)'
+        },
+        yAxis: {
+          gridLineColor: 'rgba(255, 255, 255, 0.05)',
+          labels: { style: { color: '#94a3b8' } },
+          title: { style: { color: '#94a3b8' } }
+        },
+        legend: {
+          itemStyle: { color: '#cbd5e1' },
+          itemHoverStyle: { color: '#ffffff' }
+        }
+      };
+      Highcharts.setOptions(Highcharts.theme);
+
+      // 1. Treemap Chart
+      const treemapData = (metrics.treemap_loc_by_folder || []).map(item => ({
+        name: item.folder,
+        value: item.loc,
+        color: item.color
+      }));
+
+      Highcharts.chart('chartTreemap', {
+        series: [{
+          type: 'treemap',
+          layoutAlgorithm: 'squarified',
+          data: treemapData,
+          dataLabels: {
+            enabled: true,
+            style: { color: '#ffffff', textOutline: 'none', fontWeight: 'bold' }
+          }
+        }],
+        tooltip: {
+          pointFormat: '<b>{point.name}</b>: {point.value:,.0f} LOC'
+        }
+      });
+
+      // 2. Top Complexity Column Chart
+      const complexityItems = (metrics.top_complexity || []).slice(0, 10);
+      Highcharts.chart('chartComplexity', {
+        chart: { type: 'column' },
+        xAxis: {
+          categories: complexityItems.map(c => c.id.split('/').pop()),
+          labels: { rotation: -30, style: { fontSize: '10px' } }
+        },
+        yAxis: { title: { text: 'Complexidade Ciclomática' } },
+        series: [{
+          name: 'Complexidade',
+          data: complexityItems.map(c => ({ y: c.complexity, color: c.complexity > 20 ? '#f43f5e' : '#38bdf8' })),
+          showInLegend: false
+        }],
+        tooltip: {
+          formatter: function() {
+            const item = complexityItems[this.point.index];
+            return `<b>${item.id}</b><br/>Complexidade: <b>${item.complexity}</b><br/>LOC: ${item.loc}`;
+          }
+        }
+      });
+
+      // 3. Histogram Chart
+      const hist = metrics.loc_histogram || { bins: [], counts: [] };
+      Highcharts.chart('chartHistogram', {
+        chart: { type: 'bar' },
+        xAxis: {
+          categories: hist.bins.map(b => b + ' LOC')
+        },
+        yAxis: { title: { text: 'Qtd. Arquivos' } },
+        series: [{
+          name: 'Arquivos na Faixa',
+          data: hist.counts,
+          color: '#8b5cf6',
+          showInLegend: false
+        }]
+      });
+
+      // 4. Languages Donut Chart
+      const langData = (metrics.language_distribution || []).map(l => ({
+        name: l.language,
+        y: l.percent,
+        color: l.color
+      }));
+      Highcharts.chart('chartLanguages', {
+        chart: { type: 'pie' },
+        plotOptions: {
+          pie: {
+            innerSize: '55%',
+            dataLabels: {
+              enabled: true,
+              format: '{point.name}: {point.percentage:.1f}%',
+              style: { color: '#cbd5e1', fontSize: '11px', textOutline: 'none' }
+            }
+          }
+        },
+        series: [{
+          name: 'Percentual',
+          data: langData
+        }]
+      });
+
+      // 5. Sankey Diagram
+      const sankeyData = (metrics.dependency_sankey && metrics.dependency_sankey.links) || [];
+      Highcharts.chart('chartSankey', {
+        series: [{
+          keys: ['from', 'to', 'weight'],
+          data: sankeyData.map(l => [l.source, l.target, l.value]),
+          type: 'sankey',
+          name: 'Fluxo Arquitetural',
+          dataLabels: {
+            style: { color: '#ffffff', textOutline: 'none', fontSize: '11px' }
+          }
+        }]
+      });
+    })();
+  </script>
+</body>
+</html>

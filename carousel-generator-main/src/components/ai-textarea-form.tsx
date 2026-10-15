@@ -44,16 +44,8 @@ export function AITextAreaForm() {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setIsLoading(true);
 
-    // Use server action here instead of the local function
-    const result = await generateCarouselSlidesAction(
-      `Generate a carousel from this article: "${data.prompt}"`
-    );
-
-    // TODO: Restore local function for going over limit
-    // const generatedSlides = await generateCarouselSlides(
-    //   `Generate a carousel from this article: "${data.prompt}"`,
-    //   apiKey
-    // );
+    const promptText = `Generate a carousel from this article: "${data.prompt}"`;
+    const result = await generateCarouselSlidesAction(promptText);
 
     if (result.success) {
       setValue("slides", result.slides);
@@ -61,6 +53,38 @@ export function AITextAreaForm() {
         title: "New carousel generated",
         description: "The slides have been loaded into the editor.",
       });
+    } else if (
+      (result.reason === "rate_limit" || result.reason === "missing_key") &&
+      apiKey &&
+      apiKey.trim().length > 0
+    ) {
+      try {
+        const localSlides = await generateCarouselSlides(promptText, apiKey);
+        if (localSlides) {
+          setValue("slides", localSlides);
+          toast({
+            title: "Novo carrossel gerado (BYOK)",
+            description:
+              "Utilizada sua chave própria da OpenAI devido à cota pública do servidor.",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Falha na geração com chave própria",
+            description:
+              "Não foi possível gerar os slides. Verifique sua chave de API OpenAI.",
+          });
+        }
+      } catch (err) {
+        toast({
+          variant: "destructive",
+          title: "Erro na chamada OpenAI",
+          description:
+            err instanceof Error
+              ? err.message
+              : "Verifique se sua chave possui saldo e permissões adequadas.",
+        });
+      }
     } else if (result.reason === "rate_limit") {
       const minutesRemaining = result.reset
         ? Math.max(1, Math.ceil((result.reset - Date.now()) / 60000))
@@ -68,13 +92,14 @@ export function AITextAreaForm() {
       toast({
         variant: "destructive",
         title: "Limite de requisições atingido",
-        description: `Você atingiu o limite de requisições. Tente novamente em aproximadamente ${minutesRemaining} minuto(s).`,
+        description: `Aguarde ~${minutesRemaining} minuto(s) ou adicione sua chave de API OpenAI nas configurações para continuar gerando imediatamente.`,
       });
     } else if (result.reason === "missing_key") {
       toast({
         variant: "destructive",
         title: "Chave OpenAI não configurada",
-        description: result.message,
+        description:
+          "Adicione sua própria chave de API OpenAI nas configurações para gerar carrosséis.",
       });
     } else {
       toast({

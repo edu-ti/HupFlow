@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postiz Integrations & Libs — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">🔌</span>
+        <h1 class="page-title" style="margin: 0;">Postiz Integrations & Libs</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">postiz-integrations-libraries</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Integrations Libraries — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">A **Postiz Integrations Libraries** reúne o ecossistema de 38 conectores sociais oficiais, a camada de acesso a dados via Prisma ORM, utilitários de IA generativa (Mastra, LangChain) e uploaders de mídia compartilhados entre backend, frontend e orchestrator.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Padronização da interface de comunicação com 38 redes sociais sob o contrato `SocialAbstract`.</li>
+<li>Encapsulamento dos fluxos de autorização OAuth 1.0a, OAuth 2.0 PKCE e trocas de token.</li>
+<li>Normalização de mídias de acordo com as restrições de cada rede social (tamanho, formato, proporção).</li>
+<li>Manutenção do schema relacional Prisma e geração do cliente tipado `@prisma/client`.</li>
+<li>Integração de modelos de linguagem para geração e resumo de conteúdo (OpenAI, Mastra, LangChain).</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Redes Sociais Suportadas (38 Conectores)</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Bluesky, Dev.to, Discord, Dribbble, Facebook, Farcaster, Google My Business, Hashnode, Instagram (Graph API &amp; Standalone), Kick, Lemmy, LinkedIn (Página e Pessoal), Listmonk, Mastodon, Medium, MeWe, Moltbook, Nostr, Pinterest, Reddit, Skool, Slack, Telegram, Threads, TikTok (Business e Pessoal), Tumblr, Twitch, VK, Whop, WordPress, X/Twitter, YouTube.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Regras de Negócio</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**RN-PIL-01**: Toda implementação de rede social deve herdar de `SocialAbstract` e implementar obrigatoriamente `post()`, `refreshToken()` e `analytics()`. 🟢 CONFIRMADO</li>
+<li>**RN-PIL-02**: Conectores devem sanitizar o payload de texto, aplicando truncamento gracioso ou rejeitando caso exceda o limite físico da plataforma. 🟢 CONFIRMADO</li>
+<li>**RN-PIL-03**: Tokens de acesso devem ser persistidos com criptografia no banco de dados para evitar vazamento em caso de dump não autorizado. 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts`</td><td>Classe base abstrata</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/libraries/nestjs-libraries/src/integrations/integration.manager.ts`</td><td>Gerenciador e despachante</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/libraries/nestjs-libraries/src/database/prisma/schema.prisma`</td><td>Schema completo de banco</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Integrations Libraries — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Arquitetura de Classes dos Conectores</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```mermaid</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">classDiagram</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class SocialIntegrationsInterface {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">&lt;&lt;interface&gt;&gt;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+analytics(id)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class SocialAbstract {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">&lt;&lt;abstract&gt;&gt;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">#uploadMedia(media)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">#handleRateLimit(error)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)*</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)*</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+analytics(id)*</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class XProvider {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class LinkedInProvider {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class InstagramProvider {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">class BlueskyProvider {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+post(id, data)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">+refreshToken(integration)</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">SocialIntegrationsInterface &lt;|.. SocialAbstract</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">SocialAbstract &lt;|-- XProvider</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">SocialAbstract &lt;|-- LinkedInProvider</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">SocialAbstract &lt;|-- InstagramProvider</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">SocialAbstract &lt;|-- BlueskyProvider</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Integração de Inteligência Artificial</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">A pasta `nestjs-libraries/src/agent` combina **Mastra** e **LangChain** para:</p>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Reformulação de copy (ex: adaptar um texto longo para o limite de 280 caracteres do Twitter).</li>
+<li>Geração de hashtags contextuais baseadas em palavras-chave.</li>
+<li>Resumo automático de artigos e páginas externas.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🟡 **INFERIDO**: Dependência direta de APIs externas de terceiros sujeitas a quebras de compatibilidade (breaking changes) e descontinuação de endpoints sem aviso prévio.</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Integrations Libraries — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] Prisma CLI instalado</li>
+<li>[ ] Contas de desenvolvedor e chaves de API das redes sociais prioritárias</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PIL-01**: Implementar classe abstrata `SocialAbstract` com métodos comuns de upload e retry.</li>
+<li>Origem no legado: `postiz-app-main/libraries/nestjs-libraries/src/integrations/social.abstract.ts`</li>
+<li>Critério de pronto: Tratamento uniforme de limites e expiração de token.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PIL-02**: Criar conector oficial para Twitter / X API v2.</li>
+<li>Origem no legado: `postiz-app-main/libraries/nestjs-libraries/src/integrations/social/x.provider.ts`</li>
+<li>Critério de pronto: Publicação de tweets simples, threads com fotos e vídeos.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PIL-03**: Criar conector oficial para LinkedIn (Perfil Pessoal e Páginas de Empresa).</li>
+<li>Origem no legado: `postiz-app-main/libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts`</li>
+<li>Critério de pronto: Publicação de textos, carrosséis em PDF e artigos com link.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PIL-04**: Criar conector oficial para Instagram Graph API.</li>
+<li>Origem no legado: `postiz-app-main/libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts`</li>
+<li>Critério de pronto: Upload de carrosséis de imagens, Reels e Stories.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PIL-05**: Implementar `IntegrationManager` para despacho dinâmico.</li>
+<li>Origem no legado: `postiz-app-main/libraries/nestjs-libraries/src/integrations/integration.manager.ts`</li>
+<li>Critério de pronto: Instanciação e injeção do provider correto via `providerIdentifier`.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-PIL-01**: Teste unitário de sanitização de texto e truncamento de caracteres por rede.</li>
+<li>[ ] **TT-PIL-02**: Teste de renovação de token OAuth com mock de resposta de sucesso e falha.</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: postiz-integrations-libraries</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

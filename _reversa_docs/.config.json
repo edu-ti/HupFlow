@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-14T20:34:00-03:00",
+  "reversa": {
+    "version": "1.0.0"
+  },
+  "projectName": "HupFlow",
+  "interview": {
+    "readerProfile": "novo_dev",
+    "depth": "full",
+    "visualStyle": "premium"
+  },
+  "seed": {
+    "hash": "sha256:44fdd4b2d2727e52edb753257411f5b018475b1fb43237abc1fcfb80a50757a3",
+    "source": "project_name",
+    "explicitOverride": null
+  },
+  "knowledgeSources": {
+    "soul": false,
+    "chronicle": false,
+    "topology": true,
+    "sddSpecs": [
+      "carousel-generator",
+      "polotno-studio-core",
+      "polotno-mcp-server",
+      "postiz-backend-api",
+      "postiz-frontend-web",
+      "postiz-orchestrator",
+      "postiz-integrations-libraries"
+    ],
+    "sourceCode": true
+  },
+  "pagesPlanned": [
+    "index.html",
+    "arquitetura.html",
+    "modulos.html",
+    "metricas.html",
+    "glossario.html",
+    "deck.html",
+    "features/carousel-generator.html",
+    "features/polotno-studio-core.html",
+    "features/polotno-mcp-server.html",
+    "features/postiz-backend-api.html",
+    "features/postiz-frontend-web.html",
+    "features/postiz-orchestrator.html",
+    "features/postiz-integrations-libraries.html",
+    "adendos.html"
+  ],
+  "pagesOmitted": [
+    {
+      "page": "timeline.html",
+      "reason": "Sem .reversa/chronicle.md no projeto"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema-version": 1,
-  "started-at": "2026-10-14T17:18:00-03:00",
+  "started-at": "2026-10-14T19:40:00-03:00",
   "status": "done",
   "answers": {
     "target": "sync",
@@ -12,6 +12,27 @@
     {
       "item": "001-rate-limit-feedback",
       "feature-dir": "_reversa_forward/001-rate-limit-feedback",
+      "status": "done",
+      "last-stage": "done",
+      "note": "Feature concluída de ponta a ponta (requirements até sync) com adendo gerado."
+    },
+    {
+      "item": "002-byok-fallback",
+      "feature-dir": "_reversa_forward/002-byok-fallback",
+      "status": "done",
+      "last-stage": "done",
+      "note": "Feature concluída de ponta a ponta (requirements até sync) com adendo gerado."
+    },
+    {
+      "item": "003-postiz-backend-tests",
+      "feature-dir": "_reversa_forward/003-postiz-backend-tests",
+      "status": "done",
+      "last-stage": "done",
+      "note": "Feature concluída de ponta a ponta (requirements até sync) com adendo gerado."
+    },
+    {
+      "item": "004-polotno-postiz-bridge",
+      "feature-dir": "_reversa_forward/004-polotno-postiz-bridge",
       "status": "done",
       "last-stage": "done",
       "note": "Feature concluída de ponta a ponta (requirements até sync) com adendo gerado."

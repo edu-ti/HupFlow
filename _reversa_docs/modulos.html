@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulos & Dependências (Grafo D3) — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="modulos">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/vendor/d3.v7.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .graph-wrapper {
+      position: relative;
+      width: 100%;
+      height: 720px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      background: radial-gradient(circle at center, #0a0f1d 0%, #03060c 100%);
+    }
+    #graph-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    #graph-svg:active {
+      cursor: grabbing;
+    }
+    .node-circle {
+      stroke-width: 2.5px;
+      transition: filter 0.2s, stroke-width 0.2s;
+    }
+    .node-circle:hover {
+      filter: drop-shadow(0 0 10px #06b6d4);
+      stroke-width: 4px;
+      cursor: pointer;
+    }
+    .node-label {
+      font-size: 11px;
+      font-weight: 600;
+      fill: #e2e8f0;
+      text-anchor: middle;
+      pointer-events: none;
+      font-family: var(--font-sans);
+    }
+    .link-line {
+      stroke-opacity: 0.5;
+      transition: stroke-opacity 0.2s, stroke 0.2s;
+    }
+    .link-line:hover {
+      stroke-opacity: 1;
+      stroke: #06b6d4;
+    }
+    .link-label {
+      font-size: 9px;
+      fill: #94a3b8;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    #node-details-drawer {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      width: 320px;
+      background: rgba(12, 18, 34, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--accent-cyan);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: none;
+      z-index: 15;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos" class="active" aria-current="page">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Módulos & Grafo de Dependências (D3.js)</h1>
+      <p class="page-description">
+        Mapeamento dinâmico de interdependências, barramentos de comunicação e fluxos de dados entre subsistemas internos (Postiz, Polotno, Carousel) e serviços externos. Arraste os nós ou use os filtros.
+      </p>
+    </div>
+
+    <div class="graph-wrapper">
+      <svg id="graph-svg"></svg>
+
+      <div class="sidebar-overlay">
+        <h4>Controles do Grafo</h4>
+
+        <div class="control-group">
+          <label for="searchNode">Buscar Nó / Serviço:</label>
+          <input type="text" id="searchNode" placeholder="Ex: Temporal, MCP, OpenAI, Redis...">
+        </div>
+
+        <div class="control-group">
+          <label for="chargeStrength">Força de Repulsão: <span id="chargeVal">-350</span></label>
+          <input type="range" id="chargeStrength" min="-800" max="-100" step="25" value="-350">
+        </div>
+
+        <div class="control-group">
+          <label for="linkDist">Distância das Conexões: <span id="linkDistVal">120</span></label>
+          <input type="range" id="linkDist" min="60" max="250" step="10" value="120">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <button id="btnResetGraph" class="btn btn-secondary" style="flex: 1; padding: 6px;">Resetar Visão</button>
+        </div>
+      </div>
+
+      <div id="node-details-drawer">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h4 id="drawerNodeTitle" style="color: var(--accent-cyan); margin: 0;">Nome do Nó</h4>
+          <button id="btnCloseDrawer" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1rem;">&times;</button>
+        </div>
+        <p id="drawerNodeSubsystem" style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;"></p>
+        <p id="drawerNodeLoc" style="font-size: 0.85rem; margin-bottom: 0.5rem;"></p>
+        <div id="drawerNodeConns" style="font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Force-Directed Topology</span>
+      <span>D3.js v7 &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    (function initD3Graph() {
+      const data = window.RV_DATA && window.RV_DATA.deps ? window.RV_DATA.deps : { nodes: [], edges: [] };
+      const svg = d3.select("#graph-svg");
+      const container = document.querySelector(".graph-wrapper");
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // Color mapper
+      const colorMap = {
+        'carousel': '#ec4899',
+        'external-ai': '#fbbf24',
+        'cache': '#f97316',
+        'polotno': '#06b6d4',
+        'polotno-mcp': '#8b5cf6',
+        'postiz-web': '#0ea5e9',
+        'postiz-api': '#6366f1',
+        'postiz-orch': '#10b981',
+        'postiz-libs': '#3b82f6',
+        'storage': '#14b8a6',
+        'messaging': '#a855f7',
+        'external-social': '#f43f5e'
+      };
+
+      // Marker definitions for arrows
+      const defs = svg.append("defs");
+      defs.append("marker")
+        .attr("id", "arrowhead")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 22)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-5L10,0L0,5")
+        .attr("fill", "#64748b");
+
+      const g = svg.append("g");
+
+      // D3 Zoom
+      const zoom = d3.zoom()
+        .scaleExtent([0.3, 3])
+        .on("zoom", (event) => g.attr("transform", event.transform));
+      svg.call(zoom);
+
+      // Deep copy nodes and edges for D3 mutability
+      const nodes = data.nodes.map(d => ({ ...d }));
+      const links = data.edges.map(d => ({
+        source: d.from,
+        target: d.to,
+        label: d.label,
+        weight: d.weight
+      }));
+
+      let currentCharge = -350;
+      let currentDist = 120;
+
+      const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(currentDist))
+        .force("charge", d3.forceManyBody().strength(currentCharge))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(35));
+
+      // Links
+      const link = g.append("g")
+        .selectAll("line")
+        .data(links)
+        .enter().append("line")
+        .attr("class", "link-line")
+        .attr("stroke", "#475569")
+        .attr("stroke-width", d => Math.max(1.5, d.weight * 0.8))
+        .attr("marker-end", "url(#arrowhead)");
+
+      // Link labels
+      const linkLabel = g.append("g")
+        .selectAll("text")
+        .data(links)
+        .enter().append("text")
+        .attr("class", "link-label")
+        .text(d => d.label || "");
+
+      // Nodes
+      const node = g.append("g")
+        .selectAll("g")
+        .data(nodes)
+        .enter().append("g")
+        .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+      node.append("circle")
+        .attr("class", "node-circle")
+        .attr("r", d => d.loc > 0 ? Math.max(16, Math.min(32, Math.sqrt(d.loc) * 0.28)) : 16)
+        .attr("fill", d => colorMap[d.subsystem] || "#64748b")
+        .attr("stroke", "#ffffff")
+        .attr("stroke-opacity", 0.3);
+
+      node.append("text")
+        .attr("class", "node-label")
+        .attr("dy", d => (d.loc > 0 ? Math.max(16, Math.min(32, Math.sqrt(d.loc) * 0.28)) : 16) + 14)
+        .text(d => d.label.split("(")[0].trim());
+
+      // Simulation tick
+      simulation.on("tick", () => {
+        link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+        linkLabel
+          .attr("x", d => (d.source.x + d.target.x) / 2)
+          .attr("y", d => (d.source.y + d.target.y) / 2 - 4);
+
+        node
+          .attr("transform", d => `translate(${d.x},${d.y})`);
+      });
+
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+
+      // Drawer interaction
+      const drawer = document.getElementById("node-details-drawer");
+      const drawerTitle = document.getElementById("drawerNodeTitle");
+      const drawerSubsystem = document.getElementById("drawerNodeSubsystem");
+      const drawerLoc = document.getElementById("drawerNodeLoc");
+      const drawerConns = document.getElementById("drawerNodeConns");
+      document.getElementById("btnCloseDrawer").addEventListener("click", () => {
+        drawer.style.display = "none";
+      });
+
+      node.on("click", (event, d) => {
+        drawer.style.display = "block";
+        drawerTitle.textContent = d.label;
+        drawerSubsystem.textContent = `Subsistema: ${d.subsystem} (ID: ${d.id})`;
+        drawerLoc.textContent = d.loc > 0 ? `Tamanho do Código: ~${d.loc.toLocaleString()} LOC` : "Serviço Externo / Infraestrutura";
+
+        const relatedIn = links.filter(l => l.target.id === d.id);
+        const relatedOut = links.filter(l => l.source.id === d.id);
+
+        let connsHtml = `<div style="font-weight: 600; color: #fff; margin-bottom: 4px;">Conexões Ativas:</div>`;
+        if (relatedIn.length > 0) {
+          connsHtml += `<div style="color: #38bdf8; margin-bottom: 2px;">Recebe de:</div><ul style="padding-left: 1rem; margin-bottom: 6px;">`;
+          relatedIn.forEach(l => { connsHtml += `<li>${l.source.label} (${l.label})</li>`; });
+          connsHtml += `</ul>`;
+        }
+        if (relatedOut.length > 0) {
+          connsHtml += `<div style="color: #a78bfa; margin-bottom: 2px;">Envia para:</div><ul style="padding-left: 1rem;">`;
+          relatedOut.forEach(l => { connsHtml += `<li>${l.target.label} (${l.label})</li>`; });
+          connsHtml += `</ul>`;
+        }
+        drawerConns.innerHTML = connsHtml;
+      });
+
+      // Controls
+      const searchInput = document.getElementById("searchNode");
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        node.selectAll("circle")
+          .attr("stroke", d => {
+            if (!query) return "#ffffff";
+            return d.label.toLowerCase().includes(query) || d.id.toLowerCase().includes(query) ? "#06b6d4" : "#ffffff";
+          })
+          .attr("stroke-width", d => {
+            if (!query) return 2.5;
+            return d.label.toLowerCase().includes(query) || d.id.toLowerCase().includes(query) ? 5 : 1;
+          })
+          .attr("stroke-opacity", d => {
+            if (!query) return 0.3;
+            return d.label.toLowerCase().includes(query) || d.id.toLowerCase().includes(query) ? 1 : 0.2;
+          });
+      });
+
+      document.getElementById("chargeStrength").addEventListener("input", (e) => {
+        currentCharge = parseInt(e.target.value);
+        document.getElementById("chargeVal").textContent = currentCharge;
+        simulation.force("charge", d3.forceManyBody().strength(currentCharge));
+        simulation.alpha(0.3).restart();
+      });
+
+      document.getElementById("linkDist").addEventListener("input", (e) => {
+        currentDist = parseInt(e.target.value);
+        document.getElementById("linkDistVal").textContent = currentDist;
+        simulation.force("link", d3.forceLink(links).id(d => d.id).distance(currentDist));
+        simulation.alpha(0.3).restart();
+      });
+
+      document.getElementById("btnResetGraph").addEventListener("click", () => {
+        svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+      });
+    })();
+  </script>
+</body>
+</html>

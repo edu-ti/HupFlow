@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitetura 3D (Code City) — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="arquitetura">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/vendor/three.min.js"></script>
+  <script src="assets/vendor/OrbitControls.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .city-wrapper {
+      position: relative;
+      width: 100%;
+      height: 720px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      background: #030712;
+    }
+    #city-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #city-loader {
+      position: absolute;
+      inset: 0;
+      background: #070a12;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 20;
+      transition: opacity 0.5s ease;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(6, 182, 212, 0.2);
+      border-top-color: var(--accent-cyan);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #tooltip-3d {
+      position: absolute;
+      display: none;
+      padding: 10px 14px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--accent-cyan);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 0.85rem;
+      pointer-events: none;
+      z-index: 15;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      max-width: 280px;
+    }
+    .legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 1rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura" class="active" aria-current="page">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Arquitetura 3D (Code City)</h1>
+      <p class="page-description">
+        Visualização tridimensional espacializada dos módulos do HupFlow. Cada prédio representa um arquivo de código: a altura reflete as Linhas de Código (LOC) e a base reflete a complexidade ciclomática.
+      </p>
+    </div>
+
+    <div class="city-wrapper">
+      <div id="city-loader">
+        <div class="spinner"></div>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Renderizando Cidade de Código em 3D...</p>
+      </div>
+
+      <div id="tooltip-3d"></div>
+      <canvas id="city-canvas"></canvas>
+
+      <div class="sidebar-overlay">
+        <h4>Controles do Mapa</h4>
+        
+        <div class="control-group">
+          <label for="subsystemFilter">Filtrar Subsistema:</label>
+          <select id="subsystemFilter">
+            <option value="all">Todos os Subsistemas</option>
+            <option value="postiz-libs">Postiz Conectores & Libs</option>
+            <option value="postiz-backend">Postiz Backend API</option>
+            <option value="postiz-frontend">Postiz Frontend Web</option>
+            <option value="postiz-orchestrator">Postiz Orchestrator</option>
+            <option value="polotno-studio">Polotno Studio & MCP</option>
+            <option value="carousel-generator">Carousel Generator</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="heightScale">Escala de Altura (LOC): <span id="heightScaleVal">1.0x</span></label>
+          <input type="range" id="heightScale" min="0.3" max="2.5" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+          <label for="lightIntensity">Intensidade da Luz:</label>
+          <input type="range" id="lightIntensity" min="0.5" max="2.5" step="0.1" value="1.2">
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <button id="btnResetCamera" class="btn btn-secondary" style="flex: 1; padding: 6px;">Resetar</button>
+          <button id="btnExportPng" class="btn btn-primary" style="flex: 1; padding: 6px;">Salvar PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend-bar">
+      <div class="legend-item">
+        <div class="legend-color" style="background: #3b82f6;"></div>
+        <span>Postiz Libs & Conectores</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #6366f1;"></div>
+        <span>Postiz Backend (NestJS)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #0ea5e9;"></div>
+        <span>Postiz Frontend (Next.js)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #10b981;"></div>
+        <span>Postiz Orchestrator (Temporal)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #06b6d4;"></div>
+        <span>Polotno Studio & MCP</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #ec4899;"></div>
+        <span>Carousel Generator (AI)</span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; 3D City Engine</span>
+      <span>Three.js + OrbitControls &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    (function initCodeCity() {
+      const container = document.querySelector('.city-wrapper');
+      const canvas = document.getElementById('city-canvas');
+      const loader = document.getElementById('city-loader');
+      const tooltip = document.getElementById('tooltip-3d');
+
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // Color mapping
+      const colors = {
+        'postiz-libs': 0x3b82f6,
+        'postiz-backend': 0x6366f1,
+        'postiz-frontend': 0x0ea5e9,
+        'postiz-orchestrator': 0x10b981,
+        'polotno-studio': 0x06b6d4,
+        'carousel-generator': 0xec4899
+      };
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x05070f);
+      scene.fog = new THREE.FogExp2(0x05070f, 0.0035);
+
+      const camera = new THREE.PerspectiveCamera(45, width / height, 1, 3000);
+      const defaultCamPos = { x: 220, y: 180, z: 260 };
+      camera.position.set(defaultCamPos.x, defaultCamPos.y, defaultCamPos.z);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't go below ground
+      controls.target.set(0, 0, 0);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xa5b4fc, 1.2);
+      dirLight.position.set(150, 250, 150);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      const hemiLight = new THREE.HemisphereLight(0x06b6d4, 0x1e1b4b, 0.6);
+      scene.add(hemiLight);
+
+      // Ground plane with grid
+      const gridHelper = new THREE.GridHelper(500, 50, 0x1e293b, 0x0f172a);
+      gridHelper.position.y = -0.5;
+      scene.add(gridHelper);
+
+      // Ground disc with soft glow border
+      const groundGeo = new THREE.CylinderGeometry(260, 260, 2, 64);
+      const groundMat = new THREE.MeshStandardMaterial({
+        color: 0x090d16,
+        roughness: 0.85,
+        metalness: 0.2
+      });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
+      ground.position.y = -1;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      // Ring border
+      const ringGeo = new THREE.RingGeometry(258, 262, 64);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 0.1;
+      scene.add(ring);
+
+      // Building generation from RV_DATA.modules
+      const modules = (window.RV_DATA && window.RV_DATA.modules) || [];
+      const buildingGroup = new THREE.Group();
+      scene.add(buildingGroup);
+
+      const buildings = [];
+      const cols = 6;
+      const spacing = 34;
+      const startX = -((cols - 1) * spacing) / 2;
+      const rows = Math.ceil(modules.length / cols);
+      const startZ = -((rows - 1) * spacing) / 2;
+
+      let currentHeightScale = 1.0;
+
+      modules.forEach((mod, idx) => {
+        const col = idx % cols;
+        const row = Math.floor(idx / cols);
+
+        const x = startX + col * spacing;
+        const z = startZ + row * spacing;
+
+        const baseSize = Math.max(10, Math.min(26, mod.complexity * 0.9));
+        const rawHeight = Math.max(8, (mod.loc / 8));
+
+        const colorHex = colors[mod.subsystem] || 0x64748b;
+        const geo = new THREE.BoxGeometry(baseSize, 1, baseSize);
+        geo.translate(0, 0.5, 0);
+
+        const mat = new THREE.MeshStandardMaterial({
+          color: colorHex,
+          roughness: 0.3,
+          metalness: 0.6,
+          emissive: colorHex,
+          emissiveIntensity: 0.15
+        });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, 0, z);
+        mesh.scale.y = rawHeight * currentHeightScale;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        mesh.userData = {
+          ...mod,
+          originalColor: colorHex,
+          baseHeight: rawHeight
+        };
+
+        // Wireframe accent top
+        const wireGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(baseSize, 1, baseSize));
+        const wireMat = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.3, transparent: true });
+        const wire = new THREE.LineSegments(wireGeo, wireMat);
+        mesh.add(wire);
+
+        buildingGroup.add(mesh);
+        buildings.push(mesh);
+      });
+
+      // Controls interaction
+      const heightSlider = document.getElementById('heightScale');
+      const heightVal = document.getElementById('heightScaleVal');
+      heightSlider.addEventListener('input', (e) => {
+        currentHeightScale = parseFloat(e.target.value);
+        heightVal.textContent = currentHeightScale.toFixed(1) + 'x';
+        buildings.forEach(b => {
+          b.scale.y = b.userData.baseHeight * currentHeightScale;
+        });
+      });
+
+      const lightSlider = document.getElementById('lightIntensity');
+      lightSlider.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        dirLight.intensity = val;
+        ambientLight.intensity = val * 0.7;
+      });
+
+      const filterSelect = document.getElementById('subsystemFilter');
+      filterSelect.addEventListener('change', (e) => {
+        const selected = e.target.value;
+        buildings.forEach(b => {
+          if (selected === 'all' || b.userData.subsystem === selected) {
+            b.visible = true;
+          } else {
+            b.visible = false;
+          }
+        });
+      });
+
+      document.getElementById('btnResetCamera').addEventListener('click', () => {
+        camera.position.set(defaultCamPos.x, defaultCamPos.y, defaultCamPos.z);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      });
+
+      document.getElementById('btnExportPng').addEventListener('click', () => {
+        const dataUrl = renderer.domElement.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'hupflow-arquitetura-3d.png';
+        link.href = dataUrl;
+        link.click();
+      });
+
+      // Raycasting for hover tooltip
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+      let hoveredMesh = null;
+
+      function onPointerMove(event) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const visibleBuildings = buildings.filter(b => b.visible);
+        const intersects = raycaster.intersectObjects(visibleBuildings);
+
+        if (intersects.length > 0) {
+          const hit = intersects[0].object;
+          if (hoveredMesh !== hit) {
+            if (hoveredMesh) {
+              hoveredMesh.material.emissiveIntensity = 0.15;
+            }
+            hoveredMesh = hit;
+            hoveredMesh.material.emissiveIntensity = 0.7;
+          }
+
+          const d = hit.userData;
+          tooltip.style.display = 'block';
+          tooltip.style.left = (event.clientX - rect.left + 15) + 'px';
+          tooltip.style.top = (event.clientY - rect.top + 15) + 'px';
+          tooltip.innerHTML = `
+            <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px;">${d.name}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 6px;">${d.subsystem} &bull; ${d.type}</div>
+            <div style="font-size: 0.8rem; margin-bottom: 6px;">${d.description}</div>
+            <div style="display: flex; gap: 8px; font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 4px;">
+              <span><strong>LOC:</strong> ${d.loc}</span>
+              <span><strong>Complexidade:</strong> ${d.complexity}</span>
+            </div>
+          `;
+        } else {
+          if (hoveredMesh) {
+            hoveredMesh.material.emissiveIntensity = 0.15;
+            hoveredMesh = null;
+          }
+          tooltip.style.display = 'none';
+        }
+      }
+
+      canvas.addEventListener('pointermove', onPointerMove);
+      canvas.addEventListener('pointerleave', () => {
+        if (hoveredMesh) {
+          hoveredMesh.material.emissiveIntensity = 0.15;
+          hoveredMesh = null;
+        }
+        tooltip.style.display = 'none';
+      });
+
+      // Window resize handler
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth;
+        const newH = container.clientHeight;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+
+      // Render loop
+      let firstFrame = true;
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+
+        if (firstFrame) {
+          firstFrame = false;
+          loader.style.opacity = '0';
+          setTimeout(() => { loader.style.display = 'none'; }, 500);
+        }
+      }
+      animate();
+    })();
+  </script>
+</body>
+</html>

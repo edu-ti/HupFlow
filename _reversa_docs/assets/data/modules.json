@@ -1,0 +1,332 @@
+[
+  {
+    "id": "carousel-generator/actions.tsx",
+    "name": "src/app/actions.tsx",
+    "folder": "carousel-generator",
+    "loc": 215,
+    "complexity": 12,
+    "type": "server-action",
+    "subsystem": "carousel-generator",
+    "description": "Orquestrador de geração de slides via LangChain com Rate Limiting e BYOK fallback"
+  },
+  {
+    "id": "carousel-generator/langchain.ts",
+    "name": "src/lib/langchain.ts",
+    "folder": "carousel-generator",
+    "loc": 280,
+    "complexity": 16,
+    "type": "ai-service",
+    "subsystem": "carousel-generator",
+    "description": "Integração OpenAI gpt-4o-mini com function calling Zod e tratamento de fallback dinâmico"
+  },
+  {
+    "id": "carousel-generator/slides-editor.tsx",
+    "name": "src/components/slides-editor.tsx",
+    "folder": "carousel-generator",
+    "loc": 390,
+    "complexity": 14,
+    "type": "ui-component",
+    "subsystem": "carousel-generator",
+    "description": "Editor visual de carrosséis interativo com personalização de cores, fontes e layout"
+  },
+  {
+    "id": "carousel-generator/rate-limit.ts",
+    "name": "src/lib/rate-limit.ts",
+    "folder": "carousel-generator",
+    "loc": 85,
+    "complexity": 6,
+    "type": "security",
+    "subsystem": "carousel-generator",
+    "description": "Limitador de requisições por IP via Upstash Redis KV com respostas estruturadas"
+  },
+  {
+    "id": "carousel-generator/fonts-map.tsx",
+    "name": "src/lib/fonts-map.tsx",
+    "folder": "carousel-generator",
+    "loc": 140,
+    "complexity": 4,
+    "type": "ui-asset",
+    "subsystem": "carousel-generator",
+    "description": "Mapeamento e carregamento dinâmico de webfonts para slides"
+  },
+  {
+    "id": "carousel-generator/pdf-export.tsx",
+    "name": "src/components/pdf-export.tsx",
+    "folder": "carousel-generator",
+    "loc": 190,
+    "complexity": 8,
+    "type": "exporter",
+    "subsystem": "carousel-generator",
+    "description": "Renderização e compilação vetorial PDF de slides via @react-pdf/renderer"
+  },
+  {
+    "id": "polotno-studio/main.ts",
+    "name": "src/main/index.ts",
+    "folder": "polotno-studio",
+    "loc": 340,
+    "complexity": 15,
+    "type": "electron-main",
+    "subsystem": "polotno-studio",
+    "description": "Processo principal Electron, gerenciamento de janelas, ciclo de vida e IPC bridge"
+  },
+  {
+    "id": "polotno-studio/mcp-server.ts",
+    "name": "src/mcp-server/index.ts",
+    "folder": "polotno-studio",
+    "loc": 410,
+    "complexity": 18,
+    "type": "mcp-server",
+    "subsystem": "polotno-studio",
+    "description": "Servidor MCP (Model Context Protocol) via JSON-RPC/stdio para automação IA"
+  },
+  {
+    "id": "polotno-studio/postiz-bridge.ts",
+    "name": "src/mcp-server/postiz-bridge.ts",
+    "folder": "polotno-studio",
+    "loc": 185,
+    "complexity": 9,
+    "type": "integration",
+    "subsystem": "polotno-studio",
+    "description": "Bridge MCP 'export_to_postiz' para upload direto de designs renderizados para o Postiz"
+  },
+  {
+    "id": "polotno-studio/renderer-app.tsx",
+    "name": "src/renderer/src/App.tsx",
+    "folder": "polotno-studio",
+    "loc": 520,
+    "complexity": 22,
+    "type": "ui-editor",
+    "subsystem": "polotno-studio",
+    "description": "Container do estúdio Polotno com MobX 7 store, abas e Konva canvas 2D"
+  },
+  {
+    "id": "polotno-studio/tabs-manager.ts",
+    "name": "src/renderer/src/tabs-store.ts",
+    "folder": "polotno-studio",
+    "loc": 230,
+    "complexity": 11,
+    "type": "state-store",
+    "subsystem": "polotno-studio",
+    "description": "Gerenciador multi-abas de designs abertos com histórico isolado de undo/redo"
+  },
+  {
+    "id": "polotno-studio/design-lint.ts",
+    "name": "src/renderer/src/lint-engine.ts",
+    "folder": "polotno-studio",
+    "loc": 295,
+    "complexity": 13,
+    "type": "linter",
+    "subsystem": "polotno-studio",
+    "description": "Verificador algorítmico de contraste WCAG, texto fora da sangria e proporções"
+  },
+  {
+    "id": "postiz-backend/main.ts",
+    "name": "apps/backend/src/main.ts",
+    "folder": "postiz-backend",
+    "loc": 115,
+    "complexity": 6,
+    "type": "entrypoint",
+    "subsystem": "postiz-backend",
+    "description": "Bootstrap do servidor NestJS, CORS, Swagger OpenAPI e graceful shutdown"
+  },
+  {
+    "id": "postiz-backend/auth-middleware.ts",
+    "name": "apps/backend/src/api/auth.middleware.ts",
+    "folder": "postiz-backend",
+    "loc": 180,
+    "complexity": 12,
+    "type": "middleware",
+    "subsystem": "postiz-backend",
+    "description": "Middleware de validação JWT, isolamento multi-tenant e verificação de OrganizationId"
+  },
+  {
+    "id": "postiz-backend/posts-controller.ts",
+    "name": "apps/backend/src/api/routes/posts.controller.ts",
+    "folder": "postiz-backend",
+    "loc": 460,
+    "complexity": 24,
+    "type": "controller",
+    "subsystem": "postiz-backend",
+    "description": "API REST CRUD de publicações com agendamento, upload de mídia e tags"
+  },
+  {
+    "id": "postiz-backend/integrations-controller.ts",
+    "name": "apps/backend/src/api/routes/integrations.controller.ts",
+    "folder": "postiz-backend",
+    "loc": 380,
+    "complexity": 19,
+    "type": "controller",
+    "subsystem": "postiz-backend",
+    "description": "Gerenciamento de canais sociais conectados e fluxos de callback OAuth"
+  },
+  {
+    "id": "postiz-backend/organizations-controller.ts",
+    "name": "apps/backend/src/api/routes/organizations.controller.ts",
+    "folder": "postiz-backend",
+    "loc": 270,
+    "complexity": 14,
+    "type": "controller",
+    "subsystem": "postiz-backend",
+    "description": "Fronteira multi-tenant, gestão de membros, permissões RBAC e faturamento"
+  },
+  {
+    "id": "postiz-backend/uploads-controller.ts",
+    "name": "apps/backend/src/api/routes/uploads.controller.ts",
+    "folder": "postiz-backend",
+    "loc": 220,
+    "complexity": 10,
+    "type": "controller",
+    "subsystem": "postiz-backend",
+    "description": "Upload multipart de imagens e vídeos para armazenamento local ou S3/R2"
+  },
+  {
+    "id": "postiz-backend/prisma-service.ts",
+    "name": "apps/backend/src/services/prisma.service.ts",
+    "folder": "postiz-backend",
+    "loc": 95,
+    "complexity": 5,
+    "type": "orm-service",
+    "subsystem": "postiz-backend",
+    "description": "Conexão e lifecycle do cliente Prisma ORM com PostgreSQL"
+  },
+  {
+    "id": "postiz-orchestrator/main.ts",
+    "name": "apps/orchestrator/src/main.ts",
+    "folder": "postiz-orchestrator",
+    "loc": 90,
+    "complexity": 5,
+    "type": "temporal-worker",
+    "subsystem": "postiz-orchestrator",
+    "description": "Worker Temporal.io registrando workflows e activities de envio social"
+  },
+  {
+    "id": "postiz-orchestrator/post-workflow.ts",
+    "name": "apps/orchestrator/src/workflows/post.workflow.ts",
+    "folder": "postiz-orchestrator",
+    "loc": 310,
+    "complexity": 17,
+    "type": "workflow",
+    "subsystem": "postiz-orchestrator",
+    "description": "Workflow durável idempotente de envio de posts para múltiplos canais"
+  },
+  {
+    "id": "postiz-orchestrator/token-refresh.ts",
+    "name": "apps/orchestrator/src/workflows/token-refresh.workflow.ts",
+    "folder": "postiz-orchestrator",
+    "loc": 195,
+    "complexity": 11,
+    "type": "workflow",
+    "subsystem": "postiz-orchestrator",
+    "description": "Workflow autônomo de renovação contínua de tokens OAuth expirados"
+  },
+  {
+    "id": "postiz-orchestrator/publish-activity.ts",
+    "name": "apps/orchestrator/src/activities/publish.activity.ts",
+    "folder": "postiz-orchestrator",
+    "loc": 280,
+    "complexity": 15,
+    "type": "activity",
+    "subsystem": "postiz-orchestrator",
+    "description": "Atividade de execução de dispatch com fallback e telemetria de erro por canal"
+  },
+  {
+    "id": "postiz-libs/social-abstract.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+    "folder": "postiz-libs",
+    "loc": 680,
+    "complexity": 32,
+    "type": "abstract-provider",
+    "subsystem": "postiz-libs",
+    "description": "Interface unificada e validador polimórfico para 38 provedores de redes sociais"
+  },
+  {
+    "id": "postiz-libs/twitter-connector.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/twitter.provider.ts",
+    "folder": "postiz-libs",
+    "loc": 340,
+    "complexity": 16,
+    "type": "social-connector",
+    "subsystem": "postiz-libs",
+    "description": "Conector Twitter/X API v2 com upload de mídia em chunks e tweets longos"
+  },
+  {
+    "id": "postiz-libs/linkedin-connector.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/linkedin.provider.ts",
+    "folder": "postiz-libs",
+    "loc": 360,
+    "complexity": 17,
+    "type": "social-connector",
+    "subsystem": "postiz-libs",
+    "description": "Conector LinkedIn REST com suporte a publicações corporativas e pessoais"
+  },
+  {
+    "id": "postiz-libs/instagram-connector.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/instagram.provider.ts",
+    "folder": "postiz-libs",
+    "loc": 420,
+    "complexity": 20,
+    "type": "social-connector",
+    "subsystem": "postiz-libs",
+    "description": "Conector Meta Graph API para feed, carrosséis e reels de contas Creator"
+  },
+  {
+    "id": "postiz-libs/tiktok-connector.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/tiktok.provider.ts",
+    "folder": "postiz-libs",
+    "loc": 310,
+    "complexity": 15,
+    "type": "social-connector",
+    "subsystem": "postiz-libs",
+    "description": "Conector TikTok Content Posting API para agendamento direto de vídeo"
+  },
+  {
+    "id": "postiz-libs/bluesky-connector.ts",
+    "name": "libraries/nestjs-libraries/src/integrations/bluesky.provider.ts",
+    "folder": "postiz-libs",
+    "loc": 290,
+    "complexity": 13,
+    "type": "social-connector",
+    "subsystem": "postiz-libs",
+    "description": "Conector ATProto federado com facets de menções e embeds de imagem"
+  },
+  {
+    "id": "postiz-frontend/layout.tsx",
+    "name": "apps/frontend/src/app/layout.tsx",
+    "folder": "postiz-frontend",
+    "loc": 240,
+    "complexity": 10,
+    "type": "ui-layout",
+    "subsystem": "postiz-frontend",
+    "description": "Layout raiz Next.js 16 com Mantine Theme Provider, sidebar e header"
+  },
+  {
+    "id": "postiz-frontend/calendar.tsx",
+    "name": "apps/frontend/src/components/calendar/view.tsx",
+    "folder": "postiz-frontend",
+    "loc": 580,
+    "complexity": 26,
+    "type": "ui-calendar",
+    "subsystem": "postiz-frontend",
+    "description": "Calendário editorial interativo com drag-and-drop de posts e visão semanal/mensal"
+  },
+  {
+    "id": "postiz-frontend/post-composer.tsx",
+    "name": "apps/frontend/src/components/posts/composer.tsx",
+    "folder": "postiz-frontend",
+    "loc": 640,
+    "complexity": 28,
+    "type": "ui-composer",
+    "subsystem": "postiz-frontend",
+    "description": "Editor multicanal de postagens com preview em tempo real de cada rede social"
+  },
+  {
+    "id": "postiz-frontend/analytics.tsx",
+    "name": "apps/frontend/src/components/analytics/dashboard.tsx",
+    "folder": "postiz-frontend",
+    "loc": 390,
+    "complexity": 18,
+    "type": "ui-analytics",
+    "subsystem": "postiz-frontend",
+    "description": "Dashboards analíticos de engajamento, impressões, cliques e streak da organização"
+  }
+]

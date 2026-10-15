@@ -1,0 +1,137 @@
+{
+  "projectName": "HupFlow",
+  "tagline": "Suíte unificada de marketing digital, design com IA, e distribuição social para 38 redes.",
+  "purpose": "O HupFlow unifica a produção de criativos visuais (carrosséis estruturados e estúdio 2D desktop via MCP) com uma esteira corporativa robusta de agendamento multicanal para 38 redes sociais com workflows duráveis.",
+  "coreEntities": [
+    {
+      "term": "Organization",
+      "definition": "Fronteira multi-tenant primária. Usuários, integrações, posts e assinaturas pertencem estritamente a uma organização com isolamento absoluto.",
+      "domain": "postiz",
+      "status": "confirmado",
+      "id": "organization"
+    },
+    {
+      "term": "Post",
+      "definition": "Unidade editorial contendo texto (copy), mídias anexadas, tags e agendamento para um ou múltiplos canais sociais.",
+      "domain": "postiz",
+      "status": "confirmado",
+      "id": "post"
+    },
+    {
+      "term": "Integration",
+      "definition": "Canal social conectado (perfil pessoal ou página corporativa) com credenciais OAuth autorizadas e refresh automático.",
+      "domain": "postiz",
+      "status": "confirmado",
+      "id": "integration"
+    },
+    {
+      "term": "Set",
+      "definition": "Grupo predefinido de canais sociais que recebem publicações simultâneas com apenas 1 clique.",
+      "domain": "postiz",
+      "status": "confirmado",
+      "id": "set"
+    },
+    {
+      "term": "Streak",
+      "definition": "Métrica de gamificação e consistência que contabiliza dias ininterruptos de postagens públicas.",
+      "domain": "postiz",
+      "status": "confirmado",
+      "id": "streak"
+    },
+    {
+      "term": "Design",
+      "definition": "Documento visual individual no Polotno Studio contendo uma ou mais páginas com elementos gráficos ordenados.",
+      "domain": "polotno",
+      "status": "confirmado",
+      "id": "design"
+    },
+    {
+      "term": "Design JSON",
+      "definition": "Representação serializada pura do design em JSON compatível com store.toJSON() e com @polotno/schema.",
+      "domain": "polotno",
+      "status": "confirmado",
+      "id": "design-json"
+    },
+    {
+      "term": "Model Context Protocol (MCP)",
+      "definition": "Servidor de protocolo aberto que permite a agentes de IA manipular o canvas, injetar imagens e acionar ferramentas no Polotno.",
+      "domain": "polotno",
+      "status": "confirmado",
+      "id": "mcp"
+    },
+    {
+      "term": "Carousel",
+      "definition": "Sequência de slides horizontais com copy de alto impacto gerada por IA (LangChain) para LinkedIn e Instagram.",
+      "domain": "carousel",
+      "status": "confirmado",
+      "id": "carousel"
+    },
+    {
+      "term": "Slide",
+      "definition": "Lâmina individual do carrossel composta por blocos de texto (Title, Subtitle, Description) e tema visual.",
+      "domain": "carousel",
+      "status": "confirmado",
+      "id": "slide"
+    },
+    {
+      "term": "BYOK (Bring Your Own Key)",
+      "definition": "Mecanismo de fallback que permite ao usuário informar sua própria chave da OpenAI quando a cota do servidor estiver esgotada.",
+      "domain": "carousel",
+      "status": "confirmado",
+      "id": "byok"
+    },
+    {
+      "term": "Postiz Bridge",
+      "definition": "Ferramenta MCP (export_to_postiz) que renderiza o design ativo em alta resolução e o envia diretamente para o backend do Postiz.",
+      "domain": "bridge",
+      "status": "confirmado",
+      "id": "postiz-bridge"
+    }
+  ],
+  "businessRules": [
+    {
+      "id": "RN-01",
+      "name": "Isolamento Rigoroso Multi-tenant",
+      "desc": "Nenhuma consulta ou mutação pode ser executada sem filtrar explicitamente pelo organizationId da sessão ativa. Tentativas de acesso cruzado geram HTTP 403."
+    },
+    {
+      "id": "RN-02",
+      "name": "Garantia de Limites de Texto e Mídia",
+      "desc": "Cada rede social possui restrições aplicadas na validação prévia (Twitter 280 chars, LinkedIn 3.000 chars, Instagram mídias com proporções 4:5, 1:1, 9:16)."
+    },
+    {
+      "id": "RN-03",
+      "name": "Renovação Autônoma de Credenciais OAuth",
+      "desc": "Workflows assíncronos renovam access tokens com janela de expiração menor que 24 horas via refresh token antes do disparo de posts."
+    },
+    {
+      "id": "RN-04",
+      "name": "Idempotência de Publicação via Temporal",
+      "desc": "O WorkflowId do Temporal é amarrado deterministicamente ao PostId, prevenindo envios duplicados em caso de timeout de rede."
+    },
+    {
+      "id": "RN-05",
+      "name": "Rate Limiting com Feedback Estruturado",
+      "desc": "Proteção contra abusos via Upstash Redis retornando mensagens amigáveis de erro e opção BYOK para o usuário."
+    },
+    {
+      "id": "RN-06",
+      "name": "Estrutura Harmônica de Carrosséis",
+      "desc": "Geração via LLM estruturada em 8 a 15 lâminas com contagem de caracteres balanceada para leitura em dispositivos móveis."
+    }
+  ],
+  "foundingDecisions": [
+    {
+      "title": "Workflows Duráveis com Temporal.io",
+      "desc": "Substituição de cron jobs tradicionais por workflows duráveis que sobrevivem a reinicializações de pods e falhas transitórias de APIs externas."
+    },
+    {
+      "title": "Protocolo MCP para Agentes de IA",
+      "desc": "Adoção do Model Context Protocol aberto no Polotno Studio para integração transparente com assistentes e ferramentas autônomas."
+    },
+    {
+      "title": "Conector Unificado Social Abstract",
+      "desc": "Normalização de 38 redes sociais heterogêneas sob uma interface polimórfica compartilhada em TypeScript."
+    }
+  ]
+}

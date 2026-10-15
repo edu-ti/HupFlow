@@ -49,20 +49,47 @@ export function AIInputForm() {
     setIsLoading(true);
     setStatus("loading");
 
-    const result = await generateCarouselSlidesAction(
-      `A carousel with about "${data.prompt}"`
-    );
+    const promptText = `A carousel with about "${data.prompt}"`;
+    const result = await generateCarouselSlidesAction(promptText);
 
-    // const generatedSlides = await generateCarouselSlides(
-    //   `A carousel with about "${data.prompt}"`,
-    //   apiKey
-    // );
     if (result.success) {
       setValue("slides", result.slides);
       toast({
         title: "New carousel generated",
         description: "The slides have been loaded into the editor.",
       });
+    } else if (
+      (result.reason === "rate_limit" || result.reason === "missing_key") &&
+      apiKey &&
+      apiKey.trim().length > 0
+    ) {
+      try {
+        const localSlides = await generateCarouselSlides(promptText, apiKey);
+        if (localSlides) {
+          setValue("slides", localSlides);
+          toast({
+            title: "Novo carrossel gerado (BYOK)",
+            description:
+              "Utilizada sua chave própria da OpenAI devido à cota pública do servidor.",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Falha na geração com chave própria",
+            description:
+              "Não foi possível gerar os slides. Verifique sua chave de API OpenAI.",
+          });
+        }
+      } catch (err) {
+        toast({
+          variant: "destructive",
+          title: "Erro na chamada OpenAI",
+          description:
+            err instanceof Error
+              ? err.message
+              : "Verifique se sua chave possui saldo e permissões adequadas.",
+        });
+      }
     } else if (result.reason === "rate_limit") {
       const minutesRemaining = result.reset
         ? Math.max(1, Math.ceil((result.reset - Date.now()) / 60000))
@@ -70,13 +97,14 @@ export function AIInputForm() {
       toast({
         variant: "destructive",
         title: "Limite de requisições atingido",
-        description: `Você atingiu o limite de requisições. Tente novamente em aproximadamente ${minutesRemaining} minuto(s).`,
+        description: `Aguarde ~${minutesRemaining} minuto(s) ou adicione sua chave de API OpenAI nas configurações para continuar gerando imediatamente.`,
       });
     } else if (result.reason === "missing_key") {
       toast({
         variant: "destructive",
         title: "Chave OpenAI não configurada",
-        description: result.message,
+        description:
+          "Adicione sua própria chave de API OpenAI nas configurações para gerar carrosséis.",
       });
     } else {
       toast({

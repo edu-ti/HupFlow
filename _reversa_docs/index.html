@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HupFlow — Documentação Visual & Mini-Site</title>
+  <meta name="reversa-category" content="index">
+  <meta name="reversa-producer-agent" content="reversa-docs-publisher">
+  <meta name="reversa-template" content="index">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .stats-banner {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    @media (max-width: 1024px) { .stats-banner { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .stats-banner { grid-template-columns: 1fr; } }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .section-title-wrap {
+      margin-bottom: 1.75rem;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .feature-spec-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index" class="active" aria-current="page">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <!-- Hero Section with Deterministic Seal -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="dot"></span>
+          <span>Engenharia Reversa Concluída &bull; Seed 44fdd4b2</span>
+        </div>
+        <h1 class="hero-title">HupFlow</h1>
+        <p class="hero-subtitle">
+          Suíte unificada open-source para criação visual de conteúdo com inteligência artificial, estúdio gráfico 2D desktop via Model Context Protocol (MCP), e distribuição multicanal durável para 38 redes sociais.
+        </p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="arquitetura.html" class="btn btn-primary">Explorar Arquitetura 3D</a>
+          <a href="metricas.html" class="btn btn-secondary">Ver Métricas & Telemetria</a>
+          <a href="deck.html" class="btn btn-secondary">Abrir Slide Deck</a>
+        </div>
+      </div>
+      <div class="hero-seal-container">
+        <div id="hero-seal-slot" style="width: 100%; height: 100%;"></div>
+      </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <div class="stats-banner">
+      <div class="stat-item">
+        <span class="stat-num">1.801</span>
+        <span class="stat-desc">Arquivos Mapeados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">~85.4k</span>
+        <span class="stat-desc">Linhas de Código (LOC)</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">3</span>
+        <span class="stat-desc">Subsistemas Integrados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">38</span>
+        <span class="stat-desc">Conectores de Redes Sociais</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" style="color: #34d399;">91.5%</span>
+        <span class="stat-desc">Confiança Reversa</span>
+      </div>
+    </div>
+
+    <!-- Navegação Primária do Sistema -->
+    <div class="section-title-wrap">
+      <h2 class="section-title">Visualizações & Ferramentas do Mini-Site</h2>
+      <p class="section-desc">Mapeamento espacial, topológico, estatístico e narrativo do sistema completo.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 3.5rem;">
+      <!-- Card Arquitetura 3D -->
+      <a href="arquitetura.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">🏙️</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Arquitetura 3D (Code City)</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Navegue pela cidade tridimensional do código usando Three.js e OrbitControls. Altura reflete LOC e a base reflete complexidade.
+        </p>
+        <span style="color: var(--accent-cyan); font-weight: 600; font-size: 0.85rem;">Explorar Cidade 3D &rarr;</span>
+      </a>
+
+      <!-- Card Módulos & Grafo -->
+      <a href="modulos.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">🕸️</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Módulos & Grafo (D3.js)</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Grafo force-directed interativo com nós arrastáveis, protocolos de comunicação (REST, MCP, Temporal gRPC) e filtros.
+        </p>
+        <span style="color: var(--accent-violet); font-weight: 600; font-size: 0.85rem;">Explorar Grafo &rarr;</span>
+      </a>
+
+      <!-- Card Topologia -->
+      <a href="topologia.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">📐</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Topologia Arquitetural</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Matriz comparativa e fluxo operacional entre Carousel Generator, Polotno Studio Desktop e Postiz Social Engine.
+        </p>
+        <span style="color: #38bdf8; font-weight: 600; font-size: 0.85rem;">Ver Comparativo &rarr;</span>
+      </a>
+
+      <!-- Card Métricas -->
+      <a href="metricas.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">📊</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Métricas & Telemetria</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Painéis Highcharts: Treemap de LOC por pasta, top módulos com alta complexidade, histograma de tamanhos e fluxo Sankey.
+        </p>
+        <span style="color: #34d399; font-weight: 600; font-size: 0.85rem;">Ver Dashboards &rarr;</span>
+      </a>
+
+      <!-- Card Glossário -->
+      <a href="glossario.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">📖</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Glossário & Regras</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Busca instantânea de termos de negócio, entidades multi-tenant e 6 regras invariantes extraídas diretamente do código.
+        </p>
+        <span style="color: #fbbf24; font-weight: 600; font-size: 0.85rem;">Consultar Termos &rarr;</span>
+      </a>
+
+      <!-- Card Slide Deck -->
+      <a href="deck.html" class="reversa-card" style="text-decoration: none; color: inherit;">
+        <div style="font-size: 2rem; margin-bottom: 0.75rem;">📽️</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Slide Deck Executivo</h3>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem; flex: 1;">
+          Apresentação navegável em 8 lâminas com suporte a teclado (&larr;/&rarr;) e tela cheia (F) para reuniões e onboarding.
+        </p>
+        <span style="color: #ec4899; font-weight: 600; font-size: 0.85rem;">Abrir Apresentação &rarr;</span>
+      </a>
+    </div>
+
+    <!-- Destaque: Adendos de Evolução -->
+    <div class="reversa-card" style="margin-bottom: 3.5rem; background: linear-gradient(135deg, rgba(18, 26, 45, 0.9) 0%, rgba(12, 18, 34, 0.95) 100%); border-left: 4px solid var(--accent-emerald);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <span class="badge badge-emerald">Pipeline Forward Concluído</span>
+          <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-top: 4px;">4 Novas Features & Correções Integradas</h2>
+        </div>
+        <a href="adendos.html" class="btn btn-primary" style="padding: 6px 14px;">Ver Detalhes dos Adendos &rarr;</a>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
+        Durante o ciclo autônomo recente, quatro evoluções críticas foram implementadas, testadas e sincronizadas às especificações SDD:
+      </p>
+      <div class="grid-4">
+        <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="color: var(--accent-cyan); font-weight: 700; font-size: 0.85rem;">001: Rate Limit</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Feedback amigável em vez de null silencioso.</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="color: var(--accent-gold); font-weight: 700; font-size: 0.85rem;">002: BYOK Fallback</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Suporte a chave OpenAI do usuário.</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="color: var(--accent-violet); font-weight: 700; font-size: 0.85rem;">003: Testes Jest</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">11 testes cobrindo AuthMiddleware e multi-tenancy.</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="color: var(--accent-emerald); font-weight: 700; font-size: 0.85rem;">004: Bridge MCP</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">Upload direto do Polotno para o Postiz.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Especificações SDD por Módulo -->
+    <div class="section-title-wrap">
+      <h2 class="section-title">Especificações de Software (SDD) por Módulo</h2>
+      <p class="section-desc">Requisitos, decisões de design, modelos de dados e checklists extraídos em cada fronteira funcional.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 3.5rem;">
+      <a href="features/carousel-generator.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Carousel Generator</h3>
+            <span class="badge badge-gold">AI Web</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Geração de slides com LangChain, OpenAI, formatação Zod, exportação PDF/PNG e Upstash Redis rate limiting.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/polotno-studio-core.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Polotno Studio Core</h3>
+            <span class="badge badge-cyan">Electron App</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Estúdio desktop 2D offline-first com Electron 39, Konva 10, Polotno SDK e gerenciador multi-abas MobX.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/polotno-mcp-server.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Polotno MCP Server</h3>
+            <span class="badge badge-violet">AI Protocol</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Servidor nativo Model Context Protocol via JSON-RPC para automação e pairing assistido por IA.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/postiz-backend-api.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Postiz Backend API</h3>
+            <span class="badge badge-gold">NestJS API</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            API REST central NestJS 11 com Prisma ORM, isolamento multi-tenant por OrganizationId e billing Stripe.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/postiz-frontend-web.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Postiz Frontend Web</h3>
+            <span class="badge badge-cyan">Next.js 16 Web</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Interface editorial com Mantine UI, calendário drag-and-drop, compositor de posts e dashboards de métricas.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/postiz-orchestrator.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Postiz Orchestrator</h3>
+            <span class="badge badge-violet">Temporal Worker</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Workflows duráveis com Temporal.io e Redis para garantia de entrega de posts e refresh contínuo de tokens.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+
+      <a href="features/postiz-integrations-libraries.html" class="reversa-card feature-spec-card" style="text-decoration: none; color: inherit;">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff;">Postiz Integrations & Libs</h3>
+            <span class="badge badge-gold">38 Conectores</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Biblioteca modular com 38 conectores para redes sociais padronizados sob a interface SocialAbstract.
+          </p>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">Ver Especificação SDD &rarr;</div>
+      </a>
+    </div>
+
+    <!-- Invariant Box (Offline-first & file://) -->
+    <div style="padding: 1.5rem; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h4 style="color: var(--accent-cyan); font-size: 1rem; font-weight: 700; margin-bottom: 4px;">Garantia de Operação Offline-first (file://)</h4>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">
+          Este mini-site é 100% autocontido. Todas as dependências (Three.js, D3, Highcharts, OrbitControls) estão armazenadas localmente em <code style="color: #fff;">assets/vendor/</code> e todos os dados foram incorporados em <code style="color: #fff;">assets/js/data.js</code>. Duplo-clique funciona sem restrições de CORS.
+        </p>
+      </div>
+      <span class="badge badge-cyan" style="font-size: 0.85rem; padding: 6px 12px;">Zero Dependência de Rede</span>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Editor Chefe: Publisher</span>
+      <span>Framework Reversa &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const heroSlot = document.getElementById("hero-seal-slot");
+      if (heroSlot && window.RV_DATA && window.RV_DATA.sealSvg) {
+        heroSlot.innerHTML = window.RV_DATA.sealSvg;
+      }
+    });
+  </script>
+</body>
+</html>

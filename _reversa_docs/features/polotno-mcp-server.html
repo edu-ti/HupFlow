@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polotno MCP Server — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">🤖</span>
+        <h1 class="page-title" style="margin: 0;">Polotno MCP Server</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">polotno-mcp-server</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno MCP Server — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O **Polotno MCP Server** é um servidor nativo baseado no protocolo aberto **Model Context Protocol (MCP)**, embutido no Polotno Studio para permitir que agentes de IA inspecionem, criem e alterem designs visuais programaticamente em tempo real via chamadas de ferramentas RPC.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Expor catálogo semântico de ferramentas para agentes de IA compatíveis com MCP.</li>
+<li>Validação estrutural de payloads de design com Zod e `@polotno/schema`.</li>
+<li>Aplicação de patches atômicos em designs abertos utilizando JSON Patch (RFC 6902).</li>
+<li>Renderização sob demanda de páginas do canvas em imagens para alimentar modelos com visão.</li>
+<li>Inspeção algorítmica de qualidade e lint visual de layouts.</li>
+<li>Suporte a transporte duplo: STDIO/SSE padrão do MCP e bridge HTTP Express local.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Regras de Negócio</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**RN-PMS-01**: Toda mutação estrutural em lote de um design deve ser validada contra `@polotno/schema` antes de ser despachada para o canvas. 🟢 CONFIRMADO</li>
+<li>**RN-PMS-02**: Os findings de lint reportados pela ferramenta `lint_design` carregam severidade `error` ou `warning`, mas nunca bloqueiam forçadamente edições do agente. 🟢 CONFIRMADO</li>
+<li>**RN-PMS-03**: Os aliases canônicos (`render`, `export`, `lint`, `save`) devem ser resolvidos de forma idêntica tanto em chamadas MCP quanto em requisições HTTP REST. 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>ID</td><td>Requisito</td><td>Prioridade</td><td>Critério de Aceite</td></tr>
+<tr><td>**RF-PMS-01**</td><td>`list_designs`: Listar abas abertas e arquivos</td><td>Must</td><td>Retornar lista de abas ativas com seus respectivos `designId`</td></tr>
+<tr><td>**RF-PMS-02**</td><td>`create_design`: Criar design por parâmetros ou JSON</td><td>Must</td><td>Criar aba viva visível na tela e retornar `designId`</td></tr>
+<tr><td>**RF-PMS-03**</td><td>`render_page`: Renderizar imagem para visão IA</td><td>Must</td><td>Retornar `dataUrl` PNG da prancheta</td></tr>
+<tr><td>**RF-PMS-04**</td><td>`lint_design`: Inspecionar contraste e layout</td><td>Should</td><td>Reportar problemas visuais como findings estruturados</td></tr>
+<tr><td>**RF-PMS-05**</td><td>`patch_design`: Aplicar JSON Patch RFC 6902</td><td>Must</td><td>Modificar elementos específicos de forma atômica</td></tr>
+<tr><td>**RF-PMS-06**</td><td>`export_design`: Exportar arquivo final</td><td>Must</td><td>Gerar buffer de exportação em PNG, JPEG ou PDF</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Não Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Tipo</td><td>Requisito inferido</td><td>Evidência no código</td><td>Confiança</td></tr>
+<tr><td>**Compatibilidade**</td><td>Aderência estrita à especificação Model Context Protocol (v1.30+)</td><td>`package.json:@modelcontextprotocol/sdk`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Atomicidade**</td><td>Mutações parciais aplicadas com fast-json-patch RFC 6902</td><td>`src/mcp-server/tools.ts:4`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Latência**</td><td>Resposta instantânea de mutação via IPC bridge local</td><td>`src/mcp-server/bridge-client.ts`</td><td>🟢 CONFIRMADO</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Critérios de Aceitação</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```gherkin</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cenário: Agente de IA cria design e verifica visualmente</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Dado que um agente de IA está conectado ao servidor MCP do Polotno</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o agente invoca a ferramenta "create_design" com dimensões 1080x1080</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então uma nova aba é aberta no editor desktop</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">E o agente recebe o "designId" gerado</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o agente invoca "render_page" com o "designId"</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então o servidor retorna o dataUrl da imagem para inspeção visual</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`polotno-studio-app-master/src/mcp-server/index.ts`</td><td>Inicialização do servidor MCP e HTTP</td><td>🟢</td></tr>
+<tr><td>`polotno-studio-app-master/src/mcp-server/tools.ts`</td><td>Registro e handlers de todas as ferramentas</td><td>🟢</td></tr>
+<tr><td>`polotno-studio-app-master/src/mcp-server/bridge-client.ts`</td><td>Cliente RPC sobre a ponte IPC</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno MCP Server — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Arquitetura de Transporte Duplo</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O servidor MCP suporta dois modos de operação simultâneos:</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">1. **Transporte Padrão MCP (STDIO / SSE)**:</p>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Utilizado por assistentes e IDEs de IA (Claude Desktop, Cursor, Antigravity).</li>
+<li>Registrado via `McpServer` do `@modelcontextprotocol/sdk`.</li>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">2. **Transporte HTTP Express (`index.ts`)**:</p>
+<li>Expõe endpoints REST na porta local interna para ferramentas ou scripts que preferem HTTP convencional:</li>
+<li>`POST /tool/:verb` (executa a ferramenta correspondente).</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Registro e Despacho de Ferramentas (`ToolDef`)</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cada ferramenta é definida por uma estrutura neutra em `tools.ts`:</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```typescript</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">export interface ToolDef {</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">name: string;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">description: string;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">schema: Record&lt;string, z.ZodType&gt;;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">handler: (args: any) =&gt; Promise&lt;ToolResult&gt;;</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O despachante executa `rpc('design.exec', { docId: designId, command })` enviando a instrução serializada para o processo de renderização do Electron, aguarda a execução na prancheta e desembrulha o resultado com controle de revisão incremental (`rev`).</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🟡 **INFERIDO**: Múltiplos agentes conectando-se simultaneamente ao mesmo `designId` podem gerar conflitos de revisão caso tentem aplicar JSON patches concorrentes (race conditions em `rev`).</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno MCP Server — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] `@modelcontextprotocol/sdk` e `zod` instalados</li>
+<li>[ ] Ponte IPC Bridge Router em execução no processo principal do Electron</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PMS-01**: Implementar `ToolDef` e tabela de ferramentas em `tools.ts`.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/mcp-server/tools.ts`</li>
+<li>Critério de pronto: Ferramentas `list_designs`, `create_design`, `render_page`, `lint_design`, `export_design` e `patch_design`.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PMS-02**: Criar cliente Bridge RPC com despachador tipado.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/mcp-server/bridge-client.ts`</li>
+<li>Critério de pronto: Chamadas IPC `design.exec` com retorno de revisão (`rev`).</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PMS-03**: Inicializar servidor MCP nativo e servidor HTTP Express paralelo.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/mcp-server/index.ts`</li>
+<li>Critério de pronto: Aceitar conexões STDIO de clientes de IA e requisições HTTP REST locais.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PMS-04**: Integrar validador de esquema `@polotno/schema` na criação de designs.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/mcp-server/tools.ts:84-89`</li>
+<li>Critério de pronto: Rejeitar JSON inválido antes de injetar na prancheta.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-PMS-01**: Teste de criação e renderização de design via cliente MCP.</li>
+<li>[ ] **TT-PMS-02**: Teste de mutação com JSON Patch inválido (verificação de rollback).</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: polotno-mcp-server</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

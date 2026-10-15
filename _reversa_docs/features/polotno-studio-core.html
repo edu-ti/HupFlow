@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polotno Studio Core — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">🖥️</span>
+        <h1 class="page-title" style="margin: 0;">Polotno Studio Core</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">polotno-studio-core</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno Studio Core — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O **Polotno Studio Core** é uma aplicação desktop offline-first e editor gráfico web construído sobre Electron, Vite, React 19 e SDK Polotno, dedicado à criação e edição visual em alta performance de banners, posts e peças gráficas para mídias sociais.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Renderização e manipulação 2D de elementos visuais no canvas via Konva e Polotno SDK.</li>
+<li>Gerenciamento reativo de estado de prancheta, abas e histórico de desfazer/refazer via MobX.</li>
+<li>Ciclo de vida da aplicação desktop multiplataforma (Windows, macOS, Linux) com Electron.</li>
+<li>Leitura e persistência de arquivos `.polotno` na pasta do usuário (`Documents/Polotno`).</li>
+<li>Exportação vetorial e rasterizada para PDF, PNG, JPEG e SVG.</li>
+<li>Execução de comandos CLI headless (`render`, `lint`) sem interface gráfica.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Regras de Negócio</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**RN-PSC-01**: A aplicação deve garantir bloqueio de instância única (`single-instance lock`). Tentativas de abrir nova janela trazem a janela ativa para frente e abrem os arquivos solicitados como novas abas. 🟢 CONFIRMADO</li>
+<li>**RN-PSC-02**: Todas as criações e edições são salvas de forma local-first; nenhum dado de design trafega obrigatoriamente para servidores externos. 🟢 CONFIRMADO</li>
+<li>**RN-PSC-03**: Os comandos CLI headless `render` e `lint` desviam a inicialização antes de qualquer janela ser criada, garantindo execução leve em servidores e pipelines de CI. 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>ID</td><td>Requisito</td><td>Prioridade</td><td>Critério de Aceite</td></tr>
+<tr><td>**RF-PSC-01**</td><td>Criar nova aba de design</td><td>Must</td><td>Instanciar nova aba com dimensões padrão (1080x1080)</td></tr>
+<tr><td>**RF-PSC-02**</td><td>Adicionar e editar elementos visuais</td><td>Must</td><td>Suportar textos, imagens, formas, vetores SVG e linhas</td></tr>
+<tr><td>**RF-PSC-03**</td><td>Histórico de Desfazer/Refazer</td><td>Must</td><td>Manter histórico transacional por aba via MobX</td></tr>
+<tr><td>**RF-PSC-04**</td><td>Salvar e Abrir arquivos `.polotno`</td><td>Must</td><td>Ler e gravar Design JSON compatível no disco</td></tr>
+<tr><td>**RF-PSC-05**</td><td>Exportar design</td><td>Must</td><td>Produzir imagens PNG/JPEG em alta resolução e PDF vetorial</td></tr>
+<tr><td>**RF-PSC-06**</td><td>Comandos CLI Headless</td><td>Should</td><td>Executar `render` e `lint` direto pelo terminal</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Não Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Tipo</td><td>Requisito inferido</td><td>Evidência no código</td><td>Confiança</td></tr>
+<tr><td>**Disponibilidade**</td><td>Arquitetura offline-first sem dependência de internet</td><td>`CONTEXT.md:3-5`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Performance**</td><td>Renderização 2D acelerada por hardware via Konva Canvas</td><td>`package.json:konva`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Portabilidade**</td><td>Empacotamento multiplataforma nativo (Win, Mac, Linux)</td><td>`electron-builder.yml`</td><td>🟢 CONFIRMADO</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Critérios de Aceitação</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```gherkin</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cenário: Abertura de arquivo de design existente</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Dado que o usuário clica duas vezes em um arquivo `.polotno` no sistema operacional</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o aplicativo Polotno é acionado</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então o arquivo é lido da pasta Library</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">E uma nova aba é aberta na interface com os elementos exatamente posicionados</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cenário: Execução CLI headless para exportação</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Dado que o usuário executa o comando `polotno render post.json --out post.png`</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o processo inicia</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então o arquivo de imagem é gerado sem que nenhuma janela gráfica seja exibida</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`polotno-studio-app-master/src/main/index.ts`</td><td>Inicialização Electron &amp; CLI branch</td><td>🟢</td></tr>
+<tr><td>`polotno-studio-app-master/src/main/window.ts`</td><td>`createEditorWindow`</td><td>🟢</td></tr>
+<tr><td>`polotno-studio-app-master/src/renderer/src/App.tsx`</td><td>Componente raiz do editor Polotno</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno Studio Core — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Estrutura de Processos Electron</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">1. **Processo Principal (Main Process)**:</p>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Controla o ciclo de vida da janela (`BrowserWindow`), menus nativos e atalhos de teclado.</li>
+<li>Gerencia a comunicação IPC entre o sistema operacional e a webview.</li>
+<li>Inicializa a ponte Bridge Router para receber chamadas de automação externas.</li>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">2. **Processo de Renderização (Renderer Process)**:</p>
+<li>Instancia o `createStore()` do SDK Polotno.</li>
+<li>Aplica MobX como motor reativo para sincronização da prancheta e componentes React 19.</li>
+<li>Renderiza a árvore de nós no elemento HTML5 Canvas com Konva.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Formato de Arquivo de Design (Design JSON)</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O formato persistido em disco obedece estritamente ao contrato serializado do Polotno SDK:</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```json</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">{</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"width": 1080,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"height": 1080,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"pages": [</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">{</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"id": "page-1",</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"children": [</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">{</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"id": "text-1",</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"type": "text",</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"text": "Título do Post",</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"x": 100,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"y": 150,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"fontSize": 48,</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">"fill": "#ffffff"</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">]</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">]</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">}</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Dependências Críticas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>`polotno`: SDK de manipulação gráfica vetorial.</li>
+<li>`konva`: Motor 2D de canvas.</li>
+<li>`mobx` e `mobx-react-lite`: Gerenciador de estado reativo da aplicação.</li>
+<li>`electron` e `@electron-toolkit/utils`: Camada de compatibilidade de sistema operacional.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🟡 **INFERIDO**: Suporte a exportação de vídeo MP4/GIF requer ferramentas nativas compiladas no ambiente de build (`ffmpeg` ou codecs embutidos).</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Polotno Studio Core — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] Node.js 20+ e gerenciador de pacotes npm/pnpm</li>
+<li>[ ] Dependências nativas do Electron instaladas (`electron-builder install-app-deps`)</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PSC-01**: Configurar ciclo de vida do Electron e single-instance lock no processo principal.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/main/index.ts`</li>
+<li>Critério de pronto: Impedir múltiplas janelas e rotear arquivos abertos.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PSC-02**: Implementar criação da janela do editor e registro de IPC handlers.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/main/window.ts` e `ipc.ts`</li>
+<li>Critério de pronto: Janela com aceleração gráfica e ponte IPC segura.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PSC-03**: Inicializar store reativo do Polotno com MobX no processo renderizador.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/renderer/src/App.tsx`</li>
+<li>Critério de pronto: Canvas interativo com suporte a texto, imagens e formas.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PSC-04**: Implementar rotinas de salvamento e abertura de arquivos `.polotno`.</li>
+<li>Origem no legado: `polotno-studio-app-master/src/main/library.ts`</li>
+<li>Critério de pronto: Leitura e escrita atômica na pasta `Documents/Polotno`.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PSC-05**: Implementar subcomandos CLI headless (`render`, `lint`).</li>
+<li>Origem no legado: `polotno-studio-app-master/src/main/cli.ts`</li>
+<li>Critério de pronto: Renderizar arquivos JSON em PNG diretamente pelo terminal sem abrir janelas.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-PSC-01**: Teste de abertura de arquivo com formato inválido (validação de erro).</li>
+<li>[ ] **TT-PSC-02**: Teste de exportação vetorial PDF com preservação de camadas.</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: polotno-studio-core</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

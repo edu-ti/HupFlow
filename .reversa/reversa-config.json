@@ -2,6 +2,8 @@
   "version": 1,
   "allowLegacyEdits": true,
   "allowedPaths": [
-    "carousel-generator-main/**"
+    "carousel-generator-main/**",
+    "postiz-app-main/**",
+    "polotno-studio-app-master/**"
   ]
 }

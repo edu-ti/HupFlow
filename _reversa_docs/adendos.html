@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evolução & Adendos Técnicos — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="adendos">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .timeline-item {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 42px;
+      bottom: -32px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-cyan), var(--border));
+    }
+    .timeline-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(6, 182, 212, 0.15);
+      border: 2px solid var(--accent-cyan);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .timeline-content {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    .diff-box {
+      background: #050811;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    .diff-add { color: #34d399; }
+    .diff-del { color: #f43f5e; }
+    .diff-info { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos" class="active" aria-current="page">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Evolução & Adendos de Código (Reversa Forward)</h1>
+      <p class="page-description">
+        Registro detalhado das features implementadas de forma autônoma pelo pipeline <code style="color: var(--accent-cyan);">/reversa-forward-autonomous</code>, resolvendo dívidas técnicas centrais da arquitetura do HupFlow.
+      </p>
+    </div>
+
+    <div class="timeline-container">
+      <!-- Feature 001 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">01</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-cyan">carousel-generator</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">001: Rate Limit Feedback Estruturado</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; Sync OK</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Eliminou o retorno silencioso <code style="color: #f43f5e;">null</code> quando a cota do Upstash Redis era excedida. O cliente agora recebe objeto tipado com status de erro amigável e dispara toasts informativos.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// carousel-generator-main/src/app/actions.tsx</span><br>
+            <span class="diff-del">- if (!success) { return null; }</span><br>
+            <span class="diff-add">+ if (!success) {</span><br>
+            <span class="diff-add">+   return { success: false, error: 'RATE_LIMIT_EXCEEDED', message: 'Limite atingido. Tente novamente mais tarde ou informe sua própria chave.' };</span><br>
+            <span class="diff-add">+ }</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/001-rate-limit-feedback.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 002 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">02</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-gold">carousel-generator</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">002: Bring Your Own Key (BYOK) Fallback</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; Sync OK</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Adicionou campo seguro de fallback no formulário para que o usuário forneça sua chave OpenAI diretamente caso a cota global do servidor esteja esgotada, evitando interrupções no fluxo criativo.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// carousel-generator-main/src/lib/langchain.ts</span><br>
+            <span class="diff-add">+ const apiKey = userApiKey || process.env.OPENAI_API_KEY;</span><br>
+            <span class="diff-add">+ const chatModel = new ChatOpenAI({ apiKey, modelName: 'gpt-4o-mini', temperature: 0 });</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/002-byok-fallback.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 003 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">03</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-violet">postiz-backend-api</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">003: Testes Unitários Automatizados no Backend</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; 11/11 Passando</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Resolveu a lacuna crítica identificada pelo agente Scout (0 testes automatizados no legado). Implementou 11 testes unitários com Jest cobrindo validação JWT, rejeição de requisições sem tenant e isolamento multi-tenant estrito por <code>OrganizationId</code>.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// postiz-app-main/apps/backend/src/api/auth.middleware.spec.ts</span><br>
+            <span class="diff-add">+ describe('AuthMiddleware', () => {</span><br>
+            <span class="diff-add">+   it('should reject request without Authorization header with 401', async () => { ... });</span><br>
+            <span class="diff-add">+   it('should block cross-tenant organization mismatch with 403 Forbidden', async () => { ... });</span><br>
+            <span class="diff-add">+ });</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/003-postiz-backend-tests.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 004 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">04</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-cyan">polotno-mcp-server</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">004: Bridge MCP Polotno ➔ Postiz</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; Sync OK</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Criou a ferramenta de integração nativa do Model Context Protocol <code style="color: #38bdf8;">export_to_postiz</code>. Agentes de IA agora podem solicitar a renderização do canvas ativo e enviá-lo via REST multipart para o backend do Postiz em um único comando.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// polotno-studio-app-master/src/mcp-server/postiz-bridge.ts</span><br>
+            <span class="diff-add">+ export async function exportToPostiz({ designId, organizationId, authToken }) {</span><br>
+            <span class="diff-add">+   const imageBuffer = await renderDesignBuffer(designId);</span><br>
+            <span class="diff-add">+   return await uploadToPostizMedia(imageBuffer, organizationId, authToken);</span><br>
+            <span class="diff-add">+ }</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/004-polotno-postiz-bridge.md</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Adendos & Evolução</span>
+      <span>Reversa Forward Autonomous &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+</body>
+</html>
