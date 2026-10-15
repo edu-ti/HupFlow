@@ -26,6 +26,7 @@ import FileInputForm from "./forms/file-input-form";
 import { useFieldsFileImporter } from "@/lib/hooks/use-fields-file-importer";
 import { usePagerContext } from "@/lib/providers/pager-context";
 import { defaultValues } from "@/lib/default-document";
+import { PostizExportDialog } from "./postiz-export-dialog";
 
 export function EditorMenubar({}: {}) {
   const { reset, watch }: DocumentFormReturn = useFormContext(); // retrieve those props
@@ -35,20 +36,25 @@ export function EditorMenubar({}: {}) {
   const { handleFileSubmission: handleConfigFileSubmission } =
     useFieldsFileImporter("config");
   const [isContentDialogOpen, setIsContentDialogOpen] = useState(false);
-
   const { handleFileSubmission: handleContentFileSubmission } =
     useFieldsFileImporter("slides");
 
   return (
-    // TODO: Add Here download and help
     <div className="flex items-center flex-row gap-2">
       <Menubar>
         <MenubarMenu>
           <MenubarTrigger>File</MenubarTrigger>
           <MenubarContent>
-            {/* <MenubarItem > */}
             <FilenameForm className={"text-left my-1"} />
-            {/* </MenubarItem> */}
+            <MenubarSeparator />
+            <PostizExportDialog>
+              <MenubarItem
+                onSelect={(e) => e.preventDefault()}
+                className="cursor-pointer font-medium text-primary"
+              >
+                Enviar para o Postiz
+              </MenubarItem>
+            </PostizExportDialog>
             <MenubarSeparator />
             <JsonExporter
               values={watch("config")}
@@ -128,6 +134,7 @@ export function EditorMenubar({}: {}) {
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
+      <PostizExportDialog />
     </div>
   );
 }

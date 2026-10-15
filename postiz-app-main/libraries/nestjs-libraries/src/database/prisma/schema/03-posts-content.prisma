@@ -1,0 +1,182 @@
+// ============================================================================
+// Domain: 03-posts-content.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model Tags {
+  id           String       @id @default(uuid())
+  name         String
+  color        String
+  orgId        String
+  deletedAt    DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  organization Organization @relation(fields: [orgId], references: [id])
+  posts        TagsPosts[]
+
+  @@index([orgId])
+  @@index([deletedAt])
+}
+model TagsPosts {
+  postId    String
+  tagId     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id])
+  tag       Tags     @relation(fields: [tagId], references: [id])
+
+  @@id([postId, tagId])
+  @@unique([postId, tagId])
+}
+model Signatures {
+  id             String       @id @default(uuid())
+  organizationId String
+  content        String
+  autoAdd        Boolean
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([createdAt])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model Comments {
+  id             String       @id @default(uuid())
+  content        String
+  organizationId String
+  postId         String
+  userId         String?
+  displayName    String?
+  parentId       String?
+  anchorStart    Int?
+  anchorEnd      Int?
+  anchorQuote    String?
+  resolvedAt     DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  post           Post         @relation(fields: [postId], references: [id])
+  user           User?        @relation(fields: [userId], references: [id])
+  parent         Comments?    @relation("CommentReplies", fields: [parentId], references: [id])
+  replies        Comments[]   @relation("CommentReplies")
+
+  @@index([createdAt])
+  @@index([organizationId])
+  @@index([userId])
+  @@index([postId])
+  @@index([parentId])
+  @@index([resolvedAt])
+  @@index([deletedAt])
+}
+model Post {
+  id                         String                    @id @default(cuid())
+  state                      State                     @default(QUEUE)
+  publishDate                DateTime
+  organizationId             String
+  integrationId              String
+  content                    String
+  delay                      Int                       @default(0)
+  group                      String
+  batchId                    String?
+  title                      String?
+  description                String?
+  parentPostId               String?
+  releaseId                  String?
+  releaseURL                 String?
+  settings                   String?
+  image                      String?
+  submittedForOrderId        String?
+  submittedForOrganizationId String?
+  approvedSubmitForOrder     APPROVED_SUBMIT_FOR_ORDER @default(NO)
+  creationMethod             CreationMethod            @default(UNKNOWN)
+  lastMessageId              String?
+  intervalInDays             Int?
+  error                      String?
+  createdAt                  DateTime                  @default(now())
+  updatedAt                  DateTime                  @updatedAt
+  deletedAt                  DateTime?
+  comments                   Comments[]
+  errors                     Errors[]
+  payoutProblems             PayoutProblems[]
+  integration                Integration               @relation(fields: [integrationId], references: [id])
+  lastMessage                Messages?                 @relation(fields: [lastMessageId], references: [id])
+  organization               Organization              @relation("organization", fields: [organizationId], references: [id])
+  parentPost                 Post?                     @relation("parentPostId", fields: [parentPostId], references: [id])
+  childrenPost               Post[]                    @relation("parentPostId")
+  submittedForOrder          Orders?                   @relation(fields: [submittedForOrderId], references: [id])
+  submittedForOrganization   Organization?             @relation("submittedForOrg", fields: [submittedForOrganizationId], references: [id])
+  tags                       TagsPosts[]
+
+  @@index([group])
+  @@index([batchId])
+  @@index([deletedAt])
+  @@index([publishDate])
+  @@index([state])
+  @@index([organizationId])
+  @@index([parentPostId])
+  @@index([submittedForOrderId])
+  @@index([intervalInDays])
+  @@index([approvedSubmitForOrder])
+  @@index([creationMethod])
+  @@index([lastMessageId])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([releaseURL])
+  @@index([integrationId])
+}
+model PopularPosts {
+  id        String   @id @default(uuid())
+  category  String
+  topic     String
+  content   String
+  hook      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model AutoPost {
+  id              String       @id @default(uuid())
+  organizationId  String
+  title           String
+  content         String?
+  onSlot          Boolean
+  syncLast        Boolean
+  url             String
+  lastUrl         String
+  active          Boolean
+  addPicture      Boolean
+  generateContent Boolean
+  integrations    String
+  deletedAt       DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([deletedAt])
+}
+model Sets {
+  id             String       @id @default(uuid())
+  organizationId String
+  name           String
+  content        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+}
+model Mentions {
+  name      String
+  username  String
+  platform  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  image     String
+
+  @@id([name, username, platform, image])
+  @@index([createdAt])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

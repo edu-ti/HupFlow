@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossário de Domínio & Regras — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="glossario">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .search-bar-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 280px;
+      padding: 0.85rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px var(--accent-cyan-glow);
+    }
+    .filter-btn-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter-btn:hover {
+      color: #fff;
+      border-color: var(--accent-cyan);
+    }
+    .filter-btn.active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-cyan);
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .concept-card {
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-cyan);
+    }
+    .rule-card {
+      background: rgba(18, 26, 45, 0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario" class="active" aria-current="page">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Glossário de Domínio & Regras de Negócio</h1>
+      <p class="page-description">
+        Terminologia essencial, entidades fundamentais e regras de negócio invariantes extraídas pelo agente Detective a partir dos modelos de dados e código-fonte.
+      </p>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="search-bar-container">
+      <input type="text" id="glossarySearch" class="search-input" placeholder="Buscar termo, entidade ou conceito (ex: Organization, MCP, Temporal, BYOK)...">
+      <div class="filter-btn-group">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="postiz">Postiz</button>
+        <button class="filter-btn" data-filter="polotno">Polotno</button>
+        <button class="filter-btn" data-filter="carousel">Carousel</button>
+        <button class="filter-btn" data-filter="bridge">Bridges</button>
+      </div>
+    </div>
+
+    <!-- Concept Cards Grid -->
+    <div id="conceptsGrid" class="grid-3" style="margin-bottom: 3.5rem;">
+      <!-- Populated via JavaScript -->
+    </div>
+
+    <!-- Business Rules Section -->
+    <div style="margin-bottom: 3.5rem;">
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 1.5rem; color: #fff;">
+        Regras de Negócio Invariantes (Código-Fonte)
+      </h2>
+      <div id="rulesContainer">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Founding Decisions Section -->
+    <div class="reversa-card">
+      <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.25rem; color: #fff;">
+        Decisões Fundadoras da Arquitetura
+      </h2>
+      <div id="decisionsContainer" class="grid-3">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Glossário de Domínio</span>
+      <span>Detective &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    (function initGlossary() {
+      const concepts = (window.RV_DATA && window.RV_DATA.glossary) || [];
+      const soul = (window.RV_DATA && window.RV_DATA.soul) || {};
+      const rules = soul.businessRules || [];
+      const decisions = soul.foundingDecisions || [];
+
+      const grid = document.getElementById("conceptsGrid");
+      const rulesBox = document.getElementById("rulesContainer");
+      const decisionsBox = document.getElementById("decisionsContainer");
+      const searchInput = document.getElementById("glossarySearch");
+      const filterBtns = document.querySelectorAll(".filter-btn");
+
+      let currentFilter = "all";
+      let currentQuery = "";
+
+      const badgeColors = {
+        'postiz': 'badge-violet',
+        'polotno': 'badge-cyan',
+        'carousel': 'badge-gold',
+        'bridge': 'badge-emerald'
+      };
+
+      function renderConcepts() {
+        grid.innerHTML = "";
+        const filtered = concepts.filter(c => {
+          const matchesFilter = currentFilter === "all" || c.domain === currentFilter;
+          const matchesQuery = !currentQuery || 
+            c.term.toLowerCase().includes(currentQuery) || 
+            c.definition.toLowerCase().includes(currentQuery);
+          return matchesFilter && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">Nenhum conceito encontrado para "${currentQuery}".</div>`;
+          return;
+        }
+
+        filtered.forEach(c => {
+          const card = document.createElement("div");
+          card.className = "reversa-card concept-card";
+          card.id = `concept-${c.id}`;
+          const bClass = badgeColors[c.domain] || "badge-cyan";
+
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+              <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff;">${c.term}</h3>
+              <span class="badge ${bClass}">${c.domain}</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; flex: 1;">
+              ${c.definition}
+            </p>
+            <div style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 600;">
+              &bull; Confirmado no código
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      function renderRules() {
+        rulesBox.innerHTML = "";
+        rules.forEach(r => {
+          const item = document.createElement("div");
+          item.className = "rule-card";
+          item.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+              <span class="badge badge-cyan" style="font-size: 0.8rem;">${r.id}</span>
+              <h4 style="font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0;">${r.name}</h4>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">
+              ${r.desc}
+            </p>
+          `;
+          rulesBox.appendChild(item);
+        });
+      }
+
+      function renderDecisions() {
+        decisionsBox.innerHTML = "";
+        decisions.forEach(d => {
+          const card = document.createElement("div");
+          card.className = "reversa-card";
+          card.innerHTML = `
+            <h4 style="color: var(--accent-cyan); font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">${d.title}</h4>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">${d.desc}</p>
+          `;
+          decisionsBox.appendChild(card);
+        });
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        currentQuery = e.target.value.toLowerCase().trim();
+        renderConcepts();
+      });
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          filterBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.getAttribute("data-filter");
+          renderConcepts();
+        });
+      });
+
+      renderConcepts();
+      renderRules();
+      renderDecisions();
+    })();
+  </script>
+</body>
+</html>

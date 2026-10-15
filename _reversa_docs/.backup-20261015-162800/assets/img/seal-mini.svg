@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <radialGradient id="sealBgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="60%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#030712" />
+    </radialGradient>
+    <linearGradient id="neonCyanViolet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="sealGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="0.32" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Base Disc -->
+  <circle cx="32" cy="32" r="30.400000000000002" fill="url(#sealBgGrad)" stroke="#1e293b" stroke-width="0.24" />
+  <circle cx="32" cy="32" r="29.2" fill="none" stroke="url(#neonCyanViolet)" stroke-width="0.12" stroke-dasharray="0.48 0.48" opacity="0.6" />
+  <line x1="59.6" y1="32.0" x2="58.4" y2="32.0" stroke="#64748b" stroke-width="0.16" opacity="0.7" />
+<line x1="55.9" y1="45.8" x2="55.4" y2="45.5" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="45.8" y1="55.9" x2="45.5" y2="55.4" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="32.0" y1="59.6" x2="32.0" y2="58.4" stroke="#64748b" stroke-width="0.16" opacity="0.7" />
+<line x1="18.2" y1="55.9" x2="18.5" y2="55.4" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="8.1" y1="45.8" x2="8.6" y2="45.5" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="4.4" y1="32.0" x2="5.6" y2="32.0" stroke="#64748b" stroke-width="0.16" opacity="0.7" />
+<line x1="8.1" y1="18.2" x2="8.6" y2="18.5" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="18.2" y1="8.1" x2="18.5" y2="8.6" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="32.0" y1="4.4" x2="32.0" y2="5.6" stroke="#64748b" stroke-width="0.16" opacity="0.7" />
+<line x1="45.8" y1="8.1" x2="45.5" y2="8.6" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<line x1="55.9" y1="18.2" x2="55.4" y2="18.5" stroke="#64748b" stroke-width="0.08" opacity="0.7" />
+<circle cx="32" cy="32" r="24.8" fill="none" stroke="url(#neonCyanViolet)" stroke-width="0.12" stroke-dasharray="0.96 0.48" opacity="0.35" />
+<circle cx="32" cy="32" r="21.6" fill="none" stroke="#8b5cf6" stroke-width="0.12"  opacity="0.43" />
+<circle cx="32" cy="32" r="18.400000000000002" fill="none" stroke="url(#neonCyanViolet)" stroke-width="0.12"  opacity="0.51" />
+<circle cx="32" cy="32" r="15.200000000000001" fill="none" stroke="#8b5cf6" stroke-width="0.24" stroke-dasharray="1.92 0.96" opacity="0.59" />
+<circle cx="32" cy="32" r="12" fill="none" stroke="url(#neonCyanViolet)" stroke-width="0.12"  opacity="0.67" />
+<circle cx="32" cy="32" r="8.8" fill="none" stroke="#8b5cf6" stroke-width="0.12"  opacity="0.75" />
+<circle cx="32" cy="32" r="5.6000000000000005" fill="none" stroke="url(#neonCyanViolet)" stroke-width="0.12" stroke-dasharray="2.88 1.44" opacity="0.83" />
+<ellipse cx="32" cy="32" rx="22.400000000000002" ry="8.8" fill="none" stroke="#06b6d4" stroke-width="0.16" opacity="0.65" transform="rotate(0 32 32)" filter="url(#sealGlow)" />
+<ellipse cx="32" cy="32" rx="22.400000000000002" ry="8.8" fill="none" stroke="#8b5cf6" stroke-width="0.16" opacity="0.65" transform="rotate(60 32 32)" filter="url(#sealGlow)" />
+<ellipse cx="32" cy="32" rx="22.400000000000002" ry="8.8" fill="none" stroke="#3b82f6" stroke-width="0.16" opacity="0.65" transform="rotate(120 32 32)" filter="url(#sealGlow)" />
+<circle cx="32" cy="32" r="1.92" fill="url(#neonCyanViolet)" filter="url(#sealGlow)" />
+<circle cx="32" cy="32" r="0.96" fill="#ffffff" />
+<circle cx="48.6" cy="41.6" r="0.48" fill="#06b6d4" filter="url(#sealGlow)" />
+<circle cx="15.4" cy="41.6" r="0.56" fill="#8b5cf6" filter="url(#sealGlow)" />
+<circle cx="32.0" cy="12.8" r="0.48" fill="#3b82f6" filter="url(#sealGlow)" />
+<circle cx="32.0" cy="46.4" r="0.4" fill="#fbbf24" filter="url(#sealGlow)" />
+<circle cx="19.5" cy="24.8" r="0.4" fill="#10b981" filter="url(#sealGlow)" />
+</svg>

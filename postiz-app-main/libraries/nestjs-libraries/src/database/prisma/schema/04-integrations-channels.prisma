@@ -1,0 +1,174 @@
+// ============================================================================
+// Domain: 04-integrations-channels.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model GitHub {
+  id             String       @id @default(uuid())
+  login          String?
+  name           String?
+  token          String
+  jobId          String?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([login])
+  @@index([organizationId])
+}
+model Trending {
+  id           String   @id @default(uuid())
+  trendingList String
+  language     String?  @unique
+  hash         String
+  date         DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([hash])
+}
+model TrendingLog {
+  id       String   @id @default(uuid())
+  language String?
+  date     DateTime
+}
+model ItemUser {
+  id     String @id @default(uuid())
+  userId String
+  key    String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, key])
+  @@index([userId])
+  @@index([key])
+}
+model Star {
+  id         String   @id @default(uuid())
+  stars      Int
+  totalStars Int
+  forks      Int
+  totalForks Int
+  login      String
+  date       DateTime @default(now()) @db.Date
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([login, date])
+}
+model Integration {
+  id                    String                 @id @default(cuid())
+  internalId            String
+  organizationId        String
+  name                  String
+  customName            String?
+  picture               String?
+  providerIdentifier    String
+  type                  String
+  token                 String
+  disabled              Boolean                @default(false)
+  tokenExpiration       DateTime?
+  refreshToken          String?
+  profile               String?
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime?              @updatedAt
+  inBetweenSteps        Boolean                @default(false)
+  refreshNeeded         Boolean                @default(false)
+  postingTimes          String                 @default("[{\"time\":120}, {\"time\":400}, {\"time\":700}]")
+  customInstanceDetails String?
+  customerId            String?
+  rootInternalId        String?
+  additionalSettings    String?                @default("[]")
+  exisingPlugData       ExisingPlugData[]
+  customer              Customer?              @relation(fields: [customerId], references: [id])
+  organization          Organization           @relation(fields: [organizationId], references: [id])
+  webhooks              IntegrationsWebhooks[]
+  orderItems            OrderItems[]
+  plugs                 Plugs[]
+  posts                 Post[]
+
+  @@unique([organizationId, internalId])
+  @@index([rootInternalId])
+  @@index([organizationId])
+  @@index([providerIdentifier])
+  @@index([updatedAt])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([customerId])
+  @@index([inBetweenSteps])
+  @@index([refreshNeeded])
+  @@index([disabled])
+}
+model Plugs {
+  id             String       @id @default(uuid())
+  organizationId String
+  plugFunction   String
+  data           String
+  integrationId  String
+  activated      Boolean      @default(true)
+  integration    Integration  @relation(fields: [integrationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([plugFunction, integrationId])
+  @@index([organizationId])
+}
+model ExisingPlugData {
+  id            String      @id @default(uuid())
+  integrationId String
+  methodName    String
+  value         String
+  integration   Integration @relation(fields: [integrationId], references: [id])
+
+  @@unique([integrationId, methodName, value])
+}
+model IntegrationsWebhooks {
+  integrationId String
+  webhookId     String
+  integration   Integration @relation(fields: [integrationId], references: [id])
+  webhook       Webhooks    @relation(fields: [webhookId], references: [id])
+
+  @@id([integrationId, webhookId])
+  @@unique([integrationId, webhookId])
+  @@index([integrationId])
+  @@index([webhookId])
+}
+model Webhooks {
+  id             String                 @id @default(uuid())
+  name           String
+  organizationId String
+  url            String
+  deletedAt      DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  integrations   IntegrationsWebhooks[]
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model ThirdParty {
+  id             String       @id @default(uuid())
+  organizationId String
+  identifier     String
+  name           String
+  internalId     String
+  apiKey         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([organizationId, internalId])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+enum Provider {
+  LOCAL
+  GITHUB
+  GOOGLE
+  APPLE
+  FARCASTER
+  WALLET
+  GENERIC
+}

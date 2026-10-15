@@ -211,6 +211,125 @@
           </div>
         </div>
       </div>
+
+      <!-- Feature 005 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">05</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-gold">carousel-generator</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">005: Ponte Direta Carousel Generator ➔ Postiz</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; Sync OK</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Criou a Server Action proxy com streaming multipart e diálogo modal no Carousel Generator. O criador de conteúdo exporta carrosséis gerados com IA como PDF ou PNGs individuais diretamente para a biblioteca do Postiz com 1 clique.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// carousel-generator-main/src/app/actions.tsx</span><br>
+            <span class="diff-add">+ export async function uploadToPostizAction(formData: FormData) {</span><br>
+            <span class="diff-add">+   const response = await fetch(`${postizUrl}/api/media`, { method: 'POST', body: formData });</span><br>
+            <span class="diff-add">+   return await response.json();</span><br>
+            <span class="diff-add">+ }</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/005-carousel-postiz-bridge.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 006 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">06</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-cyan">postiz-frontend-web</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">006: Editor Polotno Canvas Embutido no Postiz Web</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; GAP-MOD-01 Mitigado</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Expandiu o canvas Polotno embutido com barra de presets para redes sociais (1:1 Quadrado, 16:9 Paisagem, 9:16 Stories/Reels e 4:5 Retrato), carregamento de artes existentes via <code>initialMedia</code>, botão de retoque nas miniaturas e desbloqueio de acesso para todos os planos.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// postiz-app-main/apps/frontend/src/components/launches/polonto.tsx</span><br>
+            <span class="diff-add">+ const SOCIAL_PRESETS = [</span><br>
+            <span class="diff-add">+   { id: '1:1', label: '1:1 Quadrado', width: 1080, height: 1080 },</span><br>
+            <span class="diff-add">+   { id: '9:16', label: '9:16 Stories/Reels', width: 1080, height: 1920 }</span><br>
+            <span class="diff-add">+ ];</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/006-polotno-web-canvas.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 007 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">07</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-violet">postiz-frontend-web & backend</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">007: AI Copywriter & Sugestão de Legendas</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; Sync OK</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Implementou suíte de copywriting com inteligência artificial integrada ao editor de publicações. Inclui modal com geração de legendas por rede (LinkedIn, X, Instagram, etc.), 3 opções de ganchos clicáveis (hooks), nuvem de hashtags e endpoint NestJS com fallback heurístico.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// postiz-app-main/apps/backend/src/api/routes/copilot.controller.ts</span><br>
+            <span class="diff-add">+ @Post('/copywriter')</span><br>
+            <span class="diff-add">+ @CheckPolicies([AuthorizationActions.Create, Sections.AI])</span><br>
+            <span class="diff-add">+ async generateCopywriting(@Body() body: CopywriterDto): Promise<CopywriterResult> { ... }</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/007-ai-copywriter.md</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 008 -->
+      <div class="timeline-item">
+        <div class="timeline-badge">08</div>
+        <div class="timeline-content">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="badge badge-emerald">postiz-backend-api</span>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px;">008: Modularização do Schema Prisma (GAP-MOD-02)</h3>
+            </div>
+            <span class="badge badge-emerald">Concluído &bull; GAP-MOD-02 Mitigado</span>
+          </div>
+
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+            Decompôs o schema monolítico de 1.841 linhas em 8 sub-esquemas modulares organizados por domínio dentro de <code>schema/*.prisma</code>, ativou o suporte do Prisma 6 à flag <code>prismaSchemaFolder</code> e criou o script de bundle <code>pnpm run prisma-bundle</code> preservando 100% dos 90 modelos e 11 enums.
+          </p>
+
+          <div class="diff-box">
+            <span class="diff-info">// postiz-app-main/libraries/nestjs-libraries/src/database/prisma/schema/01-base.prisma</span><br>
+            <span class="diff-add">+ generator client {</span><br>
+            <span class="diff-add">+   provider        = "prisma-client-js"</span><br>
+            <span class="diff-add">+   previewFeatures = ["prismaSchemaFolder"]</span><br>
+            <span class="diff-add">+ }</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: #94a3b8;">
+            <strong>Adendo SDD:</strong> <code>_reversa_sdd/addenda/008-modular-prisma-schema.md</code>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 

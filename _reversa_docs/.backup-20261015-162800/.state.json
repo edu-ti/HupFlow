@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-10-14T20:34:00-03:00",
+  "lastCheckpoint": "2026-10-15T00:22:05.717Z",
+  "pipelineDurationMs": 45000,
+  "completedAgents": [
+    "mapper",
+    "analyst",
+    "storyteller",
+    "publisher"
+  ],
+  "pendingAgents": [],
+  "pages": {
+    "index.html": {
+      "status": "created",
+      "agent": "reversa-docs-publisher",
+      "hash": "e3692cb7e2c77a30c3158bfc20587488ca8d500ec0b22dcd1024138f0057f395",
+      "sizeBytes": 19994
+    },
+    "arquitetura.html": {
+      "status": "created",
+      "agent": "reversa-docs-mapper",
+      "hash": "10a1451e4c7b12934fd6ba8567042e3825d25e5b705582f11a1aea72301a6b88",
+      "sizeBytes": 16436
+    },
+    "modulos.html": {
+      "status": "created",
+      "agent": "reversa-docs-mapper",
+      "hash": "43c9c2f0b6f6a3f6d5ea507765f2afe78447f61a3c4bf022b029998a433fa1bb",
+      "sizeBytes": 13317
+    },
+    "topologia.html": {
+      "status": "created",
+      "agent": "reversa-docs-mapper",
+      "hash": "7cfb17ce58861668f68b76cae74b77b33f18a236e45f8ad8d191a02bcdbdb9da",
+      "sizeBytes": 12214
+    },
+    "metricas.html": {
+      "status": "created",
+      "agent": "reversa-docs-analyst",
+      "hash": "fae8c12071c7a2511bee3d4aa6ab7bd3b3886a7dec90b812ab893ba0b07f7159",
+      "sizeBytes": 10409
+    },
+    "glossario.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "82b77460ff3398549b9c3621cf22d3ab1fa948b3d17b799f696846c696d7d582",
+      "sizeBytes": 9557
+    },
+    "deck.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "e7e7ef2e719335665cbcb92fd45f0f49d776fd30812705f6e9b7fecc945cf241",
+      "sizeBytes": 15277
+    },
+    "adendos.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "02de11aae28cfc552014899b9b97971d7f1b948cf1ba966a235a6f681973dd5e",
+      "sizeBytes": 10458
+    },
+    "timeline.html": {
+      "status": "created",
+      "agent": "reversa-docs-analyst",
+      "hash": "1be45c5445a8c111965197167251326a005debef44876fec12ad97b5c895f04a",
+      "sizeBytes": 2760
+    },
+    "features/carousel-generator.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "c2eecaed8fc87fc5507be67947da01770761d260f1f1f103ce6bd2c7831764d7",
+      "sizeBytes": 22230
+    },
+    "features/polotno-studio-core.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "a3eefb7fffa80ce679d48e6770df690245e1734d0ee3bee72d9560e59966eac5",
+      "sizeBytes": 21332
+    },
+    "features/polotno-mcp-server.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "d27841fb003c4a59ba598c969a8be7209f0d3625a11d01a728fb4718bd83faa1",
+      "sizeBytes": 19279
+    },
+    "features/postiz-backend-api.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "b961a572f4e1888bece0e7b1456cba706333617a9c43e369bc94870ce94f1674",
+      "sizeBytes": 19863
+    },
+    "features/postiz-frontend-web.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "52e5ebaef33a76e841dac36d26ce66492917063c2b5ad5176145645db0735ee0",
+      "sizeBytes": 14421
+    },
+    "features/postiz-orchestrator.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "f9bce05e2a5c375127cc10b78ff1b934d4c58ae0f837d59c52e90e01ba938017",
+      "sizeBytes": 15987
+    },
+    "features/postiz-integrations-libraries.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "ccb942982cc6454093c97508746e43693b03ecd4e8e12339ca4061e478a787ca",
+      "sizeBytes": 19180
+    }
+  },
+  "pagesGenerated": [
+    "index.html",
+    "arquitetura.html",
+    "modulos.html",
+    "topologia.html",
+    "metricas.html",
+    "glossario.html",
+    "deck.html",
+    "adendos.html",
+    "timeline.html",
+    "features/carousel-generator.html",
+    "features/polotno-studio-core.html",
+    "features/polotno-mcp-server.html",
+    "features/postiz-backend-api.html",
+    "features/postiz-frontend-web.html",
+    "features/postiz-orchestrator.html",
+    "features/postiz-integrations-libraries.html"
+  ],
+  "pagesOmitted": [
+    {
+      "page": "timeline.html",
+      "reason": "chronicle.md não encontrado (.reversa/chronicle.md ausente)"
+    }
+  ],
+  "auxiliaryHtmls": [],
+  "auxiliaryHtmlsDiscovered": 0,
+  "auxiliaryDiscoveryAborted": false,
+  "cdnFallbackUsed": false,
+  "cdnFallbackDetails": [],
+  "vendorMissing": [],
+  "smokeTestFailed": false,
+  "smokeTestErrors": [],
+  "brokenLinks": []
+}

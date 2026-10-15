@@ -1,0 +1,173 @@
+// ============================================================================
+// Domain: 05-billing-marketplace.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model SocialMediaAgency {
+  id               String                   @id @default(uuid())
+  userId           String                   @unique
+  name             String
+  logoId           String?
+  website          String?
+  slug             String?
+  facebook         String?
+  instagram        String?
+  twitter          String?
+  linkedIn         String?
+  youtube          String?
+  tiktok           String?
+  otherSocialMedia String?
+  shortDescription String
+  description      String
+  approved         Boolean                  @default(false)
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  deletedAt        DateTime?
+  logo             Media?                   @relation(fields: [logoId], references: [id])
+  user             User                     @relation(fields: [userId], references: [id])
+  niches           SocialMediaAgencyNiche[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@index([id])
+}
+model SocialMediaAgencyNiche {
+  agencyId String
+  niche    String
+  agency   SocialMediaAgency @relation(fields: [agencyId], references: [id])
+
+  @@id([agencyId, niche])
+}
+model Credits {
+  id             String       @id @default(uuid())
+  organizationId String
+  credits        Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  type           String       @default("ai_images")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([createdAt])
+}
+model Subscription {
+  id               String           @id @default(cuid())
+  organizationId   String           @unique
+  subscriptionTier SubscriptionTier
+  provider         String           @default("stripe")
+  identifier       String?
+  cancelAt         DateTime?
+  period           Period
+  totalChannels    Int
+  isLifetime       Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  organization     Organization     @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model Customer {
+  id           String        @id @default(uuid())
+  name         String
+  orgId        String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  organization Organization  @relation(fields: [orgId], references: [id])
+  integrations Integration[]
+
+  @@unique([orgId, name, deletedAt])
+}
+model MessagesGroup {
+  id                  String       @id @default(uuid())
+  buyerOrganizationId String
+  buyerId             String
+  sellerId            String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  messages            Messages[]
+  buyer               User         @relation("groupBuyer", fields: [buyerId], references: [id])
+  buyerOrganization   Organization @relation(fields: [buyerOrganizationId], references: [id])
+  seller              User         @relation("groupSeller", fields: [sellerId], references: [id])
+  orders              Orders[]
+
+  @@unique([buyerId, sellerId])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@index([buyerOrganizationId])
+}
+model PayoutProblems {
+  id        String   @id @default(uuid())
+  status    String
+  orderId   String
+  userId    String
+  postId    String?
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Orders   @relation(fields: [orderId], references: [id])
+  post      Post?    @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+model Orders {
+  id             String           @id @default(uuid())
+  buyerId        String
+  sellerId       String
+  status         OrderStatus
+  messageGroupId String
+  captureId      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ordersItems    OrderItems[]
+  buyer          User             @relation("orderBuyer", fields: [buyerId], references: [id])
+  messageGroup   MessagesGroup    @relation(fields: [messageGroupId], references: [id])
+  seller         User             @relation("orderSeller", fields: [sellerId], references: [id])
+  payoutProblems PayoutProblems[]
+  posts          Post[]
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([updatedAt])
+  @@index([createdAt])
+  @@index([messageGroupId])
+}
+model OrderItems {
+  id            String      @id @default(uuid())
+  orderId       String
+  integrationId String
+  quantity      Int
+  price         Int
+  integration   Integration @relation(fields: [integrationId], references: [id])
+  order         Orders      @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
+  @@index([integrationId])
+}
+model Messages {
+  id        String        @id @default(uuid())
+  from      From
+  content   String?
+  groupId   String
+  special   String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  deletedAt DateTime?
+  group     MessagesGroup @relation(fields: [groupId], references: [id])
+  posts     Post[]
+
+  @@index([groupId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+enum From {
+  BUYER
+  SELLER
+}
+enum SubscriptionTier {
+  STANDARD
+  PRO
+  TEAM
+  ULTIMATE
+}

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Postiz Frontend Web — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">🌐</span>
+        <h1 class="page-title" style="margin: 0;">Postiz Frontend Web</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">postiz-frontend-web</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Frontend Web — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O **Postiz Frontend Web** é a interface do usuário da plataforma de mídias sociais, desenvolvido em Next.js 16, React 19, Mantine UI e Tailwind CSS, oferecendo calendário editorial dinâmico, editor de postagens com pré-visualização fiel por rede social e métricas de alcance.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Apresentação do painel de controle (Dashboard) com visualização em grade semanal e mensal.</li>
+<li>Editor avançado de conteúdo suportando múltiplas mídias, emojis, menções e tags.</li>
+<li>Pré-visualização contextual fiel de como a publicação aparecerá no X/Twitter, LinkedIn, Instagram, TikTok e Threads.</li>
+<li>Integração de assistente de redação inteligente com CopilotKit.</li>
+<li>Autenticação de usuário e seleção de organização ativa.</li>
+<li>Proxying de requisições (`proxy.ts`) para isolamento seguro do backend.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>ID</td><td>Requisito</td><td>Prioridade</td><td>Critério de Aceite</td></tr>
+<tr><td>**RF-PFW-01**</td><td>Calendário Editorial</td><td>Must</td><td>Exibir posts agendados em visão diária, semanal e mensal</td></tr>
+<tr><td>**RF-PFW-02**</td><td>Compositor Multi-canal</td><td>Must</td><td>Permitir escrever um texto e customizar previews para cada rede</td></tr>
+<tr><td>**RF-PFW-03**</td><td>Galeria de Mídia</td><td>Should</td><td>Selecionar imagens/vídeos carregados previamente ou enviar novos</td></tr>
+<tr><td>**RF-PFW-04**</td><td>Painel de Analytics</td><td>Should</td><td>Exibir gráficos de impressões, cliques e taxa de engajamento</td></tr>
+<tr><td>**RF-PFW-05**</td><td>Assistente IA Copilot</td><td>Could</td><td>Sugerir textos e variações com CopilotKit</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`postiz-app-main/apps/frontend/src/app/layout.tsx`</td><td>Layout raiz</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/apps/frontend/src/proxy.ts`</td><td>Proxy de chamadas de API</td><td>🟢</td></tr>
+<tr><td>`postiz-app-main/apps/frontend/src/app/(app)/layout.tsx`</td><td>Layout do dashboard autenticado</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Frontend Web — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Estrutura do App Router</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>`src/app/(app)`:</li>
+<li>`(site)`: Páginas protegidas: calendário, posts, analytics, integrações, billing e settings.</li>
+<li>`auth`: Fluxos de autenticação, login, registro e recuperação.</li>
+<li>`oauth`: Páginas de recepção de callbacks de provedores externos.</li>
+<li>`src/proxy.ts`: Intercepta requisições para `/api/*` e roteia internamente para `BACKEND_INTERNAL_URL` mantendo tokens de sessão seguros e evitando problemas de CORS.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Stack de UI e Componentes</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**Next.js 16** com React 19 Server e Client Components.</li>
+<li>**Mantine UI 5** para inputs complexos, modais e seletores de data/hora.</li>
+<li>**Tailwind CSS 4** para estilização utilitária de temas escuro/claro.</li>
+<li>**CopilotKit** para autocomplete e chat contextual de geração de postagens.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🟡 **INFERIDO**: A folha de estilos `polonto.css` (397 KB) presente no frontend sugere uma integração legada ou futura com o editor Polotno Studio diretamente embutido na web.</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Postiz Frontend Web — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] Backend API em execução na porta 3000</li>
+<li>[ ] Node.js 22+ com suporte a pnpm</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PFW-01**: Configurar Next.js App Router com proxy reverso seguro em `proxy.ts`.</li>
+<li>Origem no legado: `postiz-app-main/apps/frontend/src/proxy.ts`</li>
+<li>Critério de pronto: Roteamento de `/api/*` com repasse de cookies de autenticação.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PFW-02**: Implementar layout raiz e páginas de login e cadastro.</li>
+<li>Origem no legado: `postiz-app-main/apps/frontend/src/app/(app)/auth`</li>
+<li>Critério de pronto: Autenticação com e-mail/senha e OAuth.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PFW-03**: Desenvolver visualização de calendário editorial com Mantine.</li>
+<li>Origem no legado: `postiz-app-main/apps/frontend/src/app/(app)/(site)`</li>
+<li>Critério de pronto: Renderizar posts agendados e permitir arrastar/reagendar.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-PFW-04**: Criar editor de postagem com pré-visualização para Twitter, LinkedIn, Instagram e Facebook.</li>
+<li>Origem no legado: `postiz-app-main/apps/frontend/src/components`</li>
+<li>Critério de pronto: Visualização fiel com contadores de caracteres específicos por canal.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-PFW-01**: Teste de navegação e proteção de rotas privadas sem token de sessão.</li>
+<li>[ ] **TT-PFW-02**: Teste de upload e exibição de mídias anexadas no editor.</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: postiz-frontend-web</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

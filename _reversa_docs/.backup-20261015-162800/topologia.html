@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topologia Arquitetural — HupFlow</title>
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="topologia">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <style>
+    .subsystem-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .subsystem-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 36px;
+      bottom: -16px;
+      width: 2px;
+      background: var(--border);
+    }
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glow);
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .step-body {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .matrix-table th {
+      background: rgba(18, 26, 45, 0.9);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    .matrix-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="index.html" data-page-id="index">Visão Geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="topologia.html" data-page-id="topologia" class="active" aria-current="page">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <h1 class="page-title">Topologia do Sistema: 3 Pilares Integrados</h1>
+      <p class="page-description">
+        O HupFlow combina três subsistemas complementares em uma esteira única de ponta a ponta: geração de cópias/carrosséis com IA, criação visual 2D desktop via MCP e agendamento durável multi-tenant para 38 redes sociais.
+      </p>
+    </div>
+
+    <!-- 3 Subsystems Cards -->
+    <div class="grid-3" style="margin-bottom: 3rem;">
+      <!-- Pilar 1 -->
+      <div class="reversa-card">
+        <div class="subsystem-header">
+          <div class="subsystem-icon" style="background: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid rgba(236, 72, 153, 0.4);">🎨</div>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Carousel Generator</h3>
+            <span class="badge badge-cyan">Next.js 14 Web</span>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+          Gerador automatizado de lâminas verticais/quadradas para LinkedIn e Instagram. Converte temas e artigos em sequências prontas para conversão social.
+        </p>
+        <ul style="color: var(--text-muted); font-size: 0.85rem; padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong style="color: #fff;">Motor de IA:</strong> LangChain + OpenAI <code style="color: #ec4899;">gpt-4o-mini</code></li>
+          <li><strong style="color: #fff;">Controle de Cota:</strong> Rate Limit por IP (Upstash Redis) + BYOK</li>
+          <li><strong style="color: #fff;">Exportação:</strong> PDF Vetorial e PNG cliente-side</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 2 -->
+      <div class="reversa-card">
+        <div class="subsystem-header">
+          <div class="subsystem-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.4);">🖥️</div>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Polotno Studio App</h3>
+            <span class="badge badge-violet">Electron 39 Desktop</span>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+          Estúdio completo de design 2D offline-first com Konva e Polotno SDK. Equipado com servidor nativo MCP para manipulação assistida por agentes de IA.
+        </p>
+        <ul style="color: var(--text-muted); font-size: 0.85rem; padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong style="color: #fff;">Canvas:</strong> Konva 10 + Polotno SDK + MobX 7</li>
+          <li><strong style="color: #fff;">Protocolo IA:</strong> Model Context Protocol (MCP) JSON-RPC</li>
+          <li><strong style="color: #fff;">Bridge Postiz:</strong> Tool <code style="color: #06b6d4;">export_to_postiz</code> para upload direto</li>
+        </ul>
+      </div>
+
+      <!-- Pilar 3 -->
+      <div class="reversa-card">
+        <div class="subsystem-header">
+          <div class="subsystem-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.4);">🚀</div>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700;">Postiz Social Engine</h3>
+            <span class="badge badge-gold">NestJS 11 + Temporal</span>
+          </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+          Plataforma corporativa de agendamento, faturamento multi-tenant e disparo automatizado com workflows duráveis para 38 redes sociais integradas.
+        </p>
+        <ul style="color: var(--text-muted); font-size: 0.85rem; padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong style="color: #fff;">API & Banco:</strong> NestJS 11, Prisma ORM, PostgreSQL</li>
+          <li><strong style="color: #fff;">Orquestrador:</strong> Temporal.io Workers para jobs duráveis</li>
+          <li><strong style="color: #fff;">Canais:</strong> 38 adaptadores sob interface <code style="color: #3b82f6;">SocialAbstract</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pipeline de Dados Ponta a Ponta -->
+    <div class="reversa-card" style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff;">
+        Fluxo Operacional de Produção e Publicação
+      </h2>
+
+      <div class="flow-step">
+        <div class="step-number">1</div>
+        <div class="step-body">
+          <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Ideação & Geração Estruturada (Carousel Generator)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.85rem;">
+            O usuário submete um tema. O LangChain gera entre 8 e 15 lâminas com formatação estrita Zod. O Upstash Redis garante proteção contra sobrecargas e excesso de custos de API.
+          </p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-number">2</div>
+        <div class="step-body">
+          <h4 style="font-size: 1rem; color: var(--accent-violet); margin-bottom: 4px;">Refinamento Visual & Assistência por Agente (Polotno Studio)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.85rem;">
+            O criador ou um agente autônomo (via servidor MCP local) abre o design, ajusta elementos no Konva, aplica linter de contraste e proporções e aciona a tool <code style="color: #a78bfa;">export_to_postiz</code>.
+          </p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-number">3</div>
+        <div class="step-body">
+          <h4 style="font-size: 1rem; color: var(--accent-blue); margin-bottom: 4px;">Composição & Validação Editorial (Postiz Frontend)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.85rem;">
+            No calendário interativo, o post recebe copy adaptada, tags, seleção de múltiplos canais sociais (Sets) e horário de publicação programado.
+          </p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-number">4</div>
+        <div class="step-body">
+          <h4 style="font-size: 1rem; color: var(--accent-emerald); margin-bottom: 4px;">Orquestração Durável & Despacho Multicanal (Temporal.io)</h4>
+          <p style="color: var(--text-secondary); font-size: 0.85rem;">
+            No milissegundo exato, o Temporal dispara a activity idempotente. Se o token OAuth estiver próximo de expirar, um workflow filho renova as credenciais e conclui a entrega com retentativas automáticas.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matriz Comparativa Técnica -->
+    <div class="reversa-card">
+      <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; color: #fff;">
+        Matriz Comparativa dos Subsistemas
+      </h2>
+
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Dimensão</th>
+            <th>Carousel Generator</th>
+            <th>Polotno Studio</th>
+            <th>Postiz Suite</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Ambiente / Runtime</td>
+            <td>Next.js 14 (Node.js)</td>
+            <td>Electron 39 + Vite</td>
+            <td>Next.js 16 + NestJS 11 + Temporal</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Framework UI</td>
+            <td>React 18 + Tailwind</td>
+            <td>React 19 + Konva 10</td>
+            <td>React 19 + Mantine UI + Tailwind</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Gerenciamento de Estado</td>
+            <td>React Context / Hooks</td>
+            <td>MobX 7 Observables</td>
+            <td>Zustand / React Query</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Banco de Dados</td>
+            <td>Redis KV (Upstash)</td>
+            <td>Filesystem Local (.polotno)</td>
+            <td>PostgreSQL 16 via Prisma ORM</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Integração com IA</td>
+            <td>LangChain + OpenAI API</td>
+            <td>Model Context Protocol (MCP)</td>
+            <td>CopilotKit, Mastra, LangChain</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #fff;">Multi-tenancy</td>
+            <td>IP-based / Local</td>
+            <td>Mono-usuário Desktop</td>
+            <td>OrganizationId (Estrito por Tenant)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Topologia Arquitetural</span>
+      <span>Postiz + Polotno + Carousel Generator &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -10,7 +10,7 @@ import { jsPDF, jsPDFOptions } from "jspdf";
 
 // TODO: Create a reusable component and package with this code
 
-type HtmlToPdfOptions = {
+export type HtmlToPdfOptions = {
   margin: [number, number, number, number];
   filename: string;
   image: { type: string; quality: number };
@@ -23,7 +23,7 @@ export const toPx = function toPx(val: number, k: number) {
   return Math.floor(((val * k) / 72) * 96);
 };
 
-function getPdfPageSize(opt: HtmlToPdfOptions) {
+export function getPdfPageSize(opt: HtmlToPdfOptions) {
   // Retrieve page-size based on jsPDF settings, if not explicitly provided.
   // @ts-ignore function not explicitly exported
   const pageSize = jsPDF.getPageSize(opt.jsPDF);
@@ -45,7 +45,7 @@ function getPdfPageSize(opt: HtmlToPdfOptions) {
   return pageSize;
 }
 
-function canvasToPdf(canvas: HTMLCanvasElement, opt: HtmlToPdfOptions) {
+export function canvasToPdf(canvas: HTMLCanvasElement, opt: HtmlToPdfOptions) {
   const pdfPageSize = getPdfPageSize(opt);
 
   // Calculate the number of pages.
@@ -115,28 +115,30 @@ export function useComponentPrinter() {
   // html-to-image: https://github.com/bubkoo/html-to-image
   // jsPDF: https://rawgit.com/MrRio/jsPDF/master/docs/jsPDF.html
 
+export function preparePrintClone(current: HTMLElement): HTMLElement {
+  const clone = current.cloneNode(true) as HTMLElement;
+  proxyImgSources(clone);
+  removeSelectionStyleById(clone, "page-base-");
+  removeSelectionStyleById(clone, "content-image-");
+  removePaddingStyleById(clone, "carousel-item-");
+  removeStyleById(clone, "slide-wrapper-", "px-2");
+  removeAllById(clone, "add-slide-");
+  removeAllById(clone, "add-element-");
+  removeAllById(clone, "element-menubar-");
+  removeAllById(clone, "slide-menubar-");
+  insertFonts(clone);
+  clone.className = "flex flex-col";
+  // @ts-ignore
+  clone.style = {};
+
+  return clone;
+}
+
   const reactToPrintContent = React.useCallback(() => {
     const current = componentRef.current;
 
     if (current && typeof current === "object") {
-      // @ts-ignore should type narrow more precisely
-      const clone = current.cloneNode(true);
-      // Change from horizontal to vertical for printing and remove gap
-      proxyImgSources(clone);
-      removeSelectionStyleById(clone, "page-base-");
-      removeSelectionStyleById(clone, "content-image-");
-      removePaddingStyleById(clone, "carousel-item-");
-      removeStyleById(clone, "slide-wrapper-", "px-2");
-      removeAllById(clone, "add-slide-");
-      removeAllById(clone, "add-element-");
-      removeAllById(clone, "element-menubar-");
-      removeAllById(clone, "slide-menubar-");
-      insertFonts(clone);
-      // Remove styling from container
-      clone.className = "flex flex-col";
-      clone.style = {};
-
-      return clone;
+      return preparePrintClone(current as HTMLElement);
     }
 
     return componentRef.current;

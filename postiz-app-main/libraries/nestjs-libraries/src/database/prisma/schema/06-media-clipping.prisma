@@ -1,0 +1,72 @@
+// ============================================================================
+// Domain: 06-media-clipping.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model Media {
+  id                 String              @id @default(uuid())
+  name               String
+  originalName       String?
+  path               String
+  organizationId     String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+  fileSize           Int                 @default(0)
+  type               String              @default("image")
+  thumbnail          String?
+  alt                String?
+  thumbnailTimestamp Int?
+  status             String              @default("ready")
+  processingError    String?
+  organization       Organization        @relation(fields: [organizationId], references: [id])
+  agencies           SocialMediaAgency[]
+  userPicture        User[]
+  oauthApps          OAuthApp[]
+
+  @@index([name])
+  @@index([organizationId])
+  @@index([type])
+}
+model Clipping {
+  id             String         @id @default(uuid())
+  organizationId String
+  url            String
+  status         String         @default("analysing")
+  error          String?
+  title          String?
+  thumbnail      String?
+  duration       Int?
+  maxClips       Int            @default(5)
+  fit            String         @default("blur")
+  integrations   String
+  creditsId      String?
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  clips          ClippingClip[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model ClippingClip {
+  id         String    @id @default(uuid())
+  clippingId String
+  title      String
+  content    String
+  start      Float
+  end        Float
+  trimStart  Int?
+  status     String    @default("pending")
+  error      String?
+  mediaId    String?
+  path       String?
+  thumbnail  String?
+  draftedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  clipping   Clipping  @relation(fields: [clippingId], references: [id])
+
+  @@index([clippingId])
+}

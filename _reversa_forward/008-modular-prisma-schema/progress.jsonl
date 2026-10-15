@@ -1,0 +1,8 @@
+{"timestamp":"2026-10-15T15:32:00-03:00","action":"requirements","description":"Levantamento e especificacao da modularizacao do schema.prisma (GAP-MOD-02)"}
+{"timestamp":"2026-10-15T15:33:00-03:00","action":"plan","description":"Elaboracao do plano tecnico, data-delta, investigation e roadmap"}
+{"timestamp":"2026-10-15T15:33:30-03:00","action":"to-do","description":"Decomposicao em tarefas atomicas T001..T005"}
+{"timestamp":"2026-10-15T15:38:00-03:00","action":"coding","task":"T001","description":"Particionamento dos 90 modelos e 11 enums em 8 sub-esquemas de dominio"}
+{"timestamp":"2026-10-15T16:14:00-03:00","action":"coding","task":"T002","description":"Implementacao do script de bundle e validacao referencial"}
+{"timestamp":"2026-10-15T16:15:00-03:00","action":"coding","task":"T003","description":"Adicao do atalho prisma-bundle no package.json raiz"}
+{"timestamp":"2026-10-15T16:24:00-03:00","action":"coding","task":"T004","description":"Validacao automatica de equivalencia estrutural com 100% dos modelos preservados"}
+{"timestamp":"2026-10-15T16:26:00-03:00","action":"coding","task":"T005","description":"Criacao dos artefatos de impacto, vigilancias W016-W017 e adendo SDD"}

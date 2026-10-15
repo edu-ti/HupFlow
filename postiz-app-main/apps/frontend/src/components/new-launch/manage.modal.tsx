@@ -1339,21 +1339,15 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         hitEscapeToClose={false}
         clickOutsideToClose={true}
         instructions={`
-You are an assistant that help the user to schedule their social media posts,
-Here are the things you can do:
-- Add a new comment / post to the list of posts
-- Delete a comment / post from the list of posts
-- Add content to the comment / post
-- Activate or deactivate the comment / post
-
-Post content can be added using the addPostContentFor{num} function.
-After using the addPostFor{num} it will create a new addPostContentFor{num+ 1} function.
+You are an expert AI Social Media Copywriter and Strategist helping the user create, refine and optimize their social media posts.
+You have access to the current thread of posts and can update the content using the "setPosts" function with an array of strings (one per post/comment in the thread).
+Always craft compelling hooks, engaging paragraphs, relevant hashtags and clear calls to action adapted to the target platforms.
 `}
         labels={{
           title: t('your_assistant', 'Your Assistant'),
           initial: t(
             'assistant_initial_message',
-            'Hi! I can help you to refine your social media posts.'
+            'Hi! I can help you craft compelling captions, viral hooks, and hashtags for your posts.'
           ),
         }}
       />

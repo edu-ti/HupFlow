@@ -1,0 +1,41 @@
+// ============================================================================
+// Domain: 07-notifications-system.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model Notifications {
+  id             String       @id @default(uuid())
+  organizationId String
+  content        String
+  link           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([createdAt])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model Errors {
+  id             String       @id @default(uuid())
+  message        String
+  platform       String
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  postId         String
+  body           String       @default("{}")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  post           Post         @relation(fields: [postId], references: [id])
+
+  @@index([organizationId])
+  @@index([createdAt])
+}
+model Announcement {
+  id          String            @id @default(uuid())
+  title       String
+  description String
+  color       AnnouncementColor @default(INFO)
+  createdAt   DateTime          @default(now())
+}

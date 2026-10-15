@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/004-polotno-postiz-bridge",
-  "feature-id": "004",
-  "short-name": "polotno-postiz-bridge",
-  "started-at": "2026-10-14T20:00:00-03:00",
+  "feature-dir": "_reversa_forward/008-modular-prisma-schema",
+  "feature-id": "008",
+  "short-name": "modular-prisma-schema",
+  "started-at": "2026-10-15T15:32:00-03:00",
   "current-stage": "done",
   "stages-completed": [
     "requirements",

@@ -1,0 +1,53 @@
+// ============================================================================
+// Domain: 01-base.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+  runtime  = "nodejs"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  CANCELED
+  COMPLETED
+}
+enum State {
+  QUEUE
+  PUBLISHED
+  ERROR
+  DRAFT
+}
+enum Period {
+  MONTHLY
+  YEARLY
+}
+enum APPROVED_SUBMIT_FOR_ORDER {
+  NO
+  WAITING_CONFIRMATION
+  YES
+}
+enum CreationMethod {
+  UNKNOWN
+  WEB
+  MCP
+  API
+  AUTOPOST
+  CLI
+}
+enum ShortLinkPreference {
+  ASK
+  YES
+  NO
+}
+enum AnnouncementColor {
+  INFO
+  WARNING
+  ERROR
+}

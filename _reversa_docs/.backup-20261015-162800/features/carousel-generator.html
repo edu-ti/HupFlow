@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carousel Generator — Especificação SDD</title>
+  <meta name="reversa-category" content="feature">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/nav.js"></script>
+  <style>
+    .tab-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+    }
+    .tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="reversa-header">
+    <div class="reversa-nav-container">
+      <a href="../index.html" class="reversa-brand">
+        <div id="reversa-mini-seal-slot" class="seal-mini-img"></div>
+        <span>HupFlow</span>
+        <span class="reversa-brand-badge">Docs</span>
+      </a>
+      <nav class="reversa-doc-nav">
+        <!-- NAV_LINKS -->
+        <a href="../index.html" data-page-id="index">Visão Geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos & Grafo</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Slide Deck</a>
+        <a href="../adendos.html" data-page-id="adendos">Evolução & Adendos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="reversa-main">
+    <div class="page-header">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.8rem;">🎨</span>
+        <h1 class="page-title" style="margin: 0;">Carousel Generator</h1>
+      </div>
+      <p class="page-description">
+        Documentação viva e especificação formal (SDD) extraída pelo Reversa para o módulo <code style="color: var(--accent-cyan);">carousel-generator</code>.
+      </p>
+    </div>
+
+    <div class="reversa-card" style="margin-bottom: 2rem;">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-req">Requisitos & Regras</button>
+        <button class="tab-btn" data-tab="tab-design">Design & Arquitetura</button>
+        <button class="tab-btn" data-tab="tab-tasks">Tarefas & Checklist</button>
+      </div>
+
+      <div id="tab-req" class="tab-pane active">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Carousel Generator — Especificação de Requisitos</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Visão Geral</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">O **Carousel Generator** é um microsserviço web projetado para transformar tópicos, textos e artigos em carrosséis visuais estruturados para redes sociais (LinkedIn e Instagram), utilizando OpenAI com function calling estruturado e geração de arquivos PDF e PNG.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Responsabilidades</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>Ingestão de prompts e artigos fornecidos pelo usuário.</li>
+<li>Comunicação com a API OpenAI (`gpt-4o-mini`) exigindo validação estrita de esquema JSON (8 a 15 slides).</li>
+<li>Controle de taxa de requisições (rate limiting) por endereço IP com Upstash Redis.</li>
+<li>Edição interativa de temas, cores, tipografia e slides no navegador.</li>
+<li>Exportação vetorial em PDF e captura estática em imagens PNG.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Regras de Negócio</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>**RN-CG-01**: A geração de carrosséis deve produzir obrigatoriamente entre 8 e 15 slides. 🟢 CONFIRMADO</li>
+<li>**RN-CG-02**: Cada slide deve conter no máximo 70% do comprimento limite de caracteres de cada campo para evitar quebras em telas móveis. 🟢 CONFIRMADO</li>
+<li>**RN-CG-03**: Os tipos de elementos permitidos em cada slide são estritamente `Title`, `Subtitle` e `Description`. 🟢 CONFIRMADO</li>
+<li>**RN-CG-04**: Emojis contextuais devem ser injetados nos títulos e subtítulos gerados pela IA. 🟢 CONFIRMADO</li>
+<li>**RN-CG-05**: Não adicionar numeração estática de slides no texto dos elementos (a paginação é dinâmica). 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>ID</td><td>Requisito</td><td>Prioridade</td><td>Critério de Aceite</td></tr>
+<tr><td>**RF-CG-01**</td><td>Submeter prompt de tópico para geração</td><td>Must</td><td>Enviar texto via Server Action e receber lista de slides válidos</td></tr>
+<tr><td>**RF-CG-02**</td><td>Validação com esquema Zod</td><td>Must</td><td>Rejeitar respostas do LLM fora do formato `MultiSlideSchema`</td></tr>
+<tr><td>**RF-CG-03**</td><td>Rate limiting por IP</td><td>Should</td><td>Bloquear requisições excedentes via Upstash Redis</td></tr>
+<tr><td>**RF-CG-04**</td><td>Edição de tema e tipografia</td><td>Should</td><td>Alterar paleta de cores e fontes dos slides dinamicamente</td></tr>
+<tr><td>**RF-CG-05**</td><td>Exportar em PDF</td><td>Must</td><td>Gerar arquivo PDF com dimensões para LinkedIn via `@react-pdf/renderer`</td></tr>
+<tr><td>**RF-CG-06**</td><td>Exportar em imagens PNG</td><td>Should</td><td>Renderizar imagens 1:1 e 4:5 via `html-to-image`</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Requisitos Não Funcionais</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Tipo</td><td>Requisito inferido</td><td>Evidência no código</td><td>Confiança</td></tr>
+<tr><td>**Performance**</td><td>Uso de modelo leve e rápido `gpt-4o-mini` com temperatura 0</td><td>`src/lib/langchain.ts:75-76`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Segurança**</td><td>Verificação de chave de API em variáveis de ambiente de servidor</td><td>`src/app/actions.tsx:8-10`</td><td>🟢 CONFIRMADO</td></tr>
+<tr><td>**Escalabilidade**</td><td>Armazenamento de cota distribuído com Upstash Redis REST</td><td>`src/app/actions.tsx:12-20`</td><td>🟢 CONFIRMADO</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Critérios de Aceitação</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```gherkin</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cenário: Geração de carrossel com sucesso a partir de tema</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Dado que o usuário fornece o tópico "5 Dicas de Liderança Tecnológica"</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">E que a chave de API da OpenAI é válida</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o usuário clica em "Gerar Carrossel"</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então o sistema gera entre 8 e 15 slides no editor</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">E cada slide possui elementos estruturados com títulos e descrições curtas</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Cenário: Falha por falta de chave de API</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Dado que a variável OPENAI_API_KEY não está configurada no servidor</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Quando o usuário solicita a geração</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">Então o sistema retorna null sem quebrar a aplicação</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">```</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Prioridade (MoSCoW)</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Requisito</td><td>MoSCoW</td><td>Justificativa</td></tr>
+<tr><td>**Geração via LLM estruturada**</td><td>Must</td><td>Funcionalidade central da aplicação</td></tr>
+<tr><td>**Exportação PDF**</td><td>Must</td><td>Entrega do artefato final para o LinkedIn</td></tr>
+<tr><td>**Edição de texto e slides**</td><td>Should</td><td>Permite ajustes finos manuais antes de publicar</td></tr>
+<tr><td>**Rate Limiter Redis**</td><td>Could</td><td>Relevante em produção pública, opcional em ambiente local</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Rastreabilidade de Código</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Arquivo do Legado</td><td>Função / Símbolo</td><td>Cobertura</td></tr>
+<tr><td>`carousel-generator-main/src/app/actions.tsx`</td><td>`generateCarouselSlidesAction`</td><td>🟢</td></tr>
+<tr><td>`carousel-generator-main/src/lib/langchain.ts`</td><td>`generateCarouselSlides`</td><td>🟢</td></tr>
+<tr><td>`carousel-generator-main/src/lib/validation/slide-schema.ts`</td><td>`MultiSlideSchema`</td><td>🟢</td></tr>
+<tr><td>`carousel-generator-main/src/components/slides-editor.tsx`</td><td>`SlidesEditor`</td><td>🟢</td></tr>
+</table></div>
+
+      </div>
+
+      <div id="tab-design" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Carousel Generator — Design Técnico</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Interface e Assinaturas</h3>
+<h4 style="font-size: 1.05rem; font-weight: 600; color: #a78bfa; margin: 1rem 0 0.5rem;">Funções Principais</h4>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Símbolo</td><td>Assinatura</td><td>Retorno</td><td>Observação</td></tr>
+<tr><td>`generateCarouselSlidesAction`</td><td>`(userPrompt: string)`</td><td>`Promise&lt;MultiSlideSchema \</td><td>null&gt;`</td><td>Server Action exposta para o frontend</td></tr>
+<tr><td>`generateCarouselSlides`</td><td>`(topicPrompt: string, apiKey: string)`</td><td>`Promise&lt;MultiSlideSchema \</td><td>null&gt;`</td><td>Wrapper LangChain e parsing Zod</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Fluxo Principal de Execução</h3>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">1. O componente `AIInputForm` captura o texto do prompt e dispara a Server Action `generateCarouselSlidesAction`.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">2. A action valida `process.env.OPENAI_API_KEY`. Se nula, encerra retornando `null`.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">3. Se `KV_REST_API_URL` e `KV_REST_API_TOKEN` existirem, extrai o IP de `headers().get("x-real-ip")` e invoca `messageRateLimit.limit(ip)`.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">4. Instancia `ChatOpenAI` configurado com `gpt-4o-mini`, `temperature: 0` e `functions: [carouselFunctionSchema]`.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">5. Envia `SystemMessage` com diretrizes de tamanho e emojis, acompanhada da `HumanMessage` com o prompt do usuário.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">6. Realiza `JSON.parse` nos argumentos da função chamada.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">7. Executa `UnstyledDocumentSchema.safeParse`. Se válido, retorna `MultiSlideSchema.parse(slides)`.</p>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Dependências</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>`langchain`: Biblioteca de orquestração de chamadas de LLM.</li>
+<li>`@upstash/ratelimit` e `@upstash/redis`: Rate limiter distribuído HTTP.</li>
+<li>`@react-pdf/renderer`: Geração vetorial do documento em formato PDF.</li>
+<li>`html-to-image`: Rasterização de nós DOM do navegador em canvas/imagens PNG.</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Decisões de Design Identificadas</h3>
+<div style="overflow-x: auto; margin: 1rem 0;"><table class="matrix-table">
+<tr><td>Decisão</td><td>Evidência no código</td><td>Confiança</td></tr>
+<tr><td>Uso de Server Actions do Next.js App Router</td><td>`src/app/actions.tsx:1` (`"use server"`)</td><td>🟢</td></tr>
+<tr><td>Function Calling obrigatório para garantir schema JSON</td><td>`src/lib/langchain.ts:80-81`</td><td>🟢</td></tr>
+<tr><td>Modelo fixado em gpt-4o-mini para balancear custo e precisão</td><td>`src/lib/langchain.ts:75`</td><td>🟢</td></tr>
+</table></div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Riscos e Lacunas</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>🔴 **LACUNA**: Falta de retorno amigável de mensagem de erro para o frontend quando o rate limit é atingido (retorna apenas `null`).</li>
+<li>🟡 **INFERIDO**: Dependência externa direta da API da OpenAI sem fallback para outros modelos (como Claude ou Ollama local).</li>
+</ul>
+
+      </div>
+
+      <div id="tab-tasks" class="tab-pane">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 1.5rem 0 1rem;">Carousel Generator — Tarefas de Implementação</h2>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Gerado pelo agente **Writer** (Reversa) em 2026-10-14</div>
+<div style="padding: 0.75rem 1rem; background: rgba(6, 182, 212, 0.08); border-left: 3px solid var(--accent-cyan); border-radius: 4px; color: var(--text-secondary); margin: 1rem 0; font-size: 0.9rem;">Escala de Confiança: 🟢 CONFIRMADO | 🟡 INFERIDO | 🔴 LACUNA</div>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Pré-requisitos</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] Node.js 18+ instalado</li>
+<li>[ ] Chave de API da OpenAI (`OPENAI_API_KEY`)</li>
+<li>[ ] (Opcional) Instância do Upstash Redis configurada para rate limiting</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Construção</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-CG-01**: Implementar esquemas de validação Zod para slides e elementos de texto.</li>
+<li>Origem no legado: `carousel-generator-main/src/lib/validation/slide-schema.ts`</li>
+<li>Critério de pronto: Validar estruturas com `Title`, `Subtitle`, `Description` e temas.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-CG-02**: Criar cliente LangChain com function calling forçado para `carouselFunctionSchema`.</li>
+<li>Origem no legado: `carousel-generator-main/src/lib/langchain.ts`</li>
+<li>Critério de pronto: Chamada ao `gpt-4o-mini` gerando entre 8 e 15 slides validados.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-CG-03**: Criar Server Action com verificação de rate limit Upstash.</li>
+<li>Origem no legado: `carousel-generator-main/src/app/actions.tsx`</li>
+<li>Critério de pronto: Limitar requisições por IP e despachar geração de slides.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-CG-04**: Desenvolver editor visual de slides com carrossel deslizante Embla.</li>
+<li>Origem no legado: `carousel-generator-main/src/components/slides-editor.tsx`</li>
+<li>Critério de pronto: Permitir edição de texto, troca de temas e reordenação de páginas.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **T-CG-05**: Implementar exportação para PDF e PNG.</li>
+<li>Origem no legado: `carousel-generator-main/src/lib/convert-file.tsx`</li>
+<li>Critério de pronto: Download direto de PDF formatado para LinkedIn e imagens para Instagram.</li>
+<li>Confiança: 🟢 CONFIRMADO</li>
+</ul>
+<p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem;">---</p>
+<h3 style="font-size: 1.3rem; font-weight: 700; color: #38bdf8; margin: 1.25rem 0 0.75rem;">Tarefas de Teste</h3>
+<ul style="padding-left: 1.25rem; margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.7;">
+<li>[ ] **TT-CG-01**: Teste de parsing do retorno estruturado do modelo com payload válido.</li>
+<li>[ ] **TT-CG-02**: Teste de comportamento quando a chave de API é ausente ou inválida.</li>
+<li>[ ] **TT-CG-03**: Teste de estouro de rate limit quando o limite por IP é excedido.</li>
+</ul>
+
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" class="btn btn-secondary">&larr; Voltar ao Índice</a>
+      <a href="../adendos.html" class="btn btn-primary">Ver Adendos Recentes &rarr;</a>
+    </div>
+  </main>
+
+  <footer class="reversa-footer">
+    <div class="reversa-footer-content">
+      <span>HupFlow Reversa Docs &bull; Spec: carousel-generator</span>
+      <span>Reversa Spec SDD &bull; Seed 44fdd4b2</span>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -856,18 +856,33 @@ export const MultiMediaComponent: FC<{
     [currentMedia]
   );
 
-  const designMedia = useCallback(() => {
-    if (!!user?.tier?.ai && !dummy) {
-      modals.openModal({
-        askClose: false,
-        title: t('design_media', 'Design Media'),
-        size: '80%',
-        children: (close) => (
-          <Polonto setMedia={changeMedia} closeModal={close} />
-        ),
-      });
-    }
-  }, [changeMedia, t]);
+  const designMedia = useCallback(
+    (initialMedia?: { id: string; path: string }, replaceIndex?: number) => {
+      if (!dummy) {
+        modals.openModal({
+          askClose: false,
+          title: t('design_media', 'Design Media'),
+          size: '85%',
+          children: (close) => (
+            <Polonto
+              setMedia={(media) => {
+                if (replaceIndex !== undefined && replaceIndex >= 0) {
+                  const updated = [...currentMedia];
+                  updated[replaceIndex] = media[0];
+                  changeMedia(updated);
+                } else {
+                  changeMedia([...currentMedia, ...media]);
+                }
+              }}
+              initialMedia={initialMedia}
+              closeModal={close}
+            />
+          ),
+        });
+      }
+    },
+    [changeMedia, currentMedia, dummy, t]
+  );
 
   return (
     <>
@@ -917,9 +932,21 @@ export const MultiMediaComponent: FC<{
                             ),
                           });
                         }}
-                        className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-black/80 rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity z-[9]"
+                        className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-black/80 rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity z-[9] flex items-center justify-center gap-1.5 p-1"
                       >
                         <MediaSettingsIcon className="cursor-pointer relative z-[200]" />
+                        {!hasExtension(media?.path, 'mp4') && (
+                          <div
+                            title={t('edit_art', 'Editar Arte')}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              designMedia(media, index);
+                            }}
+                            className="hover:scale-110 transition-transform p-0.5 rounded text-white flex items-center justify-center cursor-pointer relative z-[200]"
+                          >
+                            <DesignMediaIcon className="w-[16px] h-[16px]" />
+                          </div>
+                        )}
                       </div>
                       {hasExtension(media?.path, 'mp4') ? (
                         <VideoFrame url={mediaDirectory.set(media?.path)} />
@@ -968,7 +995,7 @@ export const MultiMediaComponent: FC<{
                   </div>
                 </div>
                 <div
-                  onClick={designMedia}
+                  onClick={() => designMedia()}
                   className="cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px] mobile:hidden"
                 >
                   <div className="flex gap-[5px] items-center">

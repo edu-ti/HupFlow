@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-14T20:40:00-03:00",
+  "totalFiles": 1801,
+  "totalLoc": 85400,
+  "confidenceScore": 91.5,
+  "treemap_loc_by_folder": [
+    {
+      "folder": "postiz/libraries (38 Conectores)",
+      "loc": 32400,
+      "modules": 48,
+      "color": "#3b82f6"
+    },
+    {
+      "folder": "postiz/apps/backend (NestJS API)",
+      "loc": 14200,
+      "modules": 36,
+      "color": "#6366f1"
+    },
+    {
+      "folder": "_reversa_sdd (Documentação SDD)",
+      "loc": 14200,
+      "modules": 28,
+      "color": "#06b6d4"
+    },
+    {
+      "folder": "polotno-studio/renderer (Konva Canvas)",
+      "loc": 12500,
+      "modules": 32,
+      "color": "#8b5cf6"
+    },
+    {
+      "folder": "postiz/apps/frontend (Next.js Web)",
+      "loc": 11800,
+      "modules": 42,
+      "color": "#0ea5e9"
+    },
+    {
+      "folder": "carousel-generator/src (Next.js AI)",
+      "loc": 5800,
+      "modules": 18,
+      "color": "#ec4899"
+    },
+    {
+      "folder": "postiz/apps/orchestrator (Temporal)",
+      "loc": 5100,
+      "modules": 16,
+      "color": "#10b981"
+    },
+    {
+      "folder": "polotno-studio/mcp-server (Protocol)",
+      "loc": 2600,
+      "modules": 8,
+      "color": "#f59e0b"
+    }
+  ],
+  "top_complexity": [
+    {
+      "id": "postiz-libs/social.abstract.ts",
+      "complexity": 32,
+      "loc": 680,
+      "subsystem": "postiz-libs"
+    },
+    {
+      "id": "postiz-frontend/composer.tsx",
+      "complexity": 28,
+      "loc": 640,
+      "subsystem": "postiz-frontend"
+    },
+    {
+      "id": "postiz-frontend/calendar.tsx",
+      "complexity": 26,
+      "loc": 580,
+      "subsystem": "postiz-frontend"
+    },
+    {
+      "id": "postiz-backend/posts.controller.ts",
+      "complexity": 24,
+      "loc": 460,
+      "subsystem": "postiz-backend"
+    },
+    {
+      "id": "polotno-studio/App.tsx",
+      "complexity": 22,
+      "loc": 520,
+      "subsystem": "polotno-studio"
+    },
+    {
+      "id": "postiz-libs/instagram.provider.ts",
+      "complexity": 20,
+      "loc": 420,
+      "subsystem": "postiz-libs"
+    },
+    {
+      "id": "postiz-backend/integrations.controller.ts",
+      "complexity": 19,
+      "loc": 380,
+      "subsystem": "postiz-backend"
+    },
+    {
+      "id": "polotno-studio/mcp-server/index.ts",
+      "complexity": 18,
+      "loc": 410,
+      "subsystem": "polotno-studio"
+    },
+    {
+      "id": "postiz-frontend/analytics.tsx",
+      "complexity": 18,
+      "loc": 390,
+      "subsystem": "postiz-frontend"
+    },
+    {
+      "id": "postiz-orchestrator/post.workflow.ts",
+      "complexity": 17,
+      "loc": 310,
+      "subsystem": "postiz-orchestrator"
+    },
+    {
+      "id": "postiz-libs/linkedin.provider.ts",
+      "complexity": 17,
+      "loc": 360,
+      "subsystem": "postiz-libs"
+    },
+    {
+      "id": "carousel-generator/langchain.ts",
+      "complexity": 16,
+      "loc": 280,
+      "subsystem": "carousel-generator"
+    },
+    {
+      "id": "postiz-libs/twitter.provider.ts",
+      "complexity": 16,
+      "loc": 340,
+      "subsystem": "postiz-libs"
+    },
+    {
+      "id": "polotno-studio/main/index.ts",
+      "complexity": 15,
+      "loc": 340,
+      "subsystem": "polotno-studio"
+    },
+    {
+      "id": "carousel-generator/actions.tsx",
+      "complexity": 12,
+      "loc": 215,
+      "subsystem": "carousel-generator"
+    }
+  ],
+  "loc_histogram": {
+    "bins": [
+      "0-50",
+      "51-100",
+      "101-200",
+      "201-500",
+      "501-1000",
+      "1000+"
+    ],
+    "counts": [
+      420,
+      280,
+      150,
+      85,
+      25,
+      6
+    ]
+  },
+  "dependency_sankey": {
+    "nodes": [
+      {
+        "id": "Criador / Usuário"
+      },
+      {
+        "id": "Carousel Generator"
+      },
+      {
+        "id": "Polotno Studio"
+      },
+      {
+        "id": "Polotno MCP Server"
+      },
+      {
+        "id": "Agentes LLM"
+      },
+      {
+        "id": "Postiz Frontend"
+      },
+      {
+        "id": "Postiz Backend"
+      },
+      {
+        "id": "PostgreSQL Prisma"
+      },
+      {
+        "id": "Temporal Orchestrator"
+      },
+      {
+        "id": "Social Connectors (38)"
+      },
+      {
+        "id": "Redes Sociais Finais"
+      }
+    ],
+    "links": [
+      {
+        "source": "Criador / Usuário",
+        "target": "Carousel Generator",
+        "value": 20
+      },
+      {
+        "source": "Criador / Usuário",
+        "target": "Polotno Studio",
+        "value": 35
+      },
+      {
+        "source": "Criador / Usuário",
+        "target": "Postiz Frontend",
+        "value": 45
+      },
+      {
+        "source": "Agentes LLM",
+        "target": "Polotno MCP Server",
+        "value": 30
+      },
+      {
+        "source": "Polotno MCP Server",
+        "target": "Polotno Studio",
+        "value": 30
+      },
+      {
+        "source": "Carousel Generator",
+        "target": "Postiz Frontend",
+        "value": 15
+      },
+      {
+        "source": "Polotno Studio",
+        "target": "Postiz Backend",
+        "value": 25
+      },
+      {
+        "source": "Postiz Frontend",
+        "target": "Postiz Backend",
+        "value": 60
+      },
+      {
+        "source": "Postiz Backend",
+        "target": "PostgreSQL Prisma",
+        "value": 50
+      },
+      {
+        "source": "Postiz Backend",
+        "target": "Temporal Orchestrator",
+        "value": 40
+      },
+      {
+        "source": "Temporal Orchestrator",
+        "target": "Social Connectors (38)",
+        "value": 40
+      },
+      {
+        "source": "Social Connectors (38)",
+        "target": "Redes Sociais Finais",
+        "value": 40
+      }
+    ]
+  },
+  "language_distribution": [
+    {
+      "language": "TypeScript (.ts, .tsx)",
+      "files": 966,
+      "percent": 53.6,
+      "loc": 58400,
+      "color": "#3178c6"
+    },
+    {
+      "language": "Markdown / SDD (.md)",
+      "files": 348,
+      "percent": 19.3,
+      "loc": 14200,
+      "color": "#0891b2"
+    },
+    {
+      "language": "Configurações CI/CD (.yaml)",
+      "files": 181,
+      "percent": 10.1,
+      "loc": 5200,
+      "color": "#f59e0b"
+    },
+    {
+      "language": "Manifestos e Dados (.json)",
+      "files": 95,
+      "percent": 5.3,
+      "loc": 4800,
+      "color": "#10b981"
+    },
+    {
+      "language": "JavaScript (.js, .mjs)",
+      "files": 25,
+      "percent": 1.4,
+      "loc": 1800,
+      "color": "#facc15"
+    },
+    {
+      "language": "Prisma Schema (.prisma)",
+      "files": 1,
+      "percent": 0.1,
+      "loc": 1840,
+      "color": "#4f46e5"
+    },
+    {
+      "language": "Python & Shell (.py, .sh)",
+      "files": 11,
+      "percent": 0.6,
+      "loc": 800,
+      "color": "#ec4899"
+    },
+    {
+      "language": "Outros & Ativos (.css, .svg)",
+      "files": 174,
+      "percent": 9.7,
+      "loc": 1200,
+      "color": "#64748b"
+    }
+  ]
+}

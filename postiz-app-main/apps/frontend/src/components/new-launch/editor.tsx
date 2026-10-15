@@ -69,6 +69,7 @@ import {
   DelayIcon,
 } from '@gitroom/frontend/components/ui/icons';
 import { DelayComponent } from '@gitroom/frontend/components/new-launch/delay.component';
+import { AiCopywriterModal } from '@gitroom/frontend/components/new-launch/ai.copywriter.modal';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1 GB
 
@@ -652,6 +653,7 @@ export const Editor: FC<{
   } = props;
   const [id] = useState(makeId(10));
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const [copywriterOpen, setCopywriterOpen] = useState(false);
   const t = useT();
   const toaster = useToaster();
   const editorRef = useRef<undefined | { editor: any }>(undefined);
@@ -1075,6 +1077,18 @@ export const Editor: FC<{
                         >
                           <EmojiIcon className="mobile:w-[20px] mobile:h-[20px]" />
                         </div>
+                        <div
+                          data-tooltip-id="tooltip"
+                          data-tooltip-content={t(
+                            'ai_copywriter',
+                            'AI Copywriter & Sugestão de Legendas'
+                          )}
+                          className="select-none cursor-pointer rounded-[6px] mobile:rounded-[8px] px-2.5 h-[30px] mobile:h-[40px] bg-gradient-to-r from-purple-600/25 to-indigo-600/25 hover:from-purple-600/40 hover:to-indigo-600/40 border border-purple-500/30 text-purple-200 flex items-center gap-1.5 font-medium text-xs transition-all shadow-sm"
+                          onClick={() => setCopywriterOpen(true)}
+                        >
+                          <span className="text-sm">✨</span>
+                          <span className="hidden sm:inline">AI Copywriter</span>
+                        </div>
                         <div className="relative">
                           {emojiPickerOpen && (
                             <div
@@ -1140,8 +1154,22 @@ export const Editor: FC<{
               </div>
               <div className="mobile:hidden">{childButton}</div>
             </div>
-          </div>
         </div>
+        <AiCopywriterModal
+          isOpen={copywriterOpen}
+          onClose={() => setCopywriterOpen(false)}
+          initialContent={props.value || ''}
+          currentPlatform={identifier || 'generic'}
+          onApply={(newContent, mode) => {
+            const formattedHtml = `<p>${newContent.replace(/\n\n+/g, '</p><p>').replace(/\n/g, '<br/>')}</p>`;
+            if (mode === 'append') {
+              const currentVal = props.value || '';
+              props.onChange(currentVal ? `${currentVal}${formattedHtml}` : formattedHtml);
+            } else {
+              props.onChange(formattedHtml);
+            }
+          }}
+        />
       </div>
     </div>
   );

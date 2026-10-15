@@ -80,3 +80,107 @@ export async function generateCarouselSlidesAction(
   }
 }
 
+export type UploadToPostizSuccess = {
+  success: true;
+  media: {
+    id: string;
+    name: string;
+    path: string;
+    mimeType?: string;
+  };
+  postizWebUrl: string;
+};
+
+export type UploadToPostizError = {
+  success: false;
+  reason: "missing_file" | "missing_token" | "auth_error" | "network_error" | "upload_error";
+  message: string;
+};
+
+export type UploadToPostizResult = UploadToPostizSuccess | UploadToPostizError;
+
+export async function uploadToPostizAction(
+  formData: FormData
+): Promise<UploadToPostizResult> {
+  const file = formData.get("file") as File | Blob | null;
+  const token = (formData.get("token") as string | null)?.trim();
+  const apiUrl =
+    (formData.get("apiUrl") as string | null)?.trim() || "http://localhost:3000";
+  const webUrl =
+    (formData.get("webUrl") as string | null)?.trim() || "http://localhost:4200";
+
+  if (!file) {
+    return {
+      success: false,
+      reason: "missing_file",
+      message: "Nenhum arquivo fornecido para upload.",
+    };
+  }
+
+  if (!token) {
+    return {
+      success: false,
+      reason: "missing_token",
+      message: "Token de autenticação do Postiz não informado.",
+    };
+  }
+
+  try {
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", file);
+
+    const cleanApiUrl = apiUrl.replace(/\/+$/, "");
+    const response = await fetch(`${cleanApiUrl}/media/upload-simple`, {
+      method: "POST",
+      headers: {
+        auth: token,
+      },
+      body: uploadFormData,
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      return {
+        success: false,
+        reason: "auth_error",
+        message:
+          "Token do Postiz inválido, expirado ou sem permissão na organização.",
+      };
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "");
+      return {
+        success: false,
+        reason: "upload_error",
+        message: `Falha no upload para o Postiz (HTTP ${response.status}): ${
+          errorText || response.statusText
+        }`,
+      };
+    }
+
+    const data = await response.json();
+    const cleanWebUrl = webUrl.replace(/\/+$/, "");
+
+    return {
+      success: true,
+      media: {
+        id: data.id,
+        name: data.name,
+        path: data.path,
+        mimeType: data.mimeType,
+      },
+      postizWebUrl: cleanWebUrl,
+    };
+  } catch (error) {
+    console.error("Erro na comunicação com a API do Postiz:", error);
+    return {
+      success: false,
+      reason: "network_error",
+      message:
+        error instanceof Error
+          ? `Erro de rede ao conectar com o Postiz (${apiUrl}): ${error.message}`
+          : "Erro desconhecido ao conectar com a API do Postiz.",
+    };
+  }
+}
+

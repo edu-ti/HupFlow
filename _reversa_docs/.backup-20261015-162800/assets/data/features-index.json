@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "carousel-generator",
+    "title": "Carousel Generator",
+    "description": "Gerador especializado de carrosséis para LinkedIn e Instagram via LangChain e Upstash Redis.",
+    "subsystem": "carousel",
+    "filesCount": 18,
+    "loc": 5800
+  },
+  {
+    "slug": "polotno-studio-core",
+    "title": "Polotno Studio Core",
+    "description": "Estúdio de design gráfico 2D offline-first desktop/web baseado em Electron, Konva e MobX.",
+    "subsystem": "polotno",
+    "filesCount": 32,
+    "loc": 12500
+  },
+  {
+    "slug": "polotno-mcp-server",
+    "title": "Polotno MCP Server",
+    "description": "Servidor nativo Model Context Protocol para controle autônomo do editor por agentes de IA.",
+    "subsystem": "polotno-mcp",
+    "filesCount": 8,
+    "loc": 2600
+  },
+  {
+    "slug": "postiz-backend-api",
+    "title": "Postiz Backend API",
+    "description": "API REST corporativa NestJS com Prisma ORM, isolamento multi-tenant e billing Stripe.",
+    "subsystem": "postiz-api",
+    "filesCount": 36,
+    "loc": 14200
+  },
+  {
+    "slug": "postiz-frontend-web",
+    "title": "Postiz Frontend Web",
+    "description": "Interface editorial moderna Next.js 16 com calendário drag-and-drop e visualização de analytics.",
+    "subsystem": "postiz-web",
+    "filesCount": 42,
+    "loc": 11800
+  },
+  {
+    "slug": "postiz-orchestrator",
+    "title": "Postiz Orchestrator",
+    "description": "Worker Temporal.io para agendamento idempotente e orquestração durável de disparos.",
+    "subsystem": "postiz-orch",
+    "filesCount": 16,
+    "loc": 5100
+  },
+  {
+    "slug": "postiz-integrations-libraries",
+    "title": "Postiz Integrations & Libs",
+    "description": "Biblioteca compartilhada em TypeScript contendo 38 conectores para redes sociais.",
+    "subsystem": "postiz-libs",
+    "filesCount": 48,
+    "loc": 32400
+  }
+]

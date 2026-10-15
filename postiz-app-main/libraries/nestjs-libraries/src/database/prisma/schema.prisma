@@ -1,12 +1,76 @@
+// ============================================================================
+// ATENCAO: ARQUIVO GERADO AUTOMATICAMENTE VIA SCHEMA MODULAR (GAP-MOD-02)
+// Para editar modelos, edite os arquivos correspondentes em:
+// ./schema/*.prisma e execute 'pnpm run prisma-bundle'
+// ============================================================================
+
+
+// ----------------------------------------------------------------------------
+// Domain Section: 01-base.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 01-base.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
   runtime  = "nodejs"
 }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  CANCELED
+  COMPLETED
+}
+enum State {
+  QUEUE
+  PUBLISHED
+  ERROR
+  DRAFT
+}
+enum Period {
+  MONTHLY
+  YEARLY
+}
+enum APPROVED_SUBMIT_FOR_ORDER {
+  NO
+  WAITING_CONFIRMATION
+  YES
+}
+enum CreationMethod {
+  UNKNOWN
+  WEB
+  MCP
+  API
+  AUTOPOST
+  CLI
+}
+enum ShortLinkPreference {
+  ASK
+  YES
+  NO
+}
+enum AnnouncementColor {
+  INFO
+  WARNING
+  ERROR
+}
+
+// ----------------------------------------------------------------------------
+// Domain Section: 02-auth-users.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 02-auth-users.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
 
 model Organization {
   id                  String               @id @default(uuid())
@@ -51,34 +115,6 @@ model Organization {
   @@index([paymentId])
   @@index([deletedAt])
 }
-
-model Tags {
-  id           String       @id @default(uuid())
-  name         String
-  color        String
-  orgId        String
-  deletedAt    DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  organization Organization @relation(fields: [orgId], references: [id])
-  posts        TagsPosts[]
-
-  @@index([orgId])
-  @@index([deletedAt])
-}
-
-model TagsPosts {
-  postId    String
-  tagId     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  post      Post     @relation(fields: [postId], references: [id])
-  tag       Tags     @relation(fields: [tagId], references: [id])
-
-  @@id([postId, tagId])
-  @@unique([postId, tagId])
-}
-
 model User {
   id                    String               @id @default(uuid())
   email                 String
@@ -126,7 +162,6 @@ model User {
   @@index([pictureId])
   @@index([deletedAt])
 }
-
 model UsedCodes {
   id           String       @id @default(uuid())
   code         String
@@ -137,7 +172,6 @@ model UsedCodes {
 
   @@index([code])
 }
-
 model UserOrganization {
   id             String       @id @default(uuid())
   userId         String
@@ -153,262 +187,119 @@ model UserOrganization {
   @@index([organizationId])
   @@index([disabled])
 }
+model OAuthApp {
+  id                       String                         @id @default(uuid())
+  organizationId           String?
+  name                     String
+  description              String?
+  pictureId                String?
+  redirectUrl              String
+  redirectUris             String?
+  clientId                 String                         @unique
+  clientSecret             String?
+  dynamic                  Boolean                        @default(false)
+  tokenEndpointAuthMethod  String?
+  createdAt                DateTime                       @default(now())
+  updatedAt                DateTime                       @updatedAt
+  deletedAt                DateTime?
+  organization             Organization?                  @relation(fields: [organizationId], references: [id])
+  picture                  Media?                         @relation(fields: [pictureId], references: [id])
+  authorizations           OAuthAuthorization[]
+  selfHostedAuthorizations OAuthSelfHostedAuthorization[]
 
-model GitHub {
-  id             String       @id @default(uuid())
-  login          String?
-  name           String?
-  token          String
-  jobId          String?
-  organizationId String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id])
-
-  @@index([login])
+  @@unique([organizationId, deletedAt])
+  @@index([clientId])
   @@index([organizationId])
+  @@index([deletedAt])
+  @@index([dynamic])
 }
+model OAuthAuthorization {
+  id                  String       @id @default(uuid())
+  oauthAppId          String
+  userId              String
+  organizationId      String
+  accessToken         String?
+  authorizationCode   String?
+  codeExpiresAt       DateTime?
+  codeChallenge       String?
+  codeChallengeMethod String?
+  redirectUri         String?
+  revokedAt           DateTime?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  oauthApp            OAuthApp     @relation(fields: [oauthAppId], references: [id])
+  user                User         @relation(fields: [userId], references: [id])
+  organization        Organization @relation(fields: [organizationId], references: [id])
 
-model Trending {
-  id           String   @id @default(uuid())
-  trendingList String
-  language     String?  @unique
-  hash         String
-  date         DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([hash])
-}
-
-model TrendingLog {
-  id       String   @id @default(uuid())
-  language String?
-  date     DateTime
-}
-
-model ItemUser {
-  id     String @id @default(uuid())
-  userId String
-  key    String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@unique([userId, key])
+  @@unique([oauthAppId, userId, organizationId])
+  @@index([accessToken])
+  @@index([authorizationCode])
+  @@index([oauthAppId])
   @@index([userId])
-  @@index([key])
-}
-
-model Star {
-  id         String   @id @default(uuid())
-  stars      Int
-  totalStars Int
-  forks      Int
-  totalForks Int
-  login      String
-  date       DateTime @default(now()) @db.Date
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@unique([login, date])
-}
-
-model Media {
-  id                 String              @id @default(uuid())
-  name               String
-  originalName       String?
-  path               String
-  organizationId     String
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  deletedAt          DateTime?
-  fileSize           Int                 @default(0)
-  type               String              @default("image")
-  thumbnail          String?
-  alt                String?
-  thumbnailTimestamp Int?
-  status             String              @default("ready")
-  processingError    String?
-  organization       Organization        @relation(fields: [organizationId], references: [id])
-  agencies           SocialMediaAgency[]
-  userPicture        User[]
-  oauthApps          OAuthApp[]
-
-  @@index([name])
   @@index([organizationId])
-  @@index([type])
+  @@index([revokedAt])
+}
+model OAuthSelfHostedAuthorization {
+  id                  String    @id @default(uuid())
+  oauthAppId          String
+  mcpUrl              String
+  apiKey              String
+  email               String?
+  accessToken         String?
+  authorizationCode   String?
+  codeExpiresAt       DateTime?
+  codeChallenge       String?
+  codeChallengeMethod String?
+  redirectUri         String?
+  revokedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  oauthApp            OAuthApp  @relation(fields: [oauthAppId], references: [id])
+
+  @@index([accessToken])
+  @@index([authorizationCode])
+  @@index([oauthAppId])
+}
+enum Role {
+  SUPERADMIN
+  ADMIN
+  USER
 }
 
-model SocialMediaAgency {
-  id               String                   @id @default(uuid())
-  userId           String                   @unique
-  name             String
-  logoId           String?
-  website          String?
-  slug             String?
-  facebook         String?
-  instagram        String?
-  twitter          String?
-  linkedIn         String?
-  youtube          String?
-  tiktok           String?
-  otherSocialMedia String?
-  shortDescription String
-  description      String
-  approved         Boolean                  @default(false)
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-  deletedAt        DateTime?
-  logo             Media?                   @relation(fields: [logoId], references: [id])
-  user             User                     @relation(fields: [userId], references: [id])
-  niches           SocialMediaAgencyNiche[]
+// ----------------------------------------------------------------------------
+// Domain Section: 03-posts-content.prisma
+// ----------------------------------------------------------------------------
 
-  @@index([userId])
-  @@index([deletedAt])
-  @@index([id])
-}
+// ============================================================================
+// Domain: 03-posts-content.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
 
-model SocialMediaAgencyNiche {
-  agencyId String
-  niche    String
-  agency   SocialMediaAgency @relation(fields: [agencyId], references: [id])
-
-  @@id([agencyId, niche])
-}
-
-model Credits {
-  id             String       @id @default(uuid())
-  organizationId String
-  credits        Int
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  type           String       @default("ai_images")
-  organization   Organization @relation(fields: [organizationId], references: [id])
-
-  @@index([organizationId])
-  @@index([createdAt])
-}
-
-model Clipping {
-  id             String         @id @default(uuid())
-  organizationId String
-  url            String
-  status         String         @default("analysing")
-  error          String?
-  title          String?
-  thumbnail      String?
-  duration       Int?
-  maxClips       Int            @default(5)
-  fit            String         @default("blur")
-  integrations   String
-  creditsId      String?
-  deletedAt      DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  organization   Organization   @relation(fields: [organizationId], references: [id])
-  clips          ClippingClip[]
-
-  @@index([organizationId])
-  @@index([deletedAt])
-}
-
-model ClippingClip {
-  id         String    @id @default(uuid())
-  clippingId String
-  title      String
-  content    String
-  start      Float
-  end        Float
-  trimStart  Int?
-  status     String    @default("pending")
-  error      String?
-  mediaId    String?
-  path       String?
-  thumbnail  String?
-  draftedAt  DateTime?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  clipping   Clipping  @relation(fields: [clippingId], references: [id])
-
-  @@index([clippingId])
-}
-
-model Subscription {
-  id               String           @id @default(cuid())
-  organizationId   String           @unique
-  subscriptionTier SubscriptionTier
-  provider         String           @default("stripe")
-  identifier       String?
-  cancelAt         DateTime?
-  period           Period
-  totalChannels    Int
-  isLifetime       Boolean          @default(false)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  deletedAt        DateTime?
-  organization     Organization     @relation(fields: [organizationId], references: [id])
-
-  @@index([organizationId])
-  @@index([deletedAt])
-}
-
-model Customer {
-  id           String        @id @default(uuid())
+model Tags {
+  id           String       @id @default(uuid())
   name         String
+  color        String
   orgId        String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
-  organization Organization  @relation(fields: [orgId], references: [id])
-  integrations Integration[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  organization Organization @relation(fields: [orgId], references: [id])
+  posts        TagsPosts[]
 
-  @@unique([orgId, name, deletedAt])
-}
-
-model Integration {
-  id                    String                 @id @default(cuid())
-  internalId            String
-  organizationId        String
-  name                  String
-  customName            String?
-  picture               String?
-  providerIdentifier    String
-  type                  String
-  token                 String
-  disabled              Boolean                @default(false)
-  tokenExpiration       DateTime?
-  refreshToken          String?
-  profile               String?
-  deletedAt             DateTime?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime?              @updatedAt
-  inBetweenSteps        Boolean                @default(false)
-  refreshNeeded         Boolean                @default(false)
-  postingTimes          String                 @default("[{\"time\":120}, {\"time\":400}, {\"time\":700}]")
-  customInstanceDetails String?
-  customerId            String?
-  rootInternalId        String?
-  additionalSettings    String?                @default("[]")
-  exisingPlugData       ExisingPlugData[]
-  customer              Customer?              @relation(fields: [customerId], references: [id])
-  organization          Organization           @relation(fields: [organizationId], references: [id])
-  webhooks              IntegrationsWebhooks[]
-  orderItems            OrderItems[]
-  plugs                 Plugs[]
-  posts                 Post[]
-
-  @@unique([organizationId, internalId])
-  @@index([rootInternalId])
-  @@index([organizationId])
-  @@index([providerIdentifier])
-  @@index([updatedAt])
-  @@index([createdAt])
+  @@index([orgId])
   @@index([deletedAt])
-  @@index([customerId])
-  @@index([inBetweenSteps])
-  @@index([refreshNeeded])
-  @@index([disabled])
 }
+model TagsPosts {
+  postId    String
+  tagId     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id])
+  tag       Tags     @relation(fields: [tagId], references: [id])
 
+  @@id([postId, tagId])
+  @@unique([postId, tagId])
+}
 model Signatures {
   id             String       @id @default(uuid())
   organizationId String
@@ -423,7 +314,6 @@ model Signatures {
   @@index([organizationId])
   @@index([deletedAt])
 }
-
 model Comments {
   id             String       @id @default(uuid())
   content        String
@@ -453,7 +343,6 @@ model Comments {
   @@index([resolvedAt])
   @@index([deletedAt])
 }
-
 model Post {
   id                         String                    @id @default(cuid())
   state                      State                     @default(QUEUE)
@@ -510,22 +399,325 @@ model Post {
   @@index([releaseURL])
   @@index([integrationId])
 }
+model PopularPosts {
+  id        String   @id @default(uuid())
+  category  String
+  topic     String
+  content   String
+  hook      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model AutoPost {
+  id              String       @id @default(uuid())
+  organizationId  String
+  title           String
+  content         String?
+  onSlot          Boolean
+  syncLast        Boolean
+  url             String
+  lastUrl         String
+  active          Boolean
+  addPicture      Boolean
+  generateContent Boolean
+  integrations    String
+  deletedAt       DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  organization    Organization @relation(fields: [organizationId], references: [id])
 
-model Notifications {
+  @@index([deletedAt])
+}
+model Sets {
   id             String       @id @default(uuid())
   organizationId String
+  name           String
   content        String
-  link           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+}
+model Mentions {
+  name      String
+  username  String
+  platform  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  image     String
+
+  @@id([name, username, platform, image])
+  @@index([createdAt])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+
+// ----------------------------------------------------------------------------
+// Domain Section: 04-integrations-channels.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 04-integrations-channels.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model GitHub {
+  id             String       @id @default(uuid())
+  login          String?
+  name           String?
+  token          String
+  jobId          String?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([login])
+  @@index([organizationId])
+}
+model Trending {
+  id           String   @id @default(uuid())
+  trendingList String
+  language     String?  @unique
+  hash         String
+  date         DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([hash])
+}
+model TrendingLog {
+  id       String   @id @default(uuid())
+  language String?
+  date     DateTime
+}
+model ItemUser {
+  id     String @id @default(uuid())
+  userId String
+  key    String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, key])
+  @@index([userId])
+  @@index([key])
+}
+model Star {
+  id         String   @id @default(uuid())
+  stars      Int
+  totalStars Int
+  forks      Int
+  totalForks Int
+  login      String
+  date       DateTime @default(now()) @db.Date
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([login, date])
+}
+model Integration {
+  id                    String                 @id @default(cuid())
+  internalId            String
+  organizationId        String
+  name                  String
+  customName            String?
+  picture               String?
+  providerIdentifier    String
+  type                  String
+  token                 String
+  disabled              Boolean                @default(false)
+  tokenExpiration       DateTime?
+  refreshToken          String?
+  profile               String?
+  deletedAt             DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime?              @updatedAt
+  inBetweenSteps        Boolean                @default(false)
+  refreshNeeded         Boolean                @default(false)
+  postingTimes          String                 @default("[{\"time\":120}, {\"time\":400}, {\"time\":700}]")
+  customInstanceDetails String?
+  customerId            String?
+  rootInternalId        String?
+  additionalSettings    String?                @default("[]")
+  exisingPlugData       ExisingPlugData[]
+  customer              Customer?              @relation(fields: [customerId], references: [id])
+  organization          Organization           @relation(fields: [organizationId], references: [id])
+  webhooks              IntegrationsWebhooks[]
+  orderItems            OrderItems[]
+  plugs                 Plugs[]
+  posts                 Post[]
+
+  @@unique([organizationId, internalId])
+  @@index([rootInternalId])
+  @@index([organizationId])
+  @@index([providerIdentifier])
+  @@index([updatedAt])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([customerId])
+  @@index([inBetweenSteps])
+  @@index([refreshNeeded])
+  @@index([disabled])
+}
+model Plugs {
+  id             String       @id @default(uuid())
+  organizationId String
+  plugFunction   String
+  data           String
+  integrationId  String
+  activated      Boolean      @default(true)
+  integration    Integration  @relation(fields: [integrationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([plugFunction, integrationId])
+  @@index([organizationId])
+}
+model ExisingPlugData {
+  id            String      @id @default(uuid())
+  integrationId String
+  methodName    String
+  value         String
+  integration   Integration @relation(fields: [integrationId], references: [id])
+
+  @@unique([integrationId, methodName, value])
+}
+model IntegrationsWebhooks {
+  integrationId String
+  webhookId     String
+  integration   Integration @relation(fields: [integrationId], references: [id])
+  webhook       Webhooks    @relation(fields: [webhookId], references: [id])
+
+  @@id([integrationId, webhookId])
+  @@unique([integrationId, webhookId])
+  @@index([integrationId])
+  @@index([webhookId])
+}
+model Webhooks {
+  id             String                 @id @default(uuid())
+  name           String
+  organizationId String
+  url            String
+  deletedAt      DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  integrations   IntegrationsWebhooks[]
+  organization   Organization           @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model ThirdParty {
+  id             String       @id @default(uuid())
+  organizationId String
+  identifier     String
+  name           String
+  internalId     String
+  apiKey         String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  @@index([createdAt])
+  @@unique([organizationId, internalId])
   @@index([organizationId])
   @@index([deletedAt])
 }
+enum Provider {
+  LOCAL
+  GITHUB
+  GOOGLE
+  APPLE
+  FARCASTER
+  WALLET
+  GENERIC
+}
 
+// ----------------------------------------------------------------------------
+// Domain Section: 05-billing-marketplace.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 05-billing-marketplace.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model SocialMediaAgency {
+  id               String                   @id @default(uuid())
+  userId           String                   @unique
+  name             String
+  logoId           String?
+  website          String?
+  slug             String?
+  facebook         String?
+  instagram        String?
+  twitter          String?
+  linkedIn         String?
+  youtube          String?
+  tiktok           String?
+  otherSocialMedia String?
+  shortDescription String
+  description      String
+  approved         Boolean                  @default(false)
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  deletedAt        DateTime?
+  logo             Media?                   @relation(fields: [logoId], references: [id])
+  user             User                     @relation(fields: [userId], references: [id])
+  niches           SocialMediaAgencyNiche[]
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@index([id])
+}
+model SocialMediaAgencyNiche {
+  agencyId String
+  niche    String
+  agency   SocialMediaAgency @relation(fields: [agencyId], references: [id])
+
+  @@id([agencyId, niche])
+}
+model Credits {
+  id             String       @id @default(uuid())
+  organizationId String
+  credits        Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  type           String       @default("ai_images")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([createdAt])
+}
+model Subscription {
+  id               String           @id @default(cuid())
+  organizationId   String           @unique
+  subscriptionTier SubscriptionTier
+  provider         String           @default("stripe")
+  identifier       String?
+  cancelAt         DateTime?
+  period           Period
+  totalChannels    Int
+  isLifetime       Boolean          @default(false)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  deletedAt        DateTime?
+  organization     Organization     @relation(fields: [organizationId], references: [id])
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+model Customer {
+  id           String        @id @default(uuid())
+  name         String
+  orgId        String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  organization Organization  @relation(fields: [orgId], references: [id])
+  integrations Integration[]
+
+  @@unique([orgId, name, deletedAt])
+}
 model MessagesGroup {
   id                  String       @id @default(uuid())
   buyerOrganizationId String
@@ -544,7 +736,6 @@ model MessagesGroup {
   @@index([updatedAt])
   @@index([buyerOrganizationId])
 }
-
 model PayoutProblems {
   id        String   @id @default(uuid())
   status    String
@@ -558,7 +749,6 @@ model PayoutProblems {
   post      Post?    @relation(fields: [postId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
 }
-
 model Orders {
   id             String           @id @default(uuid())
   buyerId        String
@@ -581,7 +771,6 @@ model Orders {
   @@index([createdAt])
   @@index([messageGroupId])
 }
-
 model OrderItems {
   id            String      @id @default(uuid())
   orderId       String
@@ -594,7 +783,6 @@ model OrderItems {
   @@index([orderId])
   @@index([integrationId])
 }
-
 model Messages {
   id        String        @id @default(uuid())
   from      From
@@ -611,118 +799,117 @@ model Messages {
   @@index([createdAt])
   @@index([deletedAt])
 }
+enum From {
+  BUYER
+  SELLER
+}
+enum SubscriptionTier {
+  STANDARD
+  PRO
+  TEAM
+  ULTIMATE
+}
 
-model Plugs {
-  id             String       @id @default(uuid())
-  organizationId String
-  plugFunction   String
-  data           String
-  integrationId  String
-  activated      Boolean      @default(true)
-  integration    Integration  @relation(fields: [integrationId], references: [id])
-  organization   Organization @relation(fields: [organizationId], references: [id])
+// ----------------------------------------------------------------------------
+// Domain Section: 06-media-clipping.prisma
+// ----------------------------------------------------------------------------
 
-  @@unique([plugFunction, integrationId])
+// ============================================================================
+// Domain: 06-media-clipping.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model Media {
+  id                 String              @id @default(uuid())
+  name               String
+  originalName       String?
+  path               String
+  organizationId     String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+  fileSize           Int                 @default(0)
+  type               String              @default("image")
+  thumbnail          String?
+  alt                String?
+  thumbnailTimestamp Int?
+  status             String              @default("ready")
+  processingError    String?
+  organization       Organization        @relation(fields: [organizationId], references: [id])
+  agencies           SocialMediaAgency[]
+  userPicture        User[]
+  oauthApps          OAuthApp[]
+
+  @@index([name])
   @@index([organizationId])
+  @@index([type])
 }
-
-model ExisingPlugData {
-  id            String      @id @default(uuid())
-  integrationId String
-  methodName    String
-  value         String
-  integration   Integration @relation(fields: [integrationId], references: [id])
-
-  @@unique([integrationId, methodName, value])
-}
-
-model PopularPosts {
-  id        String   @id @default(uuid())
-  category  String
-  topic     String
-  content   String
-  hook      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model IntegrationsWebhooks {
-  integrationId String
-  webhookId     String
-  integration   Integration @relation(fields: [integrationId], references: [id])
-  webhook       Webhooks    @relation(fields: [webhookId], references: [id])
-
-  @@id([integrationId, webhookId])
-  @@unique([integrationId, webhookId])
-  @@index([integrationId])
-  @@index([webhookId])
-}
-
-model Webhooks {
-  id             String                 @id @default(uuid())
-  name           String
+model Clipping {
+  id             String         @id @default(uuid())
   organizationId String
   url            String
+  status         String         @default("analysing")
+  error          String?
+  title          String?
+  thumbnail      String?
+  duration       Int?
+  maxClips       Int            @default(5)
+  fit            String         @default("blur")
+  integrations   String
+  creditsId      String?
   deletedAt      DateTime?
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime               @updatedAt
-  integrations   IntegrationsWebhooks[]
-  organization   Organization           @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  clips          ClippingClip[]
 
   @@index([organizationId])
   @@index([deletedAt])
 }
+model ClippingClip {
+  id         String    @id @default(uuid())
+  clippingId String
+  title      String
+  content    String
+  start      Float
+  end        Float
+  trimStart  Int?
+  status     String    @default("pending")
+  error      String?
+  mediaId    String?
+  path       String?
+  thumbnail  String?
+  draftedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  clipping   Clipping  @relation(fields: [clippingId], references: [id])
 
-model AutoPost {
-  id              String       @id @default(uuid())
-  organizationId  String
-  title           String
-  content         String?
-  onSlot          Boolean
-  syncLast        Boolean
-  url             String
-  lastUrl         String
-  active          Boolean
-  addPicture      Boolean
-  generateContent Boolean
-  integrations    String
-  deletedAt       DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  organization    Organization @relation(fields: [organizationId], references: [id])
-
-  @@index([deletedAt])
+  @@index([clippingId])
 }
 
-model Sets {
+// ----------------------------------------------------------------------------
+// Domain Section: 07-notifications-system.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 07-notifications-system.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
+model Notifications {
   id             String       @id @default(uuid())
   organizationId String
-  name           String
   content        String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  organization   Organization @relation(fields: [organizationId], references: [id])
-
-  @@index([organizationId])
-}
-
-model ThirdParty {
-  id             String       @id @default(uuid())
-  organizationId String
-  identifier     String
-  name           String
-  internalId     String
-  apiKey         String
+  link           String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  @@unique([organizationId, internalId])
+  @@index([createdAt])
   @@index([organizationId])
   @@index([deletedAt])
 }
-
 model Errors {
   id             String       @id @default(uuid())
   message        String
@@ -738,20 +925,23 @@ model Errors {
   @@index([organizationId])
   @@index([createdAt])
 }
-
-model Mentions {
-  name      String
-  username  String
-  platform  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  image     String
-
-  @@id([name, username, platform, image])
-  @@index([createdAt])
+model Announcement {
+  id          String            @id @default(uuid())
+  title       String
+  description String
+  color       AnnouncementColor @default(INFO)
+  createdAt   DateTime          @default(now())
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+// ----------------------------------------------------------------------------
+// Domain Section: 08-mastra-ai.prisma
+// ----------------------------------------------------------------------------
+
+// ============================================================================
+// Domain: 08-mastra-ai.prisma
+// Modular Prisma Schema (GAP-MOD-02)
+// ============================================================================
+
 model mastra_ai_spans {
   traceId               String
   spanId                String
@@ -836,7 +1026,6 @@ model mastra_evals {
   @@index([agent_name, created_at(sort: Desc)], map: "public_mastra_evals_agent_name_created_at_idx")
   @@ignore
 }
-
 model mastra_messages {
   id         String    @id
   thread_id  String
@@ -850,7 +1039,6 @@ model mastra_messages {
   @@index([thread_id, createdAt(sort: Desc)], map: "public_mastra_messages_thread_id_createdat_idx")
   @@index([thread_id, createdAt(sort: Desc)], map: "mastra_messages_thread_id_createdat_idx")
 }
-
 model mastra_resources {
   id            String    @id
   workingMemory String?
@@ -860,7 +1048,6 @@ model mastra_resources {
   createdAtZ    DateTime? @default(now()) @db.Timestamptz(6)
   updatedAtZ    DateTime? @default(now()) @db.Timestamptz(6)
 }
-
 model mastra_scorers {
   id                   String    @id
   scorerId             String
@@ -904,7 +1091,6 @@ model mastra_scorers {
   @@index([traceId, spanId, createdAt(sort: Desc)], map: "public_mastra_scores_trace_id_span_id_created_at_idx")
   @@index([traceId, spanId, createdAt(sort: Desc)], map: "mastra_scores_trace_id_span_id_created_at_idx")
 }
-
 model mastra_threads {
   id         String    @id
   resourceId String
@@ -918,7 +1104,6 @@ model mastra_threads {
   @@index([resourceId, createdAt(sort: Desc)], map: "public_mastra_threads_resourceid_createdat_idx")
   @@index([resourceId, createdAt(sort: Desc)], map: "mastra_threads_resourceid_createdat_idx")
 }
-
 model mastra_traces {
   id           String    @id
   parentSpanId String?
@@ -938,7 +1123,6 @@ model mastra_traces {
 
   @@index([name, startTime(sort: Desc)], map: "public_mastra_traces_name_starttime_idx")
 }
-
 model mastra_workflow_snapshot {
   workflow_name String
   run_id        String
@@ -952,7 +1136,6 @@ model mastra_workflow_snapshot {
   @@unique([workflow_name, run_id], map: "public_mastra_workflow_snapshot_workflow_name_run_id_key")
   @@index([workflow_name, createdAt(sort: Desc)], map: "mastra_workflow_snapshot_name_createdat_idx")
 }
-
 model mastra_agent_versions {
   id                   String    @id
   agentId              String
@@ -960,7 +1143,7 @@ model mastra_agent_versions {
   name                 String
   description          String?
   instructions         String
-  model                Json
+model                Json
   tools                Json?
   defaultOptions       Json?
   workflows            Json?
@@ -983,7 +1166,6 @@ model mastra_agent_versions {
   browser              Json?
   toolProviders        Json?
 }
-
 model mastra_agents {
   id              String    @id
   status          String
@@ -997,7 +1179,6 @@ model mastra_agents {
   visibility      String?
   favoriteCount   Int?
 }
-
 model mastra_background_tasks {
   id              String    @id
   tool_call_id    String
@@ -1028,14 +1209,12 @@ model mastra_background_tasks {
   @@index([thread_id, createdAt], map: "mastra_bg_tasks_thread_idx")
   @@index([tool_call_id], map: "mastra_bg_tasks_tool_call_idx")
 }
-
 model mastra_channel_config {
   platform   String    @id
   data       Json
   updatedAt  DateTime  @db.Timestamp(6)
   updatedAtZ DateTime? @default(now()) @db.Timestamptz(6)
 }
-
 model mastra_channel_installations {
   id         String    @id
   platform   String
@@ -1052,7 +1231,6 @@ model mastra_channel_installations {
 
   @@index([platform, agentId], map: "idx_channel_installations_platform_agent")
 }
-
 model mastra_dataset_items {
   id                 String
   datasetId          String
@@ -1083,7 +1261,6 @@ model mastra_dataset_items {
   @@index([datasetId, externalId, datasetVersion], map: "idx_dataset_items_external_id_history")
   @@index([organizationId, projectId], map: "idx_dataset_items_org_project")
 }
-
 model mastra_dataset_versions {
   id         String    @id
   datasetId  String
@@ -1094,7 +1271,6 @@ model mastra_dataset_versions {
   @@unique([datasetId, version], map: "idx_dataset_versions_dataset_version_unique")
   @@index([datasetId, version], map: "idx_dataset_versions_dataset_version")
 }
-
 model mastra_datasets {
   id                   String    @id
   name                 String
@@ -1120,7 +1296,6 @@ model mastra_datasets {
   @@index([candidateKey, candidateId], map: "idx_datasets_candidate")
   @@index([organizationId, projectId], map: "idx_datasets_org_project")
 }
-
 model mastra_experiment_results {
   id                 String    @id
   experimentId       String
@@ -1152,7 +1327,6 @@ model mastra_experiment_results {
   @@index([organizationId, projectId], map: "idx_experiment_results_org_project")
   @@index([tags], map: "idx_experiment_results_tags_gin", type: Gin)
 }
-
 model mastra_experiments {
   id                String    @id
   name              String?
@@ -1190,7 +1364,6 @@ model mastra_experiments {
   @@index([experimentSetId, comparisonId, variantId, trialIndex], map: "idx_experiments_grouping")
   @@index([organizationId, projectId], map: "idx_experiments_org_project")
 }
-
 model mastra_favorites {
   userId     String
   entityType String
@@ -1201,7 +1374,6 @@ model mastra_favorites {
   @@id([userId, entityType, entityId])
   @@index([entityType, entityId], map: "idx_favorites_entity")
 }
-
 model mastra_knowledge_activity {
   id             String    @id
   action         String
@@ -1215,7 +1387,6 @@ model mastra_knowledge_activity {
 
   @@index([id(sort: Desc)], map: "idx_knowledge_activity_latest")
 }
-
 model mastra_knowledge_cursors {
   sourceThreadId  String
   agent           String
@@ -1225,7 +1396,6 @@ model mastra_knowledge_cursors {
 
   @@id([sourceThreadId, agent])
 }
-
 model mastra_knowledge_mentions {
   sourceType String
   sourceId   String
@@ -1234,7 +1404,6 @@ model mastra_knowledge_mentions {
   @@id([sourceType, sourceId, recordId])
   @@index([recordId, sourceType, sourceId], map: "idx_knowledge_mentions_record")
 }
-
 model mastra_knowledge_nodes {
   id            String    @id
   type          String
@@ -1255,7 +1424,6 @@ model mastra_knowledge_nodes {
   @@unique([type, scopeKey, canonicalName], map: "idx_knowledge_nodes_identity")
   @@index([scopeKey, type], map: "idx_knowledge_nodes_scope")
 }
-
 model mastra_knowledge_records {
   id             String    @id
   node           String
@@ -1276,7 +1444,6 @@ model mastra_knowledge_records {
   @@index([node, id(sort: Desc)], map: "idx_knowledge_records_node_latest")
   @@index([sourceThreadId, id(sort: Desc)], map: "idx_knowledge_records_thread_latest")
 }
-
 model mastra_knowledge_semantic_outbox {
   id             String    @id
   idempotencyKey String    @unique(map: "idx_knowledge_outbox_idempotency")
@@ -1299,7 +1466,6 @@ model mastra_knowledge_semantic_outbox {
 
   @@index([status, availableAt, createdAt], map: "idx_knowledge_outbox_claim")
 }
-
 model mastra_mcp_client_versions {
   id            String    @id
   mcpClientId   String
@@ -1314,7 +1480,6 @@ model mastra_mcp_client_versions {
 
   @@unique([mcpClientId, versionNumber], map: "idx_mcp_client_versions_client_version")
 }
-
 model mastra_mcp_clients {
   id              String    @id
   status          String
@@ -1326,7 +1491,6 @@ model mastra_mcp_clients {
   createdAtZ      DateTime? @default(now()) @db.Timestamptz(6)
   updatedAtZ      DateTime? @default(now()) @db.Timestamptz(6)
 }
-
 model mastra_mcp_server_versions {
   id               String    @id
   mcpServerId      String
@@ -1349,7 +1513,6 @@ model mastra_mcp_server_versions {
 
   @@unique([mcpServerId, versionNumber], map: "idx_mcp_server_versions_server_version")
 }
-
 model mastra_mcp_servers {
   id              String    @id
   status          String
@@ -1411,7 +1574,6 @@ model mastra_notifications {
   @@index([threadId, status, updatedAt], map: "idx_notifications_thread_status_updated")
   @@ignore
 }
-
 model mastra_observational_memory {
   id                              String    @id
   lookupKey                       String
@@ -1455,7 +1617,6 @@ model mastra_observational_memory {
 
   @@index([lookupKey], map: "idx_om_lookup_key")
 }
-
 model mastra_prompt_block_versions {
   id                   String    @id
   blockId              String
@@ -1472,7 +1633,6 @@ model mastra_prompt_block_versions {
 
   @@unique([blockId, versionNumber], map: "idx_prompt_block_versions_block_version")
 }
-
 model mastra_prompt_blocks {
   id              String    @id
   status          String
@@ -1484,7 +1644,6 @@ model mastra_prompt_blocks {
   createdAtZ      DateTime? @default(now()) @db.Timestamptz(6)
   updatedAtZ      DateTime? @default(now()) @db.Timestamptz(6)
 }
-
 model mastra_schedule_triggers {
   id                String  @id
   schedule_id       String
@@ -1499,7 +1658,6 @@ model mastra_schedule_triggers {
 
   @@index([schedule_id, actual_fire_at(sort: Desc)], map: "idx_mastra_schedule_triggers_schedule_fire")
 }
-
 model mastra_schedules {
   id           String  @id
   target       Json
@@ -1517,7 +1675,6 @@ model mastra_schedules {
 
   @@index([status, next_fire_at], map: "idx_mastra_schedules_status_next_fire")
 }
-
 model mastra_scorer_definition_versions {
   id                 String    @id
   scorerDefinitionId String
@@ -1525,7 +1682,7 @@ model mastra_scorer_definition_versions {
   name               String
   description        String?
   type               String
-  model              Json?
+model              Json?
   instructions       String?
   scoreRange         Json?
   presetConfig       Json?
@@ -1537,7 +1694,6 @@ model mastra_scorer_definition_versions {
 
   @@unique([scorerDefinitionId, versionNumber], map: "idx_scorer_definition_versions_def_version")
 }
-
 model mastra_scorer_definitions {
   id              String    @id
   status          String
@@ -1551,7 +1707,6 @@ model mastra_scorer_definitions {
   organizationId  String?
   projectId       String?
 }
-
 model mastra_skill_blobs {
   hash       String    @id
   content    String
@@ -1560,7 +1715,6 @@ model mastra_skill_blobs {
   createdAt  DateTime  @db.Timestamp(6)
   createdAtZ DateTime? @default(now()) @db.Timestamptz(6)
 }
-
 model mastra_skill_versions {
   id            String    @id
   skillId       String
@@ -1584,7 +1738,6 @@ model mastra_skill_versions {
 
   @@unique([skillId, versionNumber], map: "idx_skill_versions_skill_version")
 }
-
 model mastra_skills {
   id              String    @id
   status          String
@@ -1597,7 +1750,6 @@ model mastra_skills {
   visibility      String?
   favoriteCount   Int?
 }
-
 model mastra_thread_state {
   threadId   String
   type       String
@@ -1609,7 +1761,6 @@ model mastra_thread_state {
 
   @@id([threadId, type])
 }
-
 model mastra_tool_provider_connections {
   authorId     String
   providerId   String
@@ -1625,7 +1776,6 @@ model mastra_tool_provider_connections {
   @@id([authorId, providerId, connectionId])
   @@index([authorId, providerId, toolkit], map: "idx_tool_provider_connections_author")
 }
-
 model mastra_workflow_definitions {
   id                   String    @id
   description          String?
@@ -1646,7 +1796,6 @@ model mastra_workflow_definitions {
 
   @@index([status], map: "idx_workflow_definitions_status")
 }
-
 model mastra_workspace_versions {
   id               String    @id
   workspaceId      String
@@ -1668,7 +1817,6 @@ model mastra_workspace_versions {
 
   @@unique([workspaceId, versionNumber], map: "idx_workspace_versions_workspace_version")
 }
-
 model mastra_workspaces {
   id              String    @id
   status          String
@@ -1679,162 +1827,4 @@ model mastra_workspaces {
   updatedAt       DateTime  @db.Timestamp(6)
   createdAtZ      DateTime? @default(now()) @db.Timestamptz(6)
   updatedAtZ      DateTime? @default(now()) @db.Timestamptz(6)
-}
-
-model OAuthApp {
-  id                       String                         @id @default(uuid())
-  organizationId           String?
-  name                     String
-  description              String?
-  pictureId                String?
-  redirectUrl              String
-  redirectUris             String?
-  clientId                 String                         @unique
-  clientSecret             String?
-  dynamic                  Boolean                        @default(false)
-  tokenEndpointAuthMethod  String?
-  createdAt                DateTime                       @default(now())
-  updatedAt                DateTime                       @updatedAt
-  deletedAt                DateTime?
-  organization             Organization?                  @relation(fields: [organizationId], references: [id])
-  picture                  Media?                         @relation(fields: [pictureId], references: [id])
-  authorizations           OAuthAuthorization[]
-  selfHostedAuthorizations OAuthSelfHostedAuthorization[]
-
-  @@unique([organizationId, deletedAt])
-  @@index([clientId])
-  @@index([organizationId])
-  @@index([deletedAt])
-  @@index([dynamic])
-}
-
-model OAuthAuthorization {
-  id                  String       @id @default(uuid())
-  oauthAppId          String
-  userId              String
-  organizationId      String
-  accessToken         String?
-  authorizationCode   String?
-  codeExpiresAt       DateTime?
-  codeChallenge       String?
-  codeChallengeMethod String?
-  redirectUri         String?
-  revokedAt           DateTime?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-  oauthApp            OAuthApp     @relation(fields: [oauthAppId], references: [id])
-  user                User         @relation(fields: [userId], references: [id])
-  organization        Organization @relation(fields: [organizationId], references: [id])
-
-  @@unique([oauthAppId, userId, organizationId])
-  @@index([accessToken])
-  @@index([authorizationCode])
-  @@index([oauthAppId])
-  @@index([userId])
-  @@index([organizationId])
-  @@index([revokedAt])
-}
-
-model OAuthSelfHostedAuthorization {
-  id                  String    @id @default(uuid())
-  oauthAppId          String
-  mcpUrl              String
-  apiKey              String
-  email               String?
-  accessToken         String?
-  authorizationCode   String?
-  codeExpiresAt       DateTime?
-  codeChallenge       String?
-  codeChallengeMethod String?
-  redirectUri         String?
-  revokedAt           DateTime?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  oauthApp            OAuthApp  @relation(fields: [oauthAppId], references: [id])
-
-  @@index([accessToken])
-  @@index([authorizationCode])
-  @@index([oauthAppId])
-}
-
-enum OrderStatus {
-  PENDING
-  ACCEPTED
-  CANCELED
-  COMPLETED
-}
-
-enum From {
-  BUYER
-  SELLER
-}
-
-enum State {
-  QUEUE
-  PUBLISHED
-  ERROR
-  DRAFT
-}
-
-enum SubscriptionTier {
-  STANDARD
-  PRO
-  TEAM
-  ULTIMATE
-}
-
-enum Period {
-  MONTHLY
-  YEARLY
-}
-
-enum Provider {
-  LOCAL
-  GITHUB
-  GOOGLE
-  APPLE
-  FARCASTER
-  WALLET
-  GENERIC
-}
-
-enum Role {
-  SUPERADMIN
-  ADMIN
-  USER
-}
-
-enum APPROVED_SUBMIT_FOR_ORDER {
-  NO
-  WAITING_CONFIRMATION
-  YES
-}
-
-enum CreationMethod {
-  UNKNOWN
-  WEB
-  MCP
-  API
-  AUTOPOST
-  CLI
-}
-
-enum ShortLinkPreference {
-  ASK
-  YES
-  NO
-}
-
-enum AnnouncementColor {
-  INFO
-  WARNING
-  ERROR
-}
-
-model Announcement {
-  id          String            @id @default(uuid())
-  title       String
-  description String
-  color       AnnouncementColor @default(INFO)
-  createdAt   DateTime          @default(now())
 }

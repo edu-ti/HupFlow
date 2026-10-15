@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "startedAt": "2026-10-14T20:34:00-03:00",
-  "lastCheckpoint": "2026-10-15T00:22:05.717Z",
+  "lastCheckpoint": "2026-10-15T16:45:00.000Z",
   "pipelineDurationMs": 45000,
   "completedAgents": [
     "mapper",
@@ -14,8 +14,8 @@
     "index.html": {
       "status": "created",
       "agent": "reversa-docs-publisher",
-      "hash": "e3692cb7e2c77a30c3158bfc20587488ca8d500ec0b22dcd1024138f0057f395",
-      "sizeBytes": 19994
+      "hash": "f4179d694c22f366b6c459c5a3124bcb00fade78708b22411da0ca22a9238206",
+      "sizeBytes": 21636
     },
     "arquitetura.html": {
       "status": "created",
@@ -56,8 +56,8 @@
     "adendos.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
-      "hash": "02de11aae28cfc552014899b9b97971d7f1b948cf1ba966a235a6f681973dd5e",
-      "sizeBytes": 10458
+      "hash": "d6114d491f2780c4c4818789d3bb4374daf3225fbd9b970949ad4477caf1f837",
+      "sizeBytes": 17501
     },
     "timeline.html": {
       "status": "created",
@@ -129,7 +129,7 @@
   "pagesOmitted": [
     {
       "page": "timeline.html",
-      "reason": "chronicle.md não encontrado (.reversa/chronicle.md ausente)"
+      "reason": "chronicle.md n\u00e3o encontrado (.reversa/chronicle.md ausente)"
     }
   ],
   "auxiliaryHtmls": [],
