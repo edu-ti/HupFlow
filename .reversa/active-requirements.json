@@ -1,16 +1,12 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/008-modular-prisma-schema",
-  "feature-id": "008",
-  "short-name": "modular-prisma-schema",
-  "started-at": "2026-10-15T15:32:00-03:00",
-  "current-stage": "done",
+  "feature-dir": "_reversa_forward/013-hupflow-media-library-r2",
+  "feature-id": "013",
+  "short-name": "hupflow-media-library-r2",
+  "started-at": "2026-10-15T21:36:00-03:00",
+  "current-stage": "requirements",
   "stages-completed": [
-    "requirements",
-    "plan",
-    "to-do",
-    "coding",
-    "sync"
+    "requirements"
   ],
   "paused-features": []
 }

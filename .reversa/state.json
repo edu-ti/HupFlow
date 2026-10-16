@@ -8,6 +8,24 @@
   "doc_level": "detalhado",
   "output_folder": "_reversa_sdd",
   "forward_folder": "_reversa_forward",
+  "newproject_progress": {
+    "mode": "expresso",
+    "stage": "feature-012-delivered",
+    "started_at": "2026-10-15T17:30:00-03:00",
+    "last_checkpoint_at": "2026-10-15T21:34:00-03:00",
+    "completed_stages": [
+      "ideator",
+      "researcher",
+      "drafter",
+      "spec-sdd",
+      "code-foundation",
+      "feature-009-carousel-studio",
+      "feature-010-meta-connectors",
+      "feature-011-composer-editor",
+      "feature-012-scheduler-calendar"
+    ],
+    "brief": "HupFlow Clean-Room: Plataforma SaaS proprietaria de carrosseis IA, canvas 2D e agendamento multicanal"
+  },
   "phase": "concluido",
   "completed": [
     "reconhecimento",
