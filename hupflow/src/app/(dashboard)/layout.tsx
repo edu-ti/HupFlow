@@ -30,17 +30,23 @@ import {
   Rss,
   Smartphone,
   Subtitles,
+  Building2,
+  Inbox,
+  Repeat,
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard & Fila', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Social Inbox & IA', href: '/inbox', icon: Inbox, badge: 'Leads' },
   { name: 'Falhas & DLQ', href: '/queue/failures', icon: AlertTriangle },
   { name: 'Estúdio de Carrosséis', href: '/studio', icon: Palette, badge: 'IA' },
   { name: 'Legendas & Vídeos', href: '/settings/captions', icon: Subtitles, badge: 'SRT' },
+  { name: 'Reciclagem Evergreen', href: '/settings/evergreen', icon: Repeat },
   { name: 'Identidade & Marca', href: '/settings/brand', icon: Sparkles },
   { name: 'Marca d\'Água', href: '/settings/watermark', icon: Stamp },
   { name: 'Compositor de Posts', href: '/composer', icon: Send },
   { name: 'Aprovações & Revisão', href: '/approvals', icon: CheckSquare },
+  { name: 'Portais de Clientes', href: '/settings/portals', icon: Building2 },
   { name: 'Biblioteca de Mídias', href: '/media', icon: FolderOpen },
   { name: 'Métricas & Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Equipe & Membros', href: '/settings/members', icon: Users },

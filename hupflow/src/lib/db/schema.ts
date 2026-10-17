@@ -535,3 +535,68 @@ export const videoCaptionProjects = pgTable('video_caption_projects', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const clientPortals = pgTable('client_portals', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  clientName: text('client_name').notNull(),
+  projectTitle: text('project_title').notNull(),
+  token: text('token').unique().notNull(),
+  brandColor: text('brand_color').default('#6366F1').notNull(),
+  logoUrl: text('logo_url'),
+  welcomeMessage: text('welcome_message'),
+  accessPin: text('access_pin'),
+  hideHupflowBranding: boolean('hide_hupflow_branding').default(false).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  deliverables: jsonb('deliverables').default([]).notNull(),
+  totalViews: integer('total_views').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const socialInboxMessages = pgTable('social_inbox_messages', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  channel: text('channel').notNull(),
+  interactionType: text('interaction_type').default('comment').notNull(),
+  authorName: text('author_name').notNull(),
+  authorHandle: text('author_handle').notNull(),
+  authorAvatar: text('author_avatar'),
+  postTitle: text('post_title'),
+  content: text('content').notNull(),
+  intent: text('intent').default('question').notNull(),
+  sentiment: text('sentiment').default('neutral').notNull(),
+  priority: text('priority').default('normal').notNull(),
+  status: text('status').default('unread').notNull(),
+  replyText: text('reply_text'),
+  repliedBy: text('replied_by'),
+  repliedAt: timestamp('replied_at'),
+  receivedAt: timestamp('received_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const evergreenItems = pgTable('evergreen_items', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  originalCaption: text('original_caption').notNull(),
+  category: text('category').default('educational').notNull(),
+  channels: jsonb('channels').default(['linkedin', 'instagram']).notNull(),
+  mediaType: text('media_type').default('carousel').notNull(),
+  evergreenScore: integer('evergreen_score').default(85).notNull(),
+  cooldownDays: integer('cooldown_days').default(30).notNull(),
+  recycleCount: integer('recycle_count').default(0).notNull(),
+  maxRecycles: integer('max_recycles').default(12).notNull(),
+  variations: jsonb('variations').default([]).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  lastRecycledAt: timestamp('last_recycled_at'),
+  nextScheduledAt: timestamp('next_scheduled_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});

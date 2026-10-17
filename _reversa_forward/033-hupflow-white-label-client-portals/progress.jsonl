@@ -1,0 +1,6 @@
+{"timestamp":"2026-10-17T11:44:00-03:00","phase":"requirements","status":"done","description":"Requisitos da Feature 033 (White-Label Client Portals & External Approvals) especificados"}
+{"timestamp":"2026-10-17T11:44:10-03:00","phase":"plan","status":"done","description":"Roadmap, investigação técnica, data-delta e contratos REST definidos"}
+{"timestamp":"2026-10-17T11:44:20-03:00","phase":"to-do","status":"done","description":"Actions T001 a T010 planejadas e inicializadas"}
+{"timestamp":"2026-10-17T11:49:00-03:00","phase":"coding","status":"done","description":"Implementação de types, schema, motor de Capability Tokens, service, rotas REST, ClientPortalPreview, /settings/portals e /portal/[token]"}
+{"timestamp":"2026-10-17T11:50:32-03:00","phase":"testing","status":"done","description":"Testes unitários tsx e verificação estática tsc --noEmit aprovados com 100% de sucesso"}
+{"timestamp":"2026-10-17T11:51:00-03:00","phase":"sync","status":"done","description":"Feature 033 sincronizada com legacy-impact.md, regression-watch.md (W068-W070) e adendo SDD 033"}

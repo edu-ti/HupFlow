@@ -1,7 +1,7 @@
 # HupFlow — Resumo de Sessão & Handoff para Retomada
 
-> **Data de Atualização:** 2026-10-17T11:20:00-03:00  
-> **Status:** Features 009 a 032 concluídas, testadas e sincronizadas com 100% de sucesso (Zero AGPL, Zero erros TypeScript).  
+> **Data de Atualização:** 2026-10-17T12:14:00-03:00  
+> **Status:** Features 009 a 035 concluídas, testadas e sincronizadas com 100% de sucesso (Zero AGPL, Zero erros TypeScript).  
 > **Comando de Retomada:** Digite `CONTINUAR` ou `/reversa-forward`  
 
 ---
@@ -124,14 +124,35 @@ Todo o desenvolvimento segue os preceitos de **Clean-Room Software Engineering**
     - Simulador 9:16 interativo `VideoCaptionPreview.tsx` com scrubber temporal, overlay de Safe Zones e 5 presets de legendas queimadas (`hormozi_bold`, `karaoke_glow`, `minimal_pill`, `neon_cyber`, `editorial_serif`), além do painel `/settings/captions`.
     - Adendo: `_reversa_sdd/addenda/032-hupflow-ai-video-captions.md`.
 
+25. **Feature 033 (`033-hupflow-white-label-client-portals`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Portais White-Label de Aprovação Externa (`/portal/[token]`) com Capability Tokens criptográficos (`ptl_...`), proteção opcional por PIN numérico (`verifyPortalPinAccess`) e personalização de marca (`brandColor`, `welcomeMessage`, `hideHupflowBranding`).
+    - Máquina de revisão externa (`applyDeliverableReview`) com aprovação em 1 clique e exigência de justificativa em pedidos de ajuste (`changes_requested`).
+    - Simulador ao vivo `ClientPortalPreview.tsx`, painel gerencial `/settings/portals` e página pública `/portal/[token]`.
+    - Adendo: `_reversa_sdd/addenda/033-hupflow-white-label-client-portals.md`.
+
+26. **Feature 034 (`034-hupflow-social-inbox-unified`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Social Inbox Unificado (`/inbox`) para gestão centralizada de comentários e menções (LinkedIn, Instagram, Threads e X) com classificador determinístico de intenção (`lead_intent`, `support`, `praise`, `question`, `spam`), sentimento e prioridade.
+    - Gerador de respostas rápidas com IA (`generateSmartReplies`) com 3 tons (*Consultiva*, *Amigável*, *Direta*) e proteção de limite de caracteres para X (280c), além de macros com variáveis (`interpolateReplyTemplate`).
+    - Componente `InboxThreadDetail.tsx`, rotas `/api/inbox` e `/api/inbox/reply`, e atalho no menu principal.
+    - Adendo: `_reversa_sdd/addenda/034-hupflow-social-inbox-unified.md`.
+
+27. **Feature 035 (`035-hupflow-evergreen-content-recycler`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Motor de Reciclagem Evergreen & Auto-Republicação Inteligente (`/settings/evergreen`) com Índice de Perenidade (`calculateEvergreenScore` 0-100) e penalização de marcadores efêmeros/datados.
+    - Gerador de 3 variações de gancho/copy (`generateSpunVariations`) em rotação round-robin (`pickNextVariationForCycle`) e guardião de Cooldown anti-saturação (`isEligibleForRecycle`).
+    - Componente `EvergreenVariationCard.tsx`, rotas `/api/evergreen` e `/api/evergreen/recycle`, e atalho na barra lateral.
+    - Adendo: `_reversa_sdd/addenda/035-hupflow-evergreen-content-recycler.md`.
+
 ---
 
 ## 🚀 Próximas Features do Backlog
 
 Para dar prosseguimento ao ciclo Clean-Room:
 
-- **Opção 1 (Recomendada): Feature 033 (`033-hupflow-white-label-client-portals`)** — Portais White-Label para Agências & Clientes Externos (`/portal/[token]`), com logotipo do cliente, aprovação externa de posts/carrosséis em 1 clique sem fricção de login, comentários com carimbo de data/hora e relatório de entregas.
-- **Opção 2: Feature 033 (`033-hupflow-social-inbox-unified`)** — Social Inbox Unificado & Respostas Rápidas com IA para gerenciamento centralizado de comentários e menções (Instagram, LinkedIn e X) com classificação de sentimento e templates de resposta.
+- **Opção 1 (Recomendada): Feature 036 (`036-hupflow-competitor-benchmark-radar`)** — Radar de Benchmarking & Inteligência Competitiva para monitorar frequência semanal de postagem, mix de formatos (Carrossel PDF vs Reels vs Thread) e índice de engajamento relativo de perfis concorrentes por nicho.
+- **Opção 2: Feature 036 (`036-hupflow-campaign-ab-testing-hooks`)** — Laboratório de Testes A/B de Ganchos & Capas de Carrossel com cálculo estatístico de significância e seleção automática da variante vencedora.
+
+
+
 
 
 

@@ -10,9 +10,9 @@
   "forward_folder": "_reversa_forward",
   "newproject_progress": {
     "mode": "expresso",
-    "stage": "feature-032-delivered",
+    "stage": "feature-035-delivered",
     "started_at": "2026-10-15T17:30:00-03:00",
-    "last_checkpoint_at": "2026-10-17T11:20:00-03:00",
+    "last_checkpoint_at": "2026-10-17T12:14:00-03:00",
     "completed_stages": [
       "ideator",
       "researcher",
@@ -42,7 +42,10 @@
       "feature-029-media-watermark-overlay",
       "feature-030-rss-auto-publishing",
       "feature-031-smart-link-in-bio",
-      "feature-032-ai-video-captions"
+      "feature-032-ai-video-captions",
+      "feature-033-white-label-client-portals",
+      "feature-034-social-inbox-unified",
+      "feature-035-evergreen-content-recycler"
     ],
     "brief": "HupFlow Clean-Room: Plataforma SaaS proprietaria de carrosseis IA, canvas 2D e agendamento multicanal"
   },
