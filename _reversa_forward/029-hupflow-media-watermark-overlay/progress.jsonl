@@ -1,0 +1,5 @@
+{"timestamp":"2026-10-16T21:26:00-03:00","phase":"requirements","status":"done","description":"Requisitos da Feature 029 (Marca d'Água e Selos Corporativos) especificados"}
+{"timestamp":"2026-10-16T21:27:00-03:00","phase":"planning","status":"done","description":"Investigação, roadmap, data-delta e interfaces concluídos"}
+{"timestamp":"2026-10-16T21:28:00-03:00","phase":"coding","status":"in_progress","description":"Implementação de tipos, schema Drizzle, motor geométrico, testes e rotas"}
+{"timestamp":"2026-10-16T21:30:00-03:00","phase":"coding","status":"done","description":"WatermarkPreviewCard e tela /settings/watermark integrados com atalho no menu"}
+{"timestamp":"2026-10-16T21:32:00-03:00","phase":"sync","status":"done","description":"Compilação tsc limpa, testes unitários aprovados e adendo sincronizado"}

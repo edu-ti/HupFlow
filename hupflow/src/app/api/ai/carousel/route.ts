@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { generateCarouselFromPrompt } from '@/lib/ai/carousel-generator';
+import { requireAuthContext } from '@/lib/auth/session';
 
 export async function POST(req: Request) {
   try {
+    // Validação de autenticação obrigatória
+    const authResult = await requireAuthContext(req);
+    if (authResult.error) {
+      return authResult.error;
+    }
+
     const body = await req.json();
     const { prompt, targetAudience, slideCount } = body;
 

@@ -1,0 +1,6 @@
+{"timestamp":"2026-10-16T21:45:00-03:00","phase":"requirements","status":"done","description":"Requisitos da Feature 031 (Smart Link-in-Bio Multi-Link & Showcase) especificados"}
+{"timestamp":"2026-10-16T21:45:10-03:00","phase":"plan","status":"done","description":"Roadmap, arquitetura e modelo de dados definidos"}
+{"timestamp":"2026-10-16T21:45:20-03:00","phase":"to-do","status":"done","description":"Actions T001 a T010 planejadas e inicializadas"}
+{"timestamp":"2026-10-16T21:48:00-03:00","phase":"coding","status":"done","description":"Implementação de types, schema, service, rotas REST, BioPhonePreview, /settings/bio e página pública /bio/[handle]"}
+{"timestamp":"2026-10-16T21:49:30-03:00","phase":"testing","status":"done","description":"Testes unitários e verificação de tipos tsc aprovados com 100% de sucesso"}
+{"timestamp":"2026-10-16T21:50:30-03:00","phase":"sync","status":"done","description":"Feature 031 sincronizada, documentada com legacy-impact.md, regression-watch.md e adendo SDD 031"}

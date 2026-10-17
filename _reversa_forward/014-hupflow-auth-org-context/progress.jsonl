@@ -1,0 +1,9 @@
+{"ts":"2026-10-16T11:58:30Z","action":"T001","status":"done","files":["hupflow/src/lib/auth/types.ts"]}
+{"ts":"2026-10-16T14:22:35Z","action":"T002","status":"done","files":["hupflow/src/lib/auth/auth-client.ts"]}
+{"ts":"2026-10-16T14:23:05Z","action":"T004","status":"done","files":["hupflow/src/lib/auth/session.ts","hupflow/src/lib/db/schema.ts","hupflow/src/lib/auth/auth.ts"]}
+{"ts":"2026-10-16T14:47:00Z","action":"T003","status":"done","files":["hupflow/src/lib/auth/session.test.ts"]}
+{"ts":"2026-10-16T14:48:35Z","action":"T005","status":"done","files":["hupflow/src/app/api/media/presign/route.ts","hupflow/src/app/api/media/confirm/route.ts","hupflow/src/app/api/media/route.ts"]}
+{"ts":"2026-10-16T14:49:15Z","action":"T006","status":"done","files":["hupflow/src/app/api/ai/carousel/route.ts","hupflow/src/app/api/ai/copywriter/route.ts"]}
+{"ts":"2026-10-16T14:50:10Z","action":"T007","status":"done","files":["hupflow/src/app/(auth)/login/page.tsx","hupflow/src/app/(auth)/register/page.tsx"]}
+{"ts":"2026-10-16T14:51:10Z","action":"T008","status":"done","files":["hupflow/src/components/auth/WorkspaceSelector.tsx","hupflow/src/app/api/auth/workspaces/route.ts","hupflow/src/app/(dashboard)/layout.tsx"]}
+{"ts":"2026-10-16T14:58:40Z","action":"T009","status":"done","files":["hupflow/src/lib/auth/session.test.ts","hupflow/src/lib/storage/validation.test.ts"]}

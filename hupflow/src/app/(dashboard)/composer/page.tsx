@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   Send,
   Calendar,
@@ -15,11 +16,14 @@ import {
   FileText,
   Trash2,
   Plus,
+  ShieldCheck,
+  Bookmark,
 } from 'lucide-react';
 import { SocialNetwork, NETWORK_CONFIGS, AttachedMedia } from '@/lib/composer/types';
 import { checkCharLimit } from '@/lib/composer/text-utils';
 import { TipTapToolbar } from '@/components/composer/TipTapToolbar';
 import { PlatformPreview } from '@/components/composer/PlatformPreview';
+import { HashtagRecommenderModal } from '@/components/composer/HashtagRecommenderModal';
 
 interface HookOption {
   category: 'curiosity' | 'counter_intuitive' | 'direct_result';
@@ -82,6 +86,7 @@ export default function ComposerPage() {
     'GestaoDeMidias',
     'Empreendedorismo',
   ]);
+  const [isHashtagModalOpen, setIsHashtagModalOpen] = useState(false);
 
   // Agendamento
   const [scheduledDate, setScheduledDate] = useState(() => {
@@ -178,11 +183,33 @@ export default function ComposerPage() {
     updateCurrentText(`${currentText} #${tag}`);
   };
 
-  // Disparo / Agendamento
+  const handleInsertHashtags = (tags: string[]) => {
+    const formattedTags = tags.map((t) => (t.startsWith('#') ? t : `#${t}`)).join(' ');
+    const separator = currentText.endsWith('\n') ? '' : currentText.length > 0 ? '\n\n' : '';
+    updateCurrentText(`${currentText}${separator}${formattedTags}`);
+
+    const cleanTags = tags.map((t) => t.replace(/^#/, ''));
+    setHashtags((prev) => Array.from(new Set([...cleanTags, ...prev])).slice(0, 8));
+  };
+
+  // Disparo / Agendamento / Aprovação
+  const [approvalStatusFeedback, setApprovalStatusFeedback] = useState<string | null>(null);
+
   const handleSchedulePost = () => {
     setScheduleStatus('success');
+    setApprovalStatusFeedback('Post aprovado e enfileirado no agendador com sucesso!');
     setTimeout(() => {
       setScheduleStatus('idle');
+      setApprovalStatusFeedback(null);
+    }, 4500);
+  };
+
+  const handleSubmitForReview = () => {
+    setScheduleStatus('success');
+    setApprovalStatusFeedback('Publicação submetida com sucesso para a Central de Aprovações da equipe!');
+    setTimeout(() => {
+      setScheduleStatus('idle');
+      setApprovalStatusFeedback(null);
     }, 4500);
   };
 
@@ -351,35 +378,60 @@ export default function ComposerPage() {
               </div>
             )}
 
-            {/* Agendamento & Disparo */}
-            <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                <Clock className="w-4 h-4 text-indigo-400 shrink-0" />
-                <input
-                  id="input-schedule-date"
-                  type="datetime-local"
-                  value={scheduledDate}
-                  onChange={(e) => setScheduledDate(e.target.value)}
-                  className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-950 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
-                />
+            {/* Agendamento & Disparo & Aprovação */}
+            <div className="pt-3 border-t border-slate-800/80 flex flex-col lg:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3 w-full lg:w-auto">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <input
+                    id="input-schedule-date"
+                    type="datetime-local"
+                    value={scheduledDate}
+                    onChange={(e) => setScheduledDate(e.target.value)}
+                    className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-950 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <Link
+                  href="/approvals"
+                  className="text-[11px] text-amber-400/90 hover:text-amber-300 transition-colors flex items-center gap-1 font-medium whitespace-nowrap"
+                  title="Acessar Central de Aprovações"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Central de Revisão</span>
+                </Link>
               </div>
 
-              <button
-                id="btn-schedule-post"
-                type="button"
-                onClick={handleSchedulePost}
-                disabled={charStats.isOver}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/25 transition-all hover:scale-[1.02] disabled:opacity-50"
-              >
-                <Calendar className="w-3.5 h-3.5" />
-                Agendar com BullMQ
-              </button>
+              <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-end">
+                <button
+                  id="btn-submit-review"
+                  type="button"
+                  onClick={handleSubmitForReview}
+                  disabled={charStats.isOver}
+                  className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/50 text-amber-300 font-semibold text-xs shadow-sm transition-all disabled:opacity-50"
+                  title="Submeter rascunho para aprovação da equipe"
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                  Submeter para Revisão
+                </button>
+
+                <button
+                  id="btn-schedule-post"
+                  type="button"
+                  onClick={handleSchedulePost}
+                  disabled={charStats.isOver}
+                  className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/25 transition-all hover:scale-[1.02] disabled:opacity-50"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  Agendar Publicação
+                </button>
+              </div>
             </div>
 
             {scheduleStatus === 'success' && (
               <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-fade-in">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Post agendado na fila com sucesso! Idempotência e delayed job gerados.</span>
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>{approvalStatusFeedback || 'Operação realizada com sucesso!'}</span>
               </div>
             )}
           </div>
@@ -468,11 +520,21 @@ export default function ComposerPage() {
 
           {/* Hashtags Estratégicas */}
           <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-md space-y-3">
-            <div className="flex items-center gap-1.5">
-              <Hash className="w-3.5 h-3.5 text-cyan-400" />
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                Hashtags Estratégicas
-              </h4>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <Hash className="w-3.5 h-3.5 text-cyan-400" />
+                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Hashtags Estratégicas
+                </h4>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsHashtagModalOpen(true)}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                <Sparkles className="w-3 h-3" />
+                Recomendar IA
+              </button>
             </div>
             <div className="flex flex-wrap gap-2">
               {hashtags.map((tag, i) => (
@@ -486,9 +548,26 @@ export default function ComposerPage() {
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              onClick={() => setIsHashtagModalOpen(true)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-dashed border-cyan-500/30 bg-cyan-500/5 hover:bg-cyan-500/10 text-cyan-300 text-xs font-medium transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Abrir Recomendador IA & Coleções Salvas</span>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Modal de Recomendação IA e Coleções */}
+      <HashtagRecommenderModal
+        isOpen={isHashtagModalOpen}
+        onClose={() => setIsHashtagModalOpen(false)}
+        onInsertHashtags={handleInsertHashtags}
+        currentContent={currentText}
+        activeNetwork={activeTab}
+      />
     </div>
   );
 }

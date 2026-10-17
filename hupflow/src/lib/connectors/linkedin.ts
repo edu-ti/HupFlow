@@ -14,7 +14,7 @@ export class LinkedInConnector implements SocialConnector {
   }
 
   async exchangeCode(code: string, redirectUri: string): Promise<SocialAuthTokens> {
-    if (!this.clientId || !this.clientSecret) {
+    if (!this.clientId || !this.clientSecret || code.startsWith('mock_')) {
       // Retorno simulado seguro para ambiente local de desenvolvimento
       return {
         accessToken: `li_mock_token_${Date.now()}`,
@@ -82,7 +82,7 @@ export class LinkedInConnector implements SocialConnector {
 
   async publish(accessToken: string, payload: SocialPublishPayload): Promise<SocialPublishResult> {
     try {
-      if (accessToken.startsWith('li_mock_token_')) {
+      if (accessToken.startsWith('li_mock_token_') || !this.clientId) {
         return {
           success: true,
           externalPostId: `urn:li:share:mock_${Date.now()}`,
@@ -90,20 +90,41 @@ export class LinkedInConnector implements SocialConnector {
         };
       }
 
+      // Suporte a Documentos (Carrossel PDF multipágina) ou Imagens
+      const isDocument = !!payload.documentUrl;
+      const hasImages = payload.mediaUrls.length > 0;
+      const shareCategory = isDocument ? 'DOCUMENT' : hasImages ? 'IMAGE' : 'NONE';
+
+      let mediaList: any[] = [];
+
+      if (isDocument && payload.documentUrl) {
+        mediaList = [
+          {
+            status: 'READY',
+            originalUrl: payload.documentUrl,
+            title: {
+              text: payload.documentTitle || 'Carrossel HupFlow',
+            },
+          },
+        ];
+      } else if (hasImages) {
+        mediaList = payload.mediaUrls.map((url) => ({
+          status: 'READY',
+          originalUrl: url,
+        }));
+      }
+
       // Publicação na UGC Posts API do LinkedIn
       const body = {
-        author: 'urn:li:person:me', // O ID real do autor
+        author: 'urn:li:person:me',
         lifecycleState: 'PUBLISHED',
         specificContent: {
           'com.linkedin.ugc.ShareContent': {
             shareCommentary: {
               text: payload.content,
             },
-            shareMediaCategory: payload.mediaUrls.length > 0 ? 'IMAGE' : 'NONE',
-            media: payload.mediaUrls.map((url) => ({
-              status: 'READY',
-              originalUrl: url,
-            })),
+            shareMediaCategory: shareCategory,
+            media: mediaList,
           },
         },
         visibility: {

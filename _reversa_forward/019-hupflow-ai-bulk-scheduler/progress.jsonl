@@ -1,0 +1,9 @@
+{"ts":"2026-10-16T18:06:30Z","action":"T001","status":"done","files":["hupflow/src/lib/bulk-scheduler/types.ts"]}
+{"ts":"2026-10-16T18:06:45Z","action":"T002","status":"done","files":["hupflow/src/lib/bulk-scheduler/slots.ts"]}
+{"ts":"2026-10-16T18:07:00Z","action":"T003","status":"done","files":["hupflow/src/lib/bulk-scheduler/bulk-scheduler.test.ts"]}
+{"ts":"2026-10-16T19:35:15Z","action":"T004","status":"done","files":["hupflow/src/lib/bulk-scheduler/generator.ts"]}
+{"ts":"2026-10-16T19:35:30Z","action":"T005","status":"done","files":["hupflow/src/app/api/ai/bulk-campaign/route.ts"]}
+{"ts":"2026-10-16T19:36:00Z","action":"T006","status":"done","files":["hupflow/src/components/campaign/BulkCampaignModal.tsx"]}
+{"ts":"2026-10-16T19:36:45Z","action":"T007","status":"done","files":["hupflow/src/app/(dashboard)/dashboard/page.tsx"]}
+{"ts":"2026-10-16T19:38:30Z","action":"T008","status":"done","files":["hupflow/src/lib/bulk-scheduler/bulk-scheduler.test.ts","hupflow/src/lib/connectors/connectors.test.ts","hupflow/src/lib/billing/plans.test.ts","hupflow/src/lib/analytics/calculator.test.ts","hupflow/src/lib/auth/rbac.test.ts"]}
+{"ts":"2026-10-16T19:39:35Z","action":"T009","status":"done","files":["_reversa_sdd/addenda/019-hupflow-ai-bulk-scheduler.md","_reversa_forward/019-hupflow-ai-bulk-scheduler/legacy-impact.md","_reversa_forward/019-hupflow-ai-bulk-scheduler/regression-watch.md"]}

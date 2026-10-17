@@ -1,4 +1,5 @@
 import { SocialConnector, SocialPublishPayload, SocialPublishResult, SocialAuthTokens } from './types';
+import { generateCodeChallenge, generateCodeVerifier, splitIntoTweetThread } from './pkce';
 
 export class XTwitterConnector implements SocialConnector {
   public provider: 'x' = 'x';
@@ -6,16 +7,19 @@ export class XTwitterConnector implements SocialConnector {
   private clientId = process.env.X_CLIENT_ID || '';
   private clientSecret = process.env.X_CLIENT_SECRET || '';
 
-  async getAuthUrl(state: string, redirectUri: string): Promise<string> {
+  async getAuthUrl(state: string, redirectUri: string, codeVerifier?: string): Promise<string> {
+    const verifier = codeVerifier || generateCodeVerifier();
+    const challenge = generateCodeChallenge(verifier);
     const scopes = encodeURIComponent('tweet.read tweet.write users.read offline.access');
+
     return `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${this.clientId}&redirect_uri=${encodeURIComponent(
       redirectUri
-    )}&scope=${scopes}&state=${state}&code_challenge=challenge&code_challenge_method=plain`;
+    )}&scope=${scopes}&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
   }
 
-  async exchangeCode(code: string, redirectUri: string): Promise<SocialAuthTokens> {
-    if (!this.clientId || !this.clientSecret) {
-      // Mock para ambiente local de desenvolvimento
+  async exchangeCode(code: string, redirectUri: string, codeVerifier: string = 'challenge'): Promise<SocialAuthTokens> {
+    if (!this.clientId || !this.clientSecret || code.startsWith('mock_')) {
+      // Mock seguro para ambiente local de desenvolvimento
       return {
         accessToken: `x_mock_token_${Date.now()}`,
         expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 horas
@@ -37,7 +41,7 @@ export class XTwitterConnector implements SocialConnector {
         grant_type: 'authorization_code',
         client_id: this.clientId,
         redirect_uri: redirectUri,
-        code_verifier: 'challenge',
+        code_verifier: codeVerifier,
       }),
     });
 
@@ -89,40 +93,66 @@ export class XTwitterConnector implements SocialConnector {
 
   async publish(accessToken: string, payload: SocialPublishPayload): Promise<SocialPublishResult> {
     try {
-      if (accessToken.startsWith('x_mock_token_')) {
+      const isThreadRequested = payload.isThread || payload.content.length > 280;
+      const nodes = isThreadRequested
+        ? payload.threadNodes || splitIntoTweetThread(payload.content, 280)
+        : [payload.content];
+
+      if (accessToken.startsWith('x_mock_token_') || !this.clientId) {
+        const mockIds = nodes.map((_, i) => `x_tweet_${Date.now()}_${i + 1}`);
         return {
           success: true,
-          externalPostId: `x_tweet_${Date.now()}`,
-          externalPostUrl: 'https://x.com/home',
+          externalPostId: mockIds[0],
+          externalPostUrl: `https://x.com/home/status/${mockIds[0]}`,
+          threadPostIds: mockIds,
         };
       }
 
-      const body: { text: string } = {
-        text: payload.content,
-      };
+      // Publicação real via API v2 com suporte a threads sequenciais
+      const publishedIds: string[] = [];
+      let previousTweetId: string | null = null;
 
-      const res = await fetch('https://api.twitter.com/2/tweets', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        return {
-          success: false,
-          error: `Erro ao publicar no X/Twitter (${res.status}): ${err}`,
+      for (let i = 0; i < nodes.length; i++) {
+        const tweetText = nodes[i];
+        const bodyPayload: any = {
+          text: tweetText,
         };
+
+        if (previousTweetId) {
+          bodyPayload.reply = {
+            in_reply_to_tweet_id: previousTweetId,
+          };
+        }
+
+        const res = await fetch('https://api.twitter.com/2/tweets', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyPayload),
+        });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          return {
+            success: false,
+            error: `Erro ao publicar tweet ${i + 1} no X/Twitter (${res.status}): ${errText}`,
+            threadPostIds: publishedIds,
+          };
+        }
+
+        const data = await res.json();
+        const tweetId = data.data?.id;
+        publishedIds.push(tweetId);
+        previousTweetId = tweetId;
       }
 
-      const data = await res.json();
       return {
         success: true,
-        externalPostId: data.data?.id,
-        externalPostUrl: `https://x.com/i/web/status/${data.data?.id}`,
+        externalPostId: publishedIds[0],
+        externalPostUrl: `https://x.com/i/web/status/${publishedIds[0]}`,
+        threadPostIds: publishedIds,
       };
     } catch (err: any) {
       return {

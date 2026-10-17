@@ -1,0 +1,5 @@
+{"timestamp":"2026-10-16T21:15:00-03:00","phase":"requirements","status":"done","description":"Requisitos da Feature 028 (Recomendador de Hashtags com IA) especificados"}
+{"timestamp":"2026-10-16T21:16:00-03:00","phase":"planning","status":"done","description":"Investigação, roadmap, data-delta e interfaces concluídos"}
+{"timestamp":"2026-10-16T21:18:00-03:00","phase":"coding","status":"in_progress","description":"Implementação de tipos, schema Drizzle, serviço com IA/fallback, testes e rotas"}
+{"timestamp":"2026-10-16T21:23:00-03:00","phase":"coding","status":"done","description":"HashtagRecommenderModal integrado ao Compositor e tela /settings/hashtags implementada"}
+{"timestamp":"2026-10-16T21:24:00-03:00","phase":"sync","status":"done","description":"Compilação tsc limpa, testes unitários aprovados e adendo sincronizado"}

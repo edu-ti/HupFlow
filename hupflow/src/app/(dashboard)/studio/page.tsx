@@ -18,10 +18,13 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AspectRatio, SlideData, ColorPalette } from '@/lib/canvas/types';
 import { getDimensionsForAspectRatio } from '@/lib/canvas/canvas-utils';
 import { renderSlideToCanvas } from '@/lib/canvas/canvas-renderer';
 import { exportCarouselToPdf, exportSingleSlideToPng } from '@/lib/canvas/pdf-exporter';
+import { BrandKit } from '@/lib/brand/types';
+import { brandColorsToCanvasPalette } from '@/lib/brand/service';
 
 export default function StudioPage() {
   const router = useRouter();
@@ -38,12 +41,38 @@ export default function StudioPage() {
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [exportFeedback, setExportFeedback] = useState<string | null>(null);
 
-  // Paleta de cores
+  // Paleta de cores e Brand Kits
+  const [brandKits, setBrandKits] = useState<BrandKit[]>([]);
+  const [selectedKitId, setSelectedKitId] = useState<string | null>(null);
+  const [authorHandle, setAuthorHandle] = useState<string>('@hupflow');
   const [palette, setPalette] = useState<ColorPalette>({
     background: '#0B0F17',
     primaryText: '#F8FAFC',
     accentColor: '#6366F1',
   });
+
+  // Carregar Brand Kits da Organização
+  useEffect(() => {
+    async function loadBrandKits() {
+      try {
+        const res = await fetch('/api/brand-kits');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.brandKits && Array.isArray(data.brandKits) && data.brandKits.length > 0) {
+          setBrandKits(data.brandKits);
+          const defaultKit = data.brandKits.find((k: BrandKit) => k.isDefault) || data.brandKits[0];
+          if (defaultKit) {
+            setSelectedKitId(defaultKit.id);
+            setPalette(brandColorsToCanvasPalette(defaultKit.colors));
+            if (defaultKit.handle) setAuthorHandle(defaultKit.handle);
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao carregar Brand Kits:', err);
+      }
+    }
+    loadBrandKits();
+  }, []);
 
   // Deck de slides
   const [slides, setSlides] = useState<SlideData[]>([
@@ -182,6 +211,7 @@ export default function StudioPage() {
         },
         {
           fileName: `hupflow-${topicPrompt.toLowerCase().replace(/[^a-z0-9]/g, '-')}.pdf`,
+          authorHandle,
         }
       );
       showFeedback('Documento PDF (Carrossel LinkedIn) gerado com sucesso!');
@@ -190,6 +220,16 @@ export default function StudioPage() {
     } finally {
       setIsExportingPdf(false);
     }
+  };
+
+  // Selecionar Brand Kit salvo da Organização
+  const handleSelectBrandKit = (kit: BrandKit) => {
+    setSelectedKitId(kit.id);
+    setPalette(brandColorsToCanvasPalette(kit.colors));
+    if (kit.handle) {
+      setAuthorHandle(kit.handle);
+    }
+    showFeedback(`Identidade "${kit.name}" aplicada ao Canvas!`);
   };
 
   // Manipulação de Slides
@@ -476,12 +516,93 @@ export default function StudioPage() {
 
           {/* Card: Paleta Visual & Cores */}
           <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-md space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
-              <Palette className="w-4 h-4 text-purple-400" />
-              <h4 className="text-sm font-semibold text-slate-200">Identidade Visual & Cores</h4>
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+              <div className="flex items-center gap-2">
+                <Palette className="w-4 h-4 text-purple-400" />
+                <h4 className="text-sm font-semibold text-slate-200">Identidade Visual & Kits</h4>
+              </div>
+              <Link
+                href="/settings/brand"
+                className="text-[11px] font-medium text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
+                title="Criar e gerenciar Kits de Marca"
+              >
+                <span>Gerenciar</span>
+                <span>➔</span>
+              </Link>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            {/* Kits de Marca da Organização */}
+            {brandKits.length > 0 && (
+              <div className="space-y-2">
+                <label className="text-[11px] text-slate-400 block font-medium">Seus Brand Kits</label>
+                <div className="flex flex-col gap-2">
+                  {brandKits.map((kit) => {
+                    const isSelected = selectedKitId === kit.id;
+                    return (
+                      <button
+                        key={kit.id}
+                        type="button"
+                        onClick={() => handleSelectBrandKit(kit)}
+                        className={`flex items-center justify-between p-2.5 rounded-xl border text-left transition-all ${
+                          isSelected
+                            ? 'border-indigo-500 bg-indigo-950/40 ring-1 ring-indigo-500/50'
+                            : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="flex -space-x-1.5 shrink-0">
+                            <span
+                              className="w-4 h-4 rounded-full border border-slate-900 ring-1 ring-slate-800"
+                              style={{ backgroundColor: kit.colors.primary }}
+                            />
+                            <span
+                              className="w-4 h-4 rounded-full border border-slate-900 ring-1 ring-slate-800"
+                              style={{ backgroundColor: kit.colors.background }}
+                            />
+                            <span
+                              className="w-4 h-4 rounded-full border border-slate-900 ring-1 ring-slate-800"
+                              style={{ backgroundColor: kit.colors.accent }}
+                            />
+                          </div>
+                          <div className="truncate">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-semibold text-slate-200 truncate">{kit.name}</span>
+                              {kit.isDefault && (
+                                <span className="text-[9px] uppercase tracking-wider px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono">
+                                  Padrão
+                                </span>
+                              )}
+                            </div>
+                            {kit.handle && (
+                              <p className="text-[10px] text-slate-400 font-mono truncate">{kit.handle}</p>
+                            )}
+                          </div>
+                        </div>
+                        {isSelected && (
+                          <div className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Handle do Autor nos Slides */}
+            <div>
+              <label className="text-[11px] text-slate-400 block mb-1">Identificador no Rodapé (@handle)</label>
+              <input
+                id="input-author-handle"
+                type="text"
+                value={authorHandle}
+                onChange={(e) => setAuthorHandle(e.target.value)}
+                placeholder="@seuhandle ou nome da empresa"
+                className="w-full px-3 py-2 rounded-xl border border-slate-700 bg-slate-950 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+
+            {/* Ajuste Fino de Cores */}
+            <div className="grid grid-cols-3 gap-3 pt-1">
               <div>
                 <label className="text-[11px] text-slate-400 block mb-1">Fundo</label>
                 <div className="flex items-center gap-2">
@@ -522,11 +643,12 @@ export default function StudioPage() {
               </div>
             </div>
 
-            {/* Presets de Temas */}
+            {/* Presets Rápidos */}
             <div className="pt-2">
-              <label className="text-[11px] text-slate-400 block mb-2">Paletas Prontas</label>
+              <label className="text-[11px] text-slate-400 block mb-2">Temas Rápidos</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
+                  type="button"
                   onClick={() => {
                     setPalette({
                       background: '#0B0F17',
@@ -540,6 +662,7 @@ export default function StudioPage() {
                   <span>Midnight Indigo</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     setPalette({
                       background: '#0F172A',

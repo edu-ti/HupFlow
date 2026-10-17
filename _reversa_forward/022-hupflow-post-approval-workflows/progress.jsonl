@@ -1,0 +1,10 @@
+{"timestamp":"2026-10-16T20:09:00-03:00","phase":"planning","status":"done","description":"Planejamento e especificações da Feature 022 concluídos"}
+{"timestamp":"2026-10-16T20:10:00-03:00","action":"T001","status":"done","description":"Definir interfaces TypeScript para estados e auditoria de aprovação em types.ts"}
+{"timestamp":"2026-10-16T20:10:15-03:00","action":"T002","status":"done","description":"Adicionar campos em posts e tabela post_approval_history em schema.ts"}
+{"timestamp":"2026-10-16T20:10:45-03:00","action":"T003","status":"done","description":"Criar testes unitários em approvals.test.ts"}
+{"timestamp":"2026-10-16T20:11:00-03:00","action":"T004","status":"done","description":"Implementar máquina de estados e mutações atômicas em service.ts"}
+{"timestamp":"2026-10-16T20:12:30-03:00","action":"T005","status":"done","description":"Implementar rotas REST /api/posts/approval e /api/posts/approval/history"}
+{"timestamp":"2026-10-16T20:13:10-03:00","action":"T006","status":"done","description":"Criar tela Central de Revisão & Aprovações em /approvals"}
+{"timestamp":"2026-10-16T20:15:10-03:00","action":"T007","status":"done","description":"Integrar botão de submissão e link no Compositor de Posts"}
+{"timestamp":"2026-10-16T20:15:30-03:00","action":"T008","status":"done","description":"Adicionar atalho Aprovações & Revisão no menu de navegação do dashboard"}
+{"timestamp":"2026-10-16T20:17:00-03:00","action":"T009","status":"done","description":"Bateria de testes e tsc --noEmit com 100% de aprovação"}

@@ -15,14 +15,17 @@ import {
   List,
   Filter,
   Check,
+  Sparkles,
 } from 'lucide-react';
 import { WeeklyCalendarView } from '@/components/calendar/WeeklyCalendarView';
 import { RescheduleModal, CalendarPost } from '@/components/calendar/RescheduleModal';
+import { BulkCampaignModal } from '@/components/campaign/BulkCampaignModal';
 
 export default function DashboardPage() {
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
   const [selectedNetworkFilter, setSelectedNetworkFilter] = useState<string>('all');
   const [selectedPostToReschedule, setSelectedPostToReschedule] = useState<CalendarPost | null>(null);
+  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Lista dinâmica de posts
@@ -105,6 +108,15 @@ export default function DashboardPage() {
         onCancelPost={handleCancelPost}
       />
 
+      {/* Modal de Campanha com IA em Lote */}
+      <BulkCampaignModal
+        isOpen={isCampaignModalOpen}
+        onClose={() => setIsCampaignModalOpen(false)}
+        onSuccess={() => {
+          showToast('Campanha em lote agendada com sucesso no calendário!');
+        }}
+      />
+
       {/* Welcome Banner */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -115,6 +127,14 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            id="btn-dash-ai-campaign"
+            onClick={() => setIsCampaignModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-indigo-500/40 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-200 text-xs font-semibold transition-all shadow-md shadow-indigo-600/10"
+          >
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            Campanha com IA
+          </button>
           <Link
             id="btn-dash-studio"
             href="/studio"

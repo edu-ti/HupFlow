@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { WorkspaceSelector } from '@/components/auth/WorkspaceSelector';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import {
   LayoutDashboard,
   Palette,
@@ -13,13 +15,44 @@ import {
   Layers,
   ChevronDown,
   Plus,
+  FolderOpen,
+  Users,
+  BarChart3,
+  CreditCard,
+  Webhook,
+  CheckSquare,
+  Key,
+  ShieldCheck,
+  AlertTriangle,
+  Link2,
+  Hash,
+  Stamp,
+  Rss,
+  Smartphone,
+  Subtitles,
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard & Fila', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Falhas & DLQ', href: '/queue/failures', icon: AlertTriangle },
   { name: 'Estúdio de Carrosséis', href: '/studio', icon: Palette, badge: 'IA' },
+  { name: 'Legendas & Vídeos', href: '/settings/captions', icon: Subtitles, badge: 'SRT' },
+  { name: 'Identidade & Marca', href: '/settings/brand', icon: Sparkles },
+  { name: 'Marca d\'Água', href: '/settings/watermark', icon: Stamp },
   { name: 'Compositor de Posts', href: '/composer', icon: Send },
+  { name: 'Aprovações & Revisão', href: '/approvals', icon: CheckSquare },
+  { name: 'Biblioteca de Mídias', href: '/media', icon: FolderOpen },
+  { name: 'Métricas & Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Equipe & Membros', href: '/settings/members', icon: Users },
   { name: 'Contas Conectadas', href: '/accounts', icon: Share2 },
+  { name: 'Planos & Faturamento', href: '/settings/billing', icon: CreditCard },
+  { name: 'Webhooks & n8n', href: '/settings/webhooks', icon: Webhook },
+  { name: 'Chaves de API', href: '/settings/keys', icon: Key },
+  { name: 'Links & UTMs', href: '/settings/shortlinks', icon: Link2 },
+  { name: 'Hashtags & IA', href: '/settings/hashtags', icon: Hash },
+  { name: 'Feeds RSS', href: '/settings/rss', icon: Rss },
+  { name: 'Link na Bio', href: '/settings/bio', icon: Smartphone },
+  { name: 'Auditoria & Logs', href: '/settings/audit', icon: ShieldCheck },
   { name: 'Configurações', href: '/settings', icon: Settings },
 ];
 
@@ -50,23 +83,7 @@ export default function DashboardLayout({
           </Link>
 
           {/* Org Selector / Workspace */}
-          <div className="mb-6 px-1">
-            <button
-              id="btn-workspace-selector"
-              className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-850 transition-all text-left"
-            >
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs shrink-0">
-                  H
-                </div>
-                <div className="truncate">
-                  <p className="text-xs font-semibold text-slate-200 truncate">HupFlow Workspace</p>
-                  <p className="text-[10px] text-slate-500 truncate">Plano Pro • Multi-tenant</p>
-                </div>
-              </div>
-              <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />
-            </button>
-          </div>
+          <WorkspaceSelector />
 
           {/* Navigation Items */}
           <nav className="space-y-1.5">
@@ -131,6 +148,7 @@ export default function DashboardLayout({
               <span className="w-2 h-2 rounded-full bg-indigo-400" />
               <span>AES-256 Safe</span>
             </div>
+            <NotificationBell />
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-xs text-white">
               HF
             </div>

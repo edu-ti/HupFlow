@@ -1,12 +1,17 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/013-hupflow-media-library-r2",
-  "feature-id": "013",
-  "short-name": "hupflow-media-library-r2",
-  "started-at": "2026-10-15T21:36:00-03:00",
-  "current-stage": "requirements",
+  "feature-dir": "_reversa_forward/032-hupflow-ai-video-captions",
+  "feature-id": "032",
+  "short-name": "hupflow-ai-video-captions",
+  "started-at": "2026-10-17T11:12:00-03:00",
+  "current-stage": "completed",
   "stages-completed": [
-    "requirements"
+    "requirements",
+    "plan",
+    "to-do",
+    "coding",
+    "testing",
+    "sync"
   ],
   "paused-features": []
 }
