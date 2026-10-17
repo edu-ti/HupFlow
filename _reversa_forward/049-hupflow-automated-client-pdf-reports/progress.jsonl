@@ -1,0 +1,10 @@
+{"step": "T001", "status": "completed", "timestamp": "2026-10-17T16:42:06Z", "description": "Definição de tipos e modelos de dados para relatórios executivos"}
+{"step": "T002", "status": "completed", "timestamp": "2026-10-17T16:42:16Z", "description": "Tabelas client_report_schedules e generated_client_reports adicionadas ao Drizzle"}
+{"step": "T003", "status": "completed", "timestamp": "2026-10-17T16:42:53Z", "description": "Motor de renderização vetorial de PDF construído com jsPDF e aprovado nos testes unitários"}
+{"step": "T004", "status": "completed", "timestamp": "2026-10-17T16:43:11Z", "description": "Camada de serviço multi-tenant implementada com fallback em memória"}
+{"step": "T005", "status": "completed", "timestamp": "2026-10-17T16:43:41Z", "description": "Rotas de API /api/reports, /api/reports/generate e /api/reports/download (streaming binário de PDF)"}
+{"step": "T006", "status": "completed", "timestamp": "2026-10-17T16:43:53Z", "description": "Componente ClientReportCard com preview de KPIs e cópia de link"}
+{"step": "T007", "status": "completed", "timestamp": "2026-10-17T16:44:14Z", "description": "Dashboard completo em /settings/reports com modal de emissão sob demanda"}
+{"step": "T008", "status": "completed", "timestamp": "2026-10-17T16:44:29Z", "description": "Link integrado na navegação lateral com badge PDF"}
+{"step": "T009", "status": "completed", "timestamp": "2026-10-17T16:46:36Z", "description": "Testes unitários e typecheck tsc --noEmit finalizados com 0 erros"}
+{"step": "T010", "status": "completed", "timestamp": "2026-10-17T16:46:50Z", "description": "Sincronização de artefatos SDD, Reversa state e SESSION_HANDOFF"}

@@ -665,5 +665,278 @@ export const socialListeningMentions = pgTable('social_listening_mentions', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const influencerPartnerships = pgTable('influencer_partnerships', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  creatorName: text('creator_name').notNull(),
+  handle: text('handle').notNull(),
+  channel: text('channel').default('instagram').notNull(),
+  niche: text('niche').default('SaaS & Produtividade').notNull(),
+  followersCount: integer('followers_count').default(25000).notNull(),
+  stage: text('stage').default('contracted').notNull(),
+  agreedFeeBrl: integer('agreed_fee_brl').default(2500).notNull(),
+  deliverablesTotal: integer('deliverables_total').default(3).notNull(),
+  deliverablesCompleted: integer('deliverables_completed').default(1).notNull(),
+  totalViews: integer('total_views').default(0).notNull(),
+  totalEngagements: integer('total_engagements').default(0).notNull(),
+  generatedRevenueBrl: integer('generated_revenue_brl').default(0).notNull(),
+  couponCode: text('coupon_code').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
 
+export const advocacyCampaigns = pgTable('advocacy_campaigns', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  department: text('department').default('Produto & Engenharia').notNull(),
+  channel: text('channel').default('linkedin').notNull(),
+  baseMessage: text('base_message').notNull(),
+  targetUrl: text('target_url').notNull(),
+  pointsReward: integer('points_reward').default(60).notNull(),
+  sharesCount: integer('shares_count').default(0).notNull(),
+  avgReachPerShare: integer('avg_reach_per_share').default(1800).notNull(),
+  personaVariations: jsonb('persona_variations').default([]).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const socialCommerceProducts = pgTable('social_commerce_products', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  sku: text('sku').notNull(),
+  name: text('name').notNull(),
+  category: text('category').default('saas_plan').notNull(),
+  channel: text('channel').default('instagram').notNull(),
+  priceBrl: integer('price_brl').default(297).notNull(),
+  checkoutUrl: text('checkout_url').notNull(),
+  taggedPostsCount: integer('tagged_posts_count').default(1).notNull(),
+  taggedImpressions: integer('tagged_impressions').default(10000).notNull(),
+  productClicks: integer('product_clicks').default(350).notNull(),
+  ordersCount: integer('orders_count').default(15).notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const contentRepurposingKits = pgTable('content_repurposing_kits', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  sourceType: text('source_type').default('youtube_transcript').notNull(),
+  sourceUrl: text('source_url'),
+  sourceWordCount: integer('source_word_count').default(500).notNull(),
+  tone: text('tone').default('authoritative').notNull(),
+  status: text('status').default('draft').notNull(),
+  carouselSlides: jsonb('carousel_slides').notNull(),
+  xThread: jsonb('x_thread').notNull(),
+  reelScript: jsonb('reel_script').notNull(),
+  newsletter: jsonb('newsletter').notNull(),
+  tags: jsonb('tags').notNull(),
+  estimatedTimeSavedMinutes: integer('estimated_time_saved_minutes').default(240).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const agencyBrandProfiles = pgTable('agency_brand_profiles', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  brandName: text('brand_name').notNull(),
+  slug: text('slug').notNull(),
+  niche: text('niche').default('Geral').notNull(),
+  colorHex: text('color_hex').default('#6366f1').notNull(),
+  tier: text('tier').default('standard').notNull(),
+  isFavorite: boolean('is_favorite').default(false).notNull(),
+  connectedChannelsCount: integer('connected_channels_count').default(2).notNull(),
+  scheduledPostsCount: integer('scheduled_posts_count').default(5).notNull(),
+  monthlyPostQuota: integer('monthly_post_quota').default(60).notNull(),
+  status: text('status').default('active').notNull(),
+  tags: jsonb('tags').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const deviceMockups = pgTable('device_mockups', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  deviceType: text('device_type').default('iphone_16_pro').notNull(),
+  orientation: text('orientation').default('portrait').notNull(),
+  finishColor: text('finish_color').default('titanium_black').notNull(),
+  shadowStyle: text('shadow_style').default('floating_3d').notNull(),
+  mediaType: text('media_type').default('image').notNull(),
+  mediaUrl: text('media_url').notNull(),
+  backgroundColorHex: text('background_color_hex').default('#09090b').notNull(),
+  perspectiveTiltX: integer('perspective_tilt_x').default(0).notNull(),
+  perspectiveTiltY: integer('perspective_tilt_y').default(0).notNull(),
+  tags: jsonb('tags').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const affiliatePartners = pgTable('affiliate_partners', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  referralCode: text('referral_code').notNull(),
+  tier: text('tier').default('bronze').notNull(),
+  commissionPct: integer('commission_pct').default(20).notNull(),
+  totalReferredCustomers: integer('total_referred_customers').default(0).notNull(),
+  activeCustomersCount: integer('active_customers_count').default(0).notNull(),
+  monthlyRecurringRevenueBrl: integer('monthly_recurring_revenue_brl').default(0).notNull(),
+  totalEarningsBrl: integer('total_earnings_brl').default(0).notNull(),
+  availableBalanceBrl: integer('available_balance_brl').default(0).notNull(),
+  payoutMethod: text('payout_method').default('pix').notNull(),
+  payoutKey: text('payout_key').notNull(),
+  status: text('status').default('active').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const affiliateReferrals = pgTable('affiliate_referrals', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  partnerId: text('partner_id')
+    .references(() => affiliatePartners.id, { onDelete: 'cascade' })
+    .notNull(),
+  customerEmail: text('customer_email').notNull(),
+  planName: text('plan_name').notNull(),
+  planAmountBrl: integer('plan_amount_brl').notNull(),
+  commissionAmountBrl: integer('commission_amount_brl').notNull(),
+  status: text('status').default('active').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const verticalVideoPosts = pgTable('vertical_video_posts', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  caption: text('caption').notNull(),
+  videoUrl: text('video_url').notNull(),
+  thumbnailUrl: text('thumbnail_url'),
+  channels: jsonb('channels').notNull(),
+  durationSeconds: integer('duration_seconds').notNull(),
+  width: integer('width').default(1080).notNull(),
+  height: integer('height').default(1920).notNull(),
+  privacyLevel: text('privacy_level').default('public').notNull(),
+  tiktokSettings: jsonb('tiktok_settings').notNull(),
+  youtubeSettings: jsonb('youtube_settings').notNull(),
+  scheduledAt: timestamp('scheduled_at'),
+  status: text('status').default('draft').notNull(),
+  externalPublishIds: jsonb('external_publish_ids'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const voiceoverTracks = pgTable('voiceover_tracks', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  scriptText: text('script_text').notNull(),
+  voiceId: text('voice_id').notNull(),
+  voiceName: text('voice_name').notNull(),
+  language: text('language').default('pt-BR').notNull(),
+  persona: text('persona').default('narrator_documentary').notNull(),
+  speed: text('speed').default('1.0').notNull(),
+  pitch: text('pitch').default('balanced').notNull(),
+  durationSeconds: integer('duration_seconds').notNull(),
+  wordCount: integer('word_count').notNull(),
+  audioUrl: text('audio_url').notNull(),
+  status: text('status').default('ready').notNull(),
+  tags: jsonb('tags').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const brandSafetySettings = pgTable('brand_safety_settings', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .unique()
+    .notNull(),
+  mode: text('mode').default('operational').notNull(),
+  isEmergencyPaused: boolean('is_emergency_paused').default(false).notNull(),
+  pausedAt: timestamp('paused_at'),
+  pausedByUserName: text('paused_by_user_name'),
+  pauseReason: text('pause_reason'),
+  affectedPostsCount: integer('affected_posts_count').default(0).notNull(),
+  autoResumeAt: timestamp('auto_resume_at'),
+  allowedChannels: jsonb('allowed_channels').notNull(),
+  restrictedKeywords: jsonb('restricted_keywords').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const crisisIncidentLogs = pgTable('crisis_incident_logs', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  action: text('action').notNull(),
+  scope: text('scope').default('global').notNull(),
+  targetBrandSlug: text('target_brand_slug'),
+  targetChannel: text('target_channel'),
+  reason: text('reason').notNull(),
+  activatedByUserId: text('activated_by_user_id').notNull(),
+  activatedByUserName: text('activated_by_user_name').notNull(),
+  affectedPostsCount: integer('affected_posts_count').default(0).notNull(),
+  details: jsonb('details').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const clientReportSchedules = pgTable('client_report_schedules', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  brandSlug: text('brand_slug').default('default').notNull(),
+  title: text('title').notNull(),
+  frequency: text('frequency').default('weekly').notNull(),
+  sendDayOfWeek: integer('send_day_of_week').default(1).notNull(),
+  recipients: jsonb('recipients').notNull(),
+  includeAiSummary: boolean('include_ai_summary').default(true).notNull(),
+  status: text('status').default('active').notNull(),
+  lastGeneratedAt: timestamp('last_generated_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const generatedClientReports = pgTable('generated_client_reports', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  brandSlug: text('brand_slug').default('default').notNull(),
+  reportTitle: text('report_title').notNull(),
+  periodStart: timestamp('period_start').notNull(),
+  periodEnd: timestamp('period_end').notNull(),
+  pdfUrl: text('pdf_url').notNull(),
+  fileSizeBytes: integer('file_size_bytes').default(0).notNull(),
+  metricsSnapshot: jsonb('metrics_snapshot').notNull(),
+  aiExecutiveSummary: text('ai_executive_summary').notNull(),
+  status: text('status').default('ready').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
 

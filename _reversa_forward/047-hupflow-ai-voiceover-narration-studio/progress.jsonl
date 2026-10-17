@@ -1,0 +1,10 @@
+{"step": "T001", "status": "completed", "timestamp": "2026-10-17T16:05:00Z", "description": "Definidos tipos e interfaces do estúdio de narração neural"}
+{"step": "T002", "status": "completed", "timestamp": "2026-10-17T16:05:20Z", "description": "Criada tabela voiceover_tracks no schema Drizzle"}
+{"step": "T003", "status": "completed", "timestamp": "2026-10-17T16:05:54Z", "description": "Implementados algoritmos de cadência PPM e suíte de testes unitários"}
+{"step": "T004", "status": "completed", "timestamp": "2026-10-17T16:09:37Z", "description": "Implementado service de persistência com fallback em memória"}
+{"step": "T005", "status": "completed", "timestamp": "2026-10-17T16:09:52Z", "description": "Criadas rotas /api/voiceover e /api/voiceover/voices com RBAC"}
+{"step": "T006", "status": "completed", "timestamp": "2026-10-17T16:10:03Z", "description": "Desenvolvido componente VoiceoverTrackCard com visualizador de onda e player"}
+{"step": "T007", "status": "completed", "timestamp": "2026-10-17T16:10:29Z", "description": "Construída interface completa do estúdio em /settings/voiceover"}
+{"step": "T008", "status": "completed", "timestamp": "2026-10-17T16:07:31Z", "description": "Adicionado link de navegação na sidebar do layout"}
+{"step": "T009", "status": "completed", "timestamp": "2026-10-17T16:11:11Z", "description": "Validação com testes unitários (100% de sucesso) e tsc --noEmit com zero erros"}
+{"step": "T010", "status": "completed", "timestamp": "2026-10-17T16:11:30Z", "description": "Sincronização completa de artefatos SDD e governança Reversa"}
