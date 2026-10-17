@@ -75,7 +75,7 @@ services:
   # 4. MinIO (Local S3 / Cloudflare R2 Offline Simulator)
   # ---------------------------------------------------------------------------
   hupflow-minio:
-    image: minio/minio:RELEASE.2024-05-10T01-41-38Z-cpuv1
+    image: minio/minio:latest
     container_name: hupflow-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"

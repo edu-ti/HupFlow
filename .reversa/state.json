@@ -1,6 +1,7 @@
 {
   "mode": "expresso",
-  "stage": "feature-049-delivered",
-  "activeFeature": "049-hupflow-automated-client-pdf-reports",
-  "updatedAt": "2026-10-17T16:47:25-03:00"
+  "stage": "50-features-milestone-completed",
+  "activeFeature": "050-hupflow-production-readiness-docker",
+  "completedCount": 50,
+  "updatedAt": "2026-10-17T17:01:25-03:00"
 }
