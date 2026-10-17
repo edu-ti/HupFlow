@@ -1,0 +1,10 @@
+{"ts":"2026-10-17T14:53:30-03:00","task":"T001","status":"done","file":"hupflow/src/lib/listening/types.ts"}
+{"ts":"2026-10-17T14:54:00-03:00","task":"T002","status":"done","file":"hupflow/src/lib/db/schema.ts"}
+{"ts":"2026-10-17T14:54:30-03:00","task":"T003","status":"done","file":"hupflow/src/lib/listening/listening.test.ts"}
+{"ts":"2026-10-17T14:54:50-03:00","task":"T004","status":"done","file":"hupflow/src/lib/listening/service.ts"}
+{"ts":"2026-10-17T14:55:20-03:00","task":"T005","status":"done","file":"hupflow/src/app/api/listening/route.ts"}
+{"ts":"2026-10-17T14:55:40-03:00","task":"T006","status":"done","file":"hupflow/src/app/api/listening/action/route.ts"}
+{"ts":"2026-10-17T14:56:00-03:00","task":"T007","status":"done","file":"hupflow/src/components/listening/ListeningMentionCard.tsx"}
+{"ts":"2026-10-17T14:56:20-03:00","task":"T008","status":"done","file":"hupflow/src/app/(dashboard)/settings/listening/page.tsx"}
+{"ts":"2026-10-17T14:56:40-03:00","task":"T009","status":"done","file":"hupflow/src/lib/listening/listening.test.ts"}
+{"ts":"2026-10-17T14:57:00-03:00","task":"T010","status":"done","file":"_reversa_sdd/addenda/038-hupflow-social-listening-brand-mentions.md"}

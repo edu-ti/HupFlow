@@ -1,17 +1,5 @@
 {
-  "schema-version": 1,
-  "feature-dir": "_reversa_forward/035-hupflow-evergreen-content-recycler",
-  "feature-id": "035",
-  "short-name": "hupflow-evergreen-content-recycler",
-  "started-at": "2026-10-17T12:08:20-03:00",
+  "active-feature": "038-hupflow-social-listening-brand-mentions",
   "current-stage": "completed",
-  "stages-completed": [
-    "requirements",
-    "plan",
-    "to-do",
-    "coding",
-    "testing",
-    "sync"
-  ],
-  "paused-features": []
+  "updated-at": "2026-10-17T14:57:00-03:00"
 }

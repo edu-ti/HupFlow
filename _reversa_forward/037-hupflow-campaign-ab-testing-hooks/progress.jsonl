@@ -1,0 +1,10 @@
+{"ts":"2026-10-17T14:46:30-03:00","task":"T001","status":"done","file":"hupflow/src/lib/ab-testing/types.ts"}
+{"ts":"2026-10-17T14:47:00-03:00","task":"T002","status":"done","file":"hupflow/src/lib/db/schema.ts"}
+{"ts":"2026-10-17T14:47:30-03:00","task":"T003","status":"done","file":"hupflow/src/lib/ab-testing/ab-testing.test.ts"}
+{"ts":"2026-10-17T14:47:45-03:00","task":"T004","status":"done","file":"hupflow/src/lib/ab-testing/service.ts"}
+{"ts":"2026-10-17T14:48:15-03:00","task":"T005","status":"done","file":"hupflow/src/app/api/ab-tests/route.ts"}
+{"ts":"2026-10-17T14:48:30-03:00","task":"T006","status":"done","file":"hupflow/src/app/api/ab-tests/simulate/route.ts"}
+{"ts":"2026-10-17T14:49:00-03:00","task":"T007","status":"done","file":"hupflow/src/components/ab-testing/AbExperimentCard.tsx"}
+{"ts":"2026-10-17T14:49:15-03:00","task":"T008","status":"done","file":"hupflow/src/app/(dashboard)/settings/ab-testing/page.tsx"}
+{"ts":"2026-10-17T14:49:30-03:00","task":"T009","status":"done","file":"hupflow/src/lib/ab-testing/ab-testing.test.ts"}
+{"ts":"2026-10-17T14:49:45-03:00","task":"T010","status":"done","file":"_reversa_sdd/addenda/037-hupflow-campaign-ab-testing-hooks.md"}

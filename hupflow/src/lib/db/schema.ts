@@ -600,3 +600,70 @@ export const evergreenItems = pgTable('evergreen_items', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const competitorProfiles = pgTable('competitor_profiles', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  name: text('name').notNull(),
+  handle: text('handle').notNull(),
+  channel: text('channel').default('instagram').notNull(),
+  niche: text('niche').default('SaaS & Marketing').notNull(),
+  followersCount: integer('followers_count').default(10000).notNull(),
+  engagementRateBps: integer('engagement_rate_bps').default(350).notNull(),
+  postsPerWeek: integer('posts_per_week').default(5).notNull(),
+  growth30dBps: integer('growth_30d_bps').default(500).notNull(),
+  topFormat: text('top_format').default('carousel').notNull(),
+  topTopics: jsonb('top_topics').default([]).notNull(),
+  threatScore: integer('threat_score').default(65).notNull(),
+  lastSyncedAt: timestamp('last_synced_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const abTestExperiments = pgTable('ab_test_experiments', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  title: text('title').notNull(),
+  channel: text('channel').default('instagram').notNull(),
+  testType: text('test_type').default('hook_copy').notNull(),
+  hypothesisAngle: text('hypothesis_angle').default('curiosity_gap').notNull(),
+  targetMetric: text('target_metric').default('engagement_rate').notNull(),
+  minSampleSize: integer('min_sample_size').default(200).notNull(),
+  targetConfidencePct: integer('target_confidence_pct').default(95).notNull(),
+  variantA: jsonb('variant_a').notNull(),
+  variantB: jsonb('variant_b').notNull(),
+  status: text('status').default('running').notNull(),
+  winningVariantId: text('winning_variant_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const socialListeningMentions = pgTable('social_listening_mentions', {
+  id: text('id').primaryKey(),
+  organizationId: text('organization_id')
+    .references(() => organizations.id, { onDelete: 'cascade' })
+    .notNull(),
+  keywordMatched: text('keyword_matched').notNull(),
+  channel: text('channel').default('x').notNull(),
+  category: text('category').default('brand_mention').notNull(),
+  authorName: text('author_name').notNull(),
+  authorHandle: text('author_handle').notNull(),
+  authorFollowers: integer('author_followers').default(1500).notNull(),
+  content: text('content').notNull(),
+  sentiment: text('sentiment').default('neutral').notNull(),
+  sentimentScore: integer('sentiment_score').default(0).notNull(),
+  velocityPerHour: integer('velocity_per_hour').default(10).notNull(),
+  urgencyScore: integer('urgency_score').default(35).notNull(),
+  crisisLevel: text('crisis_level').default('normal').notNull(),
+  status: text('status').default('open').notNull(),
+  detectedAt: timestamp('detected_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+
+

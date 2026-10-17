@@ -1,0 +1,10 @@
+{"ts":"2026-10-17T12:45:00-03:00","task":"T001","status":"done","file":"hupflow/src/lib/competitors/types.ts"}
+{"ts":"2026-10-17T12:46:00-03:00","task":"T002","status":"done","file":"hupflow/src/lib/db/schema.ts"}
+{"ts":"2026-10-17T12:47:00-03:00","task":"T003","status":"done","file":"hupflow/src/lib/competitors/competitors.test.ts"}
+{"ts":"2026-10-17T12:47:30-03:00","task":"T004","status":"done","file":"hupflow/src/lib/competitors/service.ts"}
+{"ts":"2026-10-17T12:48:30-03:00","task":"T005","status":"done","file":"hupflow/src/app/api/competitors/route.ts"}
+{"ts":"2026-10-17T12:49:00-03:00","task":"T006","status":"done","file":"hupflow/src/app/api/competitors/sync/route.ts"}
+{"ts":"2026-10-17T12:49:30-03:00","task":"T007","status":"done","file":"hupflow/src/components/competitors/CompetitorRadarCard.tsx"}
+{"ts":"2026-10-17T12:50:00-03:00","task":"T008","status":"done","file":"hupflow/src/app/(dashboard)/settings/competitors/page.tsx"}
+{"ts":"2026-10-17T12:51:00-03:00","task":"T009","status":"done","file":"hupflow/src/lib/competitors/competitors.test.ts"}
+{"ts":"2026-10-17T12:51:15-03:00","task":"T010","status":"done","file":"_reversa_sdd/addenda/036-hupflow-competitor-benchmark-radar.md"}

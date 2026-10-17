@@ -142,14 +142,32 @@ Todo o desenvolvimento segue os preceitos de **Clean-Room Software Engineering**
     - Componente `EvergreenVariationCard.tsx`, rotas `/api/evergreen` e `/api/evergreen/recycle`, e atalho na barra lateral.
     - Adendo: `_reversa_sdd/addenda/035-hupflow-evergreen-content-recycler.md`.
 
+28. **Feature 036 (`036-hupflow-competitor-benchmark-radar`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Radar de Benchmarking & Inteligência Competitiva (`/settings/competitors`) com cálculo determinístico de Share of Voice orgânico (`calculateShareOfVoiceDistribution`), Alcance Engajado Semanal (`calculateWeeklyEngagedReach`) e Score de Pressão Competitiva (`calculateCompetitiveThreatScore` 0-100).
+    - Comparativo direto contra a média do nicho (`compareAgainstWorkspaceBaseline`) e detector automático de Lacunas de Conteúdo (`detectContentGaps`) com ganchos criativos prontos para o Compositor.
+    - Componente `CompetitorRadarCard.tsx`, rotas `/api/competitors` e `/api/competitors/sync`, e item na barra lateral.
+    - Adendo: `_reversa_sdd/addenda/036-hupflow-competitor-benchmark-radar.md`.
+
+29. **Feature 037 (`037-hupflow-campaign-ab-testing-hooks`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Laboratório de Testes A/B de Ganchos & Capas de Carrossel (`/settings/ab-testing`) com Teste Z Bicaudal de Duas Proporções (`evaluateAbExperimentStatistics`), aproximação polinomial CDF Normal (`normalCdfApprox`) e bloqueio contra vencedores prematuros abaixo da amostra mínima.
+    - Gerador automático de Variante B Desafiante (`generateChallengerHookVariant`) por ângulo psicológico (`curiosity_gap`, `contrarian_shock`, `social_proof_numbers`, `urgency_fomo`) e promoção automática (`simulateTrafficBatch`).
+    - Componente `AbExperimentCard.tsx`, rotas `/api/ab-tests` e `/api/ab-tests/simulate`, e atalho na barra lateral.
+    - Adendo: `_reversa_sdd/addenda/037-hupflow-campaign-ab-testing-hooks.md`.
+
+30. **Feature 038 (`038-hupflow-social-listening-brand-mentions`)** — ✅ CONCLUÍDA & SINCRONIZADA
+    - Monitor de Social Listening, Menções Indiretas & Alertas de Crise/Tendências (`/settings/listening`) com classificador léxico de sentimento e cálculo de Score de Urgência de RP (`analyzeMentionSignal` 0-100).
+    - Avaliador de Saúde da Marca com Net Sentiment Score (`evaluateBrandHealthAndCrisisRadar` -100 a +100) e gerador automático de Playbook de Resposta Estratégica (`generateStrategicResponsePlaybook`) para contenção de crise, Social Selling em queixas de concorrentes e amplificação UGC.
+    - Componente `ListeningMentionCard.tsx`, rotas `/api/listening` e `/api/listening/action`, e atalho na barra lateral.
+    - Adendo: `_reversa_sdd/addenda/038-hupflow-social-listening-brand-mentions.md`.
+
 ---
 
 ## 🚀 Próximas Features do Backlog
 
 Para dar prosseguimento ao ciclo Clean-Room:
 
-- **Opção 1 (Recomendada): Feature 036 (`036-hupflow-competitor-benchmark-radar`)** — Radar de Benchmarking & Inteligência Competitiva para monitorar frequência semanal de postagem, mix de formatos (Carrossel PDF vs Reels vs Thread) e índice de engajamento relativo de perfis concorrentes por nicho.
-- **Opção 2: Feature 036 (`036-hupflow-campaign-ab-testing-hooks`)** — Laboratório de Testes A/B de Ganchos & Capas de Carrossel com cálculo estatístico de significância e seleção automática da variante vencedora.
+- **Opção 1 (Recomendada): Feature 039 (`039-hupflow-influencer-creator-crm`)** — Hub de Parcerias, Influenciadores & UGC (Creator CRM, Tracking de Entregáveis e Cálculo de ROI / CPE / EMV por Criador).
+- **Opção 2: Feature 039 (`039-hupflow-employee-advocacy-board`)** — Programa de Employee Advocacy & Amplificação de Equipe com gamificação, leaderboard interno e compartilhamento em 1 clique.
 
 
 

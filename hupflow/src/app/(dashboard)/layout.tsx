@@ -33,15 +33,21 @@ import {
   Building2,
   Inbox,
   Repeat,
+  Radar,
+  FlaskConical,
+  Radio,
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard & Fila', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Social Inbox & IA', href: '/inbox', icon: Inbox, badge: 'Leads' },
+  { name: 'Social Listening', href: '/settings/listening', icon: Radio, badge: 'RP' },
   { name: 'Falhas & DLQ', href: '/queue/failures', icon: AlertTriangle },
   { name: 'Estúdio de Carrosséis', href: '/studio', icon: Palette, badge: 'IA' },
   { name: 'Legendas & Vídeos', href: '/settings/captions', icon: Subtitles, badge: 'SRT' },
   { name: 'Reciclagem Evergreen', href: '/settings/evergreen', icon: Repeat },
+  { name: 'Radar Competitivo', href: '/settings/competitors', icon: Radar, badge: 'SoV' },
+  { name: 'Testes A/B & Hooks', href: '/settings/ab-testing', icon: FlaskConical, badge: 'A/B' },
   { name: 'Identidade & Marca', href: '/settings/brand', icon: Sparkles },
   { name: 'Marca d\'Água', href: '/settings/watermark', icon: Stamp },
   { name: 'Compositor de Posts', href: '/composer', icon: Send },
