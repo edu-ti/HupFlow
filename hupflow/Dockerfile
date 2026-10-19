@@ -19,7 +19,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Disable type checking on build if already validated in CI or run tsc
+RUN mkdir -p /app/public
 RUN npm run build
 
 # -----------------------------------------------------------------------------
