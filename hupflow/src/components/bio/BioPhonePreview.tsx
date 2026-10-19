@@ -6,7 +6,7 @@ import {
   BioProfile,
   BioShowcasePost,
 } from '@/lib/bio/types';
-import { getThemeConfig } from '@/lib/bio/service';
+import { getThemeConfig } from '@/lib/bio/bio-utils';
 import {
   Instagram,
   Linkedin,

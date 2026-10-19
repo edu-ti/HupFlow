@@ -21,7 +21,7 @@ import {
   X as CloseIcon,
 } from 'lucide-react';
 import { ShortLink, ShortLinkVariant, SocialNetwork } from '@/lib/shortlinks/types';
-import { generateChannelVariants } from '@/lib/shortlinks/service';
+import { generateChannelVariants } from '@/lib/shortlinks/shortlinks-utils';
 
 export default function ShortLinksPage() {
   const [linksList, setLinksList] = useState<ShortLink[]>([]);

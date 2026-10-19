@@ -16,7 +16,7 @@ import {
   verifyPortalPinAccess,
   calculatePortalMetrics,
   applyDeliverableReview,
-} from './portals.test';
+} from './portals-utils';
 
 export {
   generatePortalToken,

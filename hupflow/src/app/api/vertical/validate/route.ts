@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireOrgRole } from '@/lib/auth/rbac';
-import { validateVerticalMediaRequirements } from '@/lib/vertical/vertical.test';
+import { validateVerticalMediaRequirements } from '@/lib/vertical/vertical-utils';
 import { VerticalChannelType } from '@/lib/vertical/types';
 
 export async function POST(req: NextRequest) {

@@ -24,7 +24,7 @@ import {
   AuditCategory,
   AUDIT_CATEGORIES,
 } from '@/lib/audit/types';
-import { formatAuditAction } from '@/lib/audit/service';
+import { formatAuditAction } from '@/lib/audit/audit-utils';
 
 export default function AuditLogsPage() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);

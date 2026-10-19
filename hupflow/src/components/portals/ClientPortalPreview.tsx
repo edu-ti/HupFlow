@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PortalDeliverable } from '@/lib/portals/types';
-import { calculatePortalMetrics } from '@/lib/portals/portals.test';
+import { calculatePortalMetrics } from '@/lib/portals/portals-utils';
 import {
   CheckCircle2,
   Clock,

@@ -14,7 +14,7 @@ import {
   computeNextRecycleSlot,
   isEligibleForRecycle,
   calculateEvergreenStats,
-} from './evergreen.test';
+} from './evergreen-utils';
 
 export {
   calculateEvergreenScore,

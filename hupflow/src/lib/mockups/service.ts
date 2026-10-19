@@ -8,7 +8,7 @@ import {
   DeviceType,
   MockupSummaryMetrics,
 } from './types';
-import { summarizeMockupsPortfolio } from './mockups.test';
+import { summarizeMockupsPortfolio } from './mockups-utils';
 
 const memoryStore = new Map<string, DeviceMockupItem[]>();
 

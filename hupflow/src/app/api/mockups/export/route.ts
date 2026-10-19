@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireOrgRole } from '@/lib/auth/rbac';
-import { generateDeviceSvgFrame } from '@/lib/mockups/mockups.test';
+import { generateDeviceSvgFrame } from '@/lib/mockups/mockups-utils';
 import { DeviceType, DeviceOrientation, MockupTheme } from '@/lib/mockups/types';
 
 export async function POST(req: NextRequest) {

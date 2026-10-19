@@ -20,7 +20,7 @@ import {
   getActiveCueAtTime,
   getCaptionPresetConfig,
   getSafeZoneAnchorClass,
-} from './captions.test';
+} from './captions-utils';
 
 export {
   formatTimestampSrt,

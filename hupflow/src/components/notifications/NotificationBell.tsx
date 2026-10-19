@@ -16,7 +16,7 @@ import {
   Flame,
 } from 'lucide-react';
 import { NotificationItem, NotificationType } from '@/lib/notifications/types';
-import { getNotificationSeverity } from '@/lib/notifications/service';
+import { getNotificationSeverity } from '@/lib/notifications/notifications-utils';
 
 export function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);

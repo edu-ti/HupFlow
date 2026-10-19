@@ -11,7 +11,7 @@ import {
 import {
   validateVerticalMediaRequirements,
   summarizeVerticalChannelPortfolio,
-} from './vertical.test';
+} from './vertical-utils';
 
 const memoryStore = new Map<string, VerticalVideoPost[]>();
 

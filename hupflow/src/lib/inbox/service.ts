@@ -17,7 +17,7 @@ import {
   interpolateReplyTemplate,
   generateSmartReplies,
   calculateInboxStats,
-} from './inbox.test';
+} from './inbox-utils';
 
 export {
   classifyInboxMessage,

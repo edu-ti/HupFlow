@@ -5,7 +5,7 @@ import { EvergreenItem } from '@/lib/evergreen/types';
 import {
   isEligibleForRecycle,
   pickNextVariationForCycle,
-} from '@/lib/evergreen/evergreen.test';
+} from '@/lib/evergreen/evergreen-utils';
 import {
   Repeat,
   Sparkles,

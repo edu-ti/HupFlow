@@ -14,7 +14,7 @@ import {
   segmentTranscriptToCues,
   exportToSrt,
   exportToVtt,
-} from '@/lib/captions/captions.test';
+} from '@/lib/captions/captions-utils';
 import { VideoCaptionPreview } from '@/components/captions/VideoCaptionPreview';
 import {
   Subtitles,

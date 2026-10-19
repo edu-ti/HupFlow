@@ -11,7 +11,7 @@ import {
 import {
   calculateDeviceDimensions,
   getDeviceColors,
-} from '@/lib/mockups/mockups.test';
+} from '@/lib/mockups/mockups-utils';
 import {
   Smartphone,
   Tablet,

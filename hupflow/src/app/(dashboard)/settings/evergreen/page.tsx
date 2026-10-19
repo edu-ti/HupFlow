@@ -6,7 +6,7 @@ import {
   EvergreenItem,
   EvergreenStats,
 } from '@/lib/evergreen/types';
-import { calculateEvergreenScore } from '@/lib/evergreen/evergreen.test';
+import { calculateEvergreenScore } from '@/lib/evergreen/evergreen-utils';
 import { EvergreenVariationCard } from '@/components/evergreen/EvergreenVariationCard';
 import {
   Repeat,

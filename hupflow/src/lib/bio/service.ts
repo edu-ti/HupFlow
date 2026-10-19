@@ -17,7 +17,7 @@ import {
   calculateBioCtr,
   sortBioLinks,
   getThemeConfig,
-} from './bio.test';
+} from './bio-utils';
 
 export {
   sanitizeHandle,

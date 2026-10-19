@@ -11,7 +11,7 @@ import {
   getActiveCueAtTime,
   getCaptionPresetConfig,
   getSafeZoneAnchorClass,
-} from '@/lib/captions/captions.test';
+} from '@/lib/captions/captions-utils';
 import {
   Play,
   Pause,

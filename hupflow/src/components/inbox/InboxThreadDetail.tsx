@@ -8,7 +8,7 @@ import {
 import {
   generateSmartReplies,
   interpolateReplyTemplate,
-} from '@/lib/inbox/inbox.test';
+} from '@/lib/inbox/inbox-utils';
 import {
   Sparkles,
   Send,
