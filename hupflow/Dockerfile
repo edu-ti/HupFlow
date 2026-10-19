@@ -32,8 +32,10 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV DEV_BYPASS_AUTH="true"
 ENV BETTER_AUTH_SECRET="hupflow_secret_fallback_key_32_characters_minimum_entropy_2026"
-ENV BETTER_AUTH_URL="http://localhost:3000"
+ENV BETTER_AUTH_URL="https://app.hupflow.com.br"
+ENV NEXT_PUBLIC_APP_URL="https://app.hupflow.com.br"
 
 # Non-root user for enterprise container security
 RUN addgroup --system --gid 1001 nodejs

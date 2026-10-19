@@ -109,22 +109,26 @@ export async function getAuthContext(req?: Request | Headers): Promise<AuthConte
     };
   }
 
-  // 3. Fallback Seguro para Modo Desenvolvimento & Testes Locais
-  const isDev = process.env.NODE_ENV === 'development' || process.env.DEV_BYPASS_AUTH === 'true';
+  // 3. Fallback Seguro para Modo Desenvolvimento, Demonstração ou Bypass
+  const isDev =
+    process.env.NODE_ENV === 'development' ||
+    process.env.DEV_BYPASS_AUTH === 'true' ||
+    process.env.DEMO_MODE === 'true';
+
   if (isDev) {
     const devOrg = reqHeaders.get('x-organization-id') || getActiveOrgFromCookie(reqHeaders) || 'org_default';
 
     return {
       user: {
-        id: 'usr_dev_01',
-        name: 'Desenvolvedor HupFlow',
-        email: 'dev@hupflow.com',
+        id: 'usr_edu_01',
+        name: 'Eduardo (Admin)',
+        email: 'admin@hupflow.com.br',
         image: null,
       },
       session: {
-        id: 'sess_dev_01',
-        userId: 'usr_dev_01',
-        expiresAt: new Date(Date.now() + 86400000),
+        id: 'sess_edu_01',
+        userId: 'usr_edu_01',
+        expiresAt: new Date(Date.now() + 86400000 * 30),
         activeOrganizationId: devOrg,
       },
       organizationId: devOrg,
