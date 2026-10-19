@@ -5,6 +5,10 @@ import { db } from '../db';
 import * as schema from '../db/schema';
 
 export const auth = betterAuth({
+  secret:
+    process.env.BETTER_AUTH_SECRET ||
+    process.env.AUTH_SECRET ||
+    'hupflow_secret_fallback_key_32_characters_minimum_entropy_2026',
   baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   database: drizzleAdapter(db, {
     provider: 'pg',

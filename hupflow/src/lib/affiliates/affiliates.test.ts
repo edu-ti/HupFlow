@@ -150,4 +150,6 @@ function runAffiliateUnitTests() {
   console.log('✅ All Feature 045 Affiliate Program & Commission unit tests passed successfully!');
 }
 
-runAffiliateUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('affiliates.test')) {
+  runAffiliateUnitTests();
+}

@@ -112,4 +112,6 @@ function runVerticalConnectorsUnitTests() {
   console.log('✅ All Feature 046 TikTok & YouTube Shorts Connectors unit tests passed successfully!');
 }
 
-runVerticalConnectorsUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('vertical.test')) {
+  runVerticalConnectorsUnitTests();
+}

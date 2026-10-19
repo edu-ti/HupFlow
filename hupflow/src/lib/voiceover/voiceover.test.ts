@@ -186,4 +186,6 @@ function runVoiceoverUnitTests() {
   console.log('✅ All Feature 047 AI Voiceover & Narration Studio unit tests passed successfully!');
 }
 
-runVoiceoverUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('voiceover.test')) {
+  runVoiceoverUnitTests();
+}

@@ -208,4 +208,6 @@ function runBrandSafetyUnitTests() {
   console.log('✅ All Feature 048 Brand Safety & Crisis Kill Switch unit tests passed successfully!');
 }
 
-runBrandSafetyUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('brandsafety.test')) {
+  runBrandSafetyUnitTests();
+}

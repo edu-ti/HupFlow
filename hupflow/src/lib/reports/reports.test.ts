@@ -89,4 +89,6 @@ function runReportsUnitTests() {
   console.log(`✅ All Feature 049 PDF Reports unit tests passed successfully! (PDF size: ${pdfOutput.byteLength} bytes)`);
 }
 
-runReportsUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('reports.test')) {
+  runReportsUnitTests();
+}

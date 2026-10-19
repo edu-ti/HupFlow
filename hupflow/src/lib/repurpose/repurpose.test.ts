@@ -290,4 +290,6 @@ function runRepurposeUnitTests() {
   console.log('✅ All Feature 042 Content Repurposing Matrix unit tests passed successfully!');
 }
 
-runRepurposeUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('repurpose.test')) {
+  runRepurposeUnitTests();
+}

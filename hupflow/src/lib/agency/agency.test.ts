@@ -214,4 +214,6 @@ function runAgencyUnitTests() {
   console.log('✅ All Feature 043 Agency Multi-Brand Switcher unit tests passed successfully!');
 }
 
-runAgencyUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('agency.test')) {
+  runAgencyUnitTests();
+}

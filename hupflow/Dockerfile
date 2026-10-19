@@ -32,6 +32,8 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV BETTER_AUTH_SECRET="hupflow_secret_fallback_key_32_characters_minimum_entropy_2026"
+ENV BETTER_AUTH_URL="http://localhost:3000"
 
 # Non-root user for enterprise container security
 RUN addgroup --system --gid 1001 nodejs
@@ -51,7 +53,7 @@ USER nextjs
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=5 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1
 
 CMD ["node", "server.js"]

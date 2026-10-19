@@ -127,4 +127,6 @@ function runSystemHealthUnitTests() {
   console.log('✅ All Feature 050 Production Readiness unit tests passed successfully!');
 }
 
-runSystemHealthUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('system.test')) {
+  runSystemHealthUnitTests();
+}

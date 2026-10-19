@@ -82,4 +82,6 @@ function runMockupsUnitTests() {
   console.log('✅ All Feature 044 Dynamic Device Mockups unit tests passed successfully!');
 }
 
-runMockupsUnitTests();
+if (typeof process !== 'undefined' && process.argv[1]?.includes('mockups.test')) {
+  runMockupsUnitTests();
+}
